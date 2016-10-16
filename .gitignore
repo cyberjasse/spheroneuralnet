@@ -1,0 +1,13 @@
+*~
+*.tex.backup
+*.aux
+*.log
+
+*.pyc
+*.pyo
+*.class
+*.o
+*.out
+
+cpp/sphero-linux-api
+python/sphero-ros
