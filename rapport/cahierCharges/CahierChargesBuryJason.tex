@@ -1,0 +1,36 @@
+\documentclass[a4paper, 12pt]{report}
+\usepackage[utf8]{inputenc}
+\usepackage[left=2cm,right=2cm,top=2cm,bottom=2cm]{geometry}
+\usepackage[pdftex]{graphicx}
+
+\begin{document}
+\input{../titlepage}
+\spherotitle{Cahier de charges}{16 octobre 2016}
+
+\section*{Exigences fonctionnelles}
+L'utilisateur sera ammené à encoder une trajectoire dans un fichier. C'est à dire encoder le chemin à suivre ainsi que les vitesses à atteindre au cours de la trajectoire.
+Puis, grâce à un réseau de neurones préalablement entraîné sur un sol donné, le programme devra envoyer fréquemment des commandes à la Sphero2.0\footnote{http://www.sphero.com/sphero} pour qu'elle suive la trajectoire encodée, à moins que l'utilisateur n'ait encodé une trajectoire physiquement impossible pour la Sphero (comme un angle droit à effectuer à 10m/s).
+
+\section*{Exigences prioritaires}
+Voici les exigeances demandées par ordre décroissant de priorité:
+\begin{enumerate}
+ \item Stream de données de et vers la Sphero.
+ \item Réalisation d'un réseau de neurones artificiel adéquat.
+ \item Utilisation du réseau de neurones sur un problème jouet.\footnote{Permet de tester le bon fonctionnement du pouvoir d'approximation universelle de fonction du réseau de neurone et de sa paramètrisation.}
+ \item Collecte des données utiles pour l'apprentissage en balayant toute les configurations possibles.
+ \item Lecture de fichier contenant les poids et paramètres d'un réseau de neurones.
+ \item Lecture d'un fichier d'encodage de trajectoire.
+ \item Suivi de la trajectoire.
+\end{enumerate}
+
+\section*{Exigences secondaires}
+Ici la liste des objectifs secondaires par ordre croissant d'intérêt.
+\begin{enumerate}
+ \item Approximation du processus par réseau de neurones.\footnote{C'est à dire un réseau de neurones qui prédit la prochaine configuration sur base d'une configuration initiale et la commande à exectuer}
+ \item Vérification de la faisabilité d'une trajectoire.
+ \item Suivi de chemin le plus rapidement possible.
+ \item Permettre à l'utilisateur d'encoder la couleur des leds au fil de la trajectoire.
+\end{enumerate}
+
+
+\end{document}
