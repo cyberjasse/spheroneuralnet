@@ -2,35 +2,40 @@
 \usepackage[utf8]{inputenc}
 \usepackage[left=2cm,right=2cm,top=2cm,bottom=2cm]{geometry}
 \usepackage[pdftex]{graphicx}
+\newcommand{\dure}[1]{\item En \textbf{#1},}
+\newcommand{\rul}{\rule{5cm}{0.3mm}}
 
 \begin{document}
 \input{../titlepage}
 \spherotitle{Cahier de charges}{16 octobre 2016}
 
 \section*{Exigences fonctionnelles}
-L'utilisateur sera ammené à encoder une trajectoire dans un fichier. C'est à dire encoder le chemin à suivre ainsi que les vitesses à atteindre au cours de la trajectoire.
+L'utilisateur sera amené à encoder une trajectoire dans un fichier. C'est-à-dire encoder le chemin à suivre ainsi que les vitesses à atteindre au cours de la trajectoire.
 Puis, grâce à un réseau de neurones préalablement entraîné sur un sol donné, le programme devra envoyer fréquemment des commandes à la Sphero2.0\footnote{http://www.sphero.com/sphero} pour qu'elle suive la trajectoire encodée, à moins que l'utilisateur n'ait encodé une trajectoire physiquement impossible pour la Sphero (comme un angle droit à effectuer à 10m/s).
 
-\section*{Exigences prioritaires}
-Voici les exigeances demandées par ordre décroissant de priorité:
+\section*{Ordre des tâches}
+Voici un résumé des tâches planifiées, par ordre chronologique:
 \begin{enumerate}
- \item Stream de données de et vers la Sphero.
- \item Réalisation d'un réseau de neurones artificiel adéquat.
- \item Utilisation du réseau de neurones sur un problème jouet.\footnote{Permet de tester le bon fonctionnement du pouvoir d'approximation universelle de fonction du réseau de neurone et de sa paramètrisation.}
- \item Collecte des données utiles pour l'apprentissage en balayant toute les configurations possibles.
- \item Lecture de fichier contenant les poids et paramètres d'un réseau de neurones.
- \item Lecture d'un fichier d'encodage de trajectoire.
- \item Suivi de la trajectoire.
+ \dure{5 jours} Lecture de documents sur la commande par réseau de neurones.
+ \dure{1 jours} Rapport sur le choix de l'architecture du réseau.
+ \dure{5 jours} Comparaison des différentes API.
+ \dure{4 jours} Stream de données de et vers la Sphero.
+ \dure{1 jour } Rapport sur les latences des paquets streamés.
+ \dure{3 jours} Outil de visualisation. (Odométrie, trajectoire réelle, vitesses)
+ \dure{2 jour } Suivi de la trajectoire de la Sphero.
+ \dure{3 jours} Pré-rapport de janvier.\\ \rul\textbf{2\textsuperscript{ème} quadri}\rul
+ \dure{1 jours} Lecture d'un document sur l'implémentation d'un réseaux de neurones.
+ \dure{4 jours} Réalisation d'un réseau de neurones artificiel adéquat.
+ \dure{1 jour } Utilisation du réseau de neurones sur un problème jouet.\footnote{Permet de tester le bon fonctionnement du pouvoir d'approximation universelle de fonction du réseau de neurones et de sa paramétrisation.}
+ \dure{1 jour } Mesure de la latence des prédictions.
+ \dure{1 jour } Rapport sur l'apprentissage en fonction des paramètres du réseau.
+ \dure{8 jours} Collecte des données utiles pour l'apprentissage en balayant toutes les configurations possibles.\footnote{Peut-être d'abord restreint sur de faibles vitesses.}
+ \dure{2 jours} Chargement et enregistrement d'un fichier contenant les poids et paramètres d'un réseau de neurones.
+ \dure{2 jours} Rapport sur le réglage des paramètres du réseau.
+ \dure{1 jours} Lecture d'un fichier d'encodage de trajectoire.
+ \dure{4 jours} Outil pour tracer la trajectoire.
+ \dure{5 jours} Version finale du programme.
+ \dure{6 jours} Rapport final.
 \end{enumerate}
-
-\section*{Exigences secondaires}
-Ici la liste des objectifs secondaires par ordre croissant d'intérêt.
-\begin{enumerate}
- \item Approximation du processus par réseau de neurones.\footnote{C'est à dire un réseau de neurones qui prédit la prochaine configuration sur base d'une configuration initiale et la commande à exectuer}
- \item Vérification de la faisabilité d'une trajectoire.
- \item Suivi de chemin le plus rapidement possible.
- \item Permettre à l'utilisateur d'encoder la couleur des leds au fil de la trajectoire.
-\end{enumerate}
-
 
 \end{document}
