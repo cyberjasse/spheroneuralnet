@@ -2,7 +2,8 @@
 \usepackage[utf8]{inputenc}
 \usepackage[left=2cm,right=2cm,top=2cm,bottom=2cm]{geometry}
 \usepackage[pdftex]{graphicx}
-\newcommand{\dure}[1]{\item En \textbf{#1},}
+\usepackage[final]{pdfpages}
+\newcommand{\dure}[2]{\item Du \textbf{#1} au \textbf{#2},}
 \newcommand{\rul}{\rule{5cm}{0.3mm}}
 
 \begin{document}
@@ -14,28 +15,30 @@ L'utilisateur sera amené à encoder une trajectoire dans un fichier. C'est-à-d
 Puis, grâce à un réseau de neurones préalablement entraîné sur un sol donné, le programme devra envoyer fréquemment des commandes à la Sphero2.0\footnote{http://www.sphero.com/sphero} pour qu'elle suive la trajectoire encodée, à moins que l'utilisateur n'ait encodé une trajectoire physiquement impossible pour la Sphero (comme un angle droit à effectuer à 10m/s).
 
 \section*{Ordre des tâches}
-Voici un résumé des tâches planifiées, par ordre chronologique:
+Voici un résumé des tâches planifiées et leur date de début et fin de tâche estimée. (Le diagramme est en annexe)
 \begin{enumerate}
- \dure{5 jours} Lecture de documents sur la commande par réseau de neurones.
- \dure{5 jours} Comparaison des différentes API.
- \dure{4 jours} Stream de données de et vers la Sphero.
- \dure{1 jour } Mesure des latences des paquets streamés.
- \dure{3 jours} Outil de visualisation. (Odométrie, trajectoire réelle, vitesses)
- \dure{1 jours} Visualisation d'historique états/commandes.
- \dure{3 jours} Pré-rapport de janvier.\\ \rul\textbf{2\textsuperscript{ème} quadri}\rul
- \dure{2 jour } Suivi de la trajectoire de la Sphero.
- \dure{1 jours} Lecture d'un document sur l'implémentation d'un réseaux de neurones.
- \dure{4 jours} Réalisation d'un réseau de neurones artificiel adéquat.
- \dure{1 jour } Utilisation du réseau de neurones sur un problème jouet.\footnote{Permet de tester le bon fonctionnement du pouvoir d'approximation universelle de fonction du réseau de neurones et de sa paramétrisation.}
- \dure{1 jour } Mesure de la latence des prédictions.
- \dure{1 jour } Rapport sur l'apprentissage en fonction des paramètres du réseau.
- \dure{8 jours} Collecte des données utiles pour l'apprentissage en balayant toutes les configurations possibles.\footnote{Peut-être d'abord restreint sur de faibles vitesses.}
- \dure{2 jours} Chargement et enregistrement d'un fichier contenant les poids et paramètres d'un réseau de neurones.
- \dure{2 jours} Rapport sur le réglage des paramètres du réseau.
- \dure{1 jours} Lecture d'un fichier d'encodage de trajectoire.
- \dure{4 jours} Outil pour tracer la trajectoire.
- \dure{5 jours} Version finale du programme.
- \dure{6 jours} Rapport final.
+ \dure{24/10}{07/01} Lecture de documents sur la commande par réseau de neurones.
+ \dure{26/10}{13/11} Comparaison des différentes API.
+ \dure{14/11}{11/12} Stream de données de et vers la Sphero.
+ \dure{28/11}{12/12} Mesure des latences des paquets streamés.
+ \dure{29/11}{18/12} Outil de visualisation. (Odométrie, trajectoire réelle, vitesses)
+ \dure{29/11}{18/12} Visualisation d'historique états/commandes.
+ \dure{19/12}{08/01} Pré-rapport de janvier.\\ \rul\textbf{2\textsuperscript{ème} quadri}\rul
+ \dure{23/01}{05/02} Suivi de la trajectoire de la Sphero.
+ \dure{30/01}{12/02} Lecture d'un document sur l'implémentation d'un réseaux de neurones.
+ \dure{06/02}{05/03} Réalisation d'un réseau de neurones artificiel adéquat.
+ \dure{06/03}{19/03} Utilisation du réseau de neurones sur un problème jouet.\footnote{Permet de tester le bon fonctionnement du pouvoir d'approximation universelle de fonction du réseau de neurones et de sa paramétrisation.}
+ \dure{13/03}{20/03} Mesure de la latence des prédictions.
+ \dure{20/03}{26/03} Rapport sur l'apprentissage en fonction des paramètres du réseau.
+ \dure{30/01}{26/03} Collecte des données utiles pour l'apprentissage en balayant toutes les configurations possibles.\footnote{Peut-être d'abord restreint sur de faibles vitesses.}
+ \dure{06/03}{26/03} Chargement et enregistrement d'un fichier contenant les poids et paramètres d'un réseau de neurones.
+ \dure{03/04}{09/04} Rapport sur le réglage des paramètres du réseau.
+ \dure{13/03}{19/03} Lecture d'un fichier d'encodage de trajectoire.
+ \dure{06/03}{02/04} Outil pour tracer la trajectoire.
+ \dure{10/04}{30/04} Version finale du programme.
+ \dure{31/04}{date de remise} Rapport final.
 \end{enumerate}
+
+\includepdf{Gantt3pd.pdf}
 
 \end{document}
