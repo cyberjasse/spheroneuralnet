@@ -1,13 +1,25 @@
+#ignore gedit backup files
 *~
+
+#ignore LaTex intermediary files
 *.tex.backup
 *.aux
 *.log
+*.bbl
+*.blg
+*.toc
 
+#ignore Python compiled files
 *.pyc
 *.pyo
+
+#ignore Java compiled files
 *.class
+
+#ignore c++ compiled files
 *.o
 *.out
 
+#ignore downloaded APIs
 cpp/sphero-linux-api
 python/sphero-ros
