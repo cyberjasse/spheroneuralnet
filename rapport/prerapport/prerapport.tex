@@ -9,6 +9,7 @@
 \usepackage{cite}
 \begin{document}
 \input{../titlepage}
+\input{../commands}
 \spherotitle{Pré-rapport}{Décembre 2016}
 \tableofcontents
 \section{Introduction}
@@ -16,7 +17,15 @@
 \subsection{Perceptron mutli-couches}
 \subsection{Base radiale}
 \section{Architectures}
+\section{Design du vecteur d'entrée et de sortie}
 \section{Choix de l'architecture}
+Le réseau le mieux adapté pour notre problème est un réseau de neurones à base radial.
+En effet, les \rbf sont moins sensibles au bruit que les \mlp \cite{adversarial,Gauthier}.%gauthier p 39,40
+%TODO pourquoi
+Un inconvénient des \rbf, celui du nombre de neurones cachés qui croît avec la dimension et la taille du vecteur d'entrée, ne pose pas de problème dans notre cas
+car le nombre de dimensions est faible
+et le domaine d'entrée est assez faible pour chaque dimensions.
+%TODO montrer avant les dimensions et les domaines
 \section{API disponibles}
 \section{Choix de l'API}
 \section{Conclusion}
