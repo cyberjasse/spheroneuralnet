@@ -23,3 +23,4 @@
 #ignore downloaded APIs
 cpp/sphero-linux-api
 python/sphero-ros
+doc/
