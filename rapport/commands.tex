@@ -1,3 +1,31 @@
-\newcommand{\termi}[1]{\uppercase{#1 } }
+\newcommand{\terminologie}{
+ \begin{center}
+ \underline{\hypertarget{terminologie}{Terminologie}}\\
+ \begin{tabular}{|l|l|}
+  \hline
+  Terme & Nom anglais complet\\
+  \hline
+  ANN & Artificial Neural Network\\
+  ELM & Extreme Learning Machine\\
+  FNN & Feedforward Neural Networks\\
+  MLP & Multi-Layer Perceptron\\
+  RBF & Radial Basis Function\\
+  CNN & Convolutional neural Network\\
+  RNN & Recurrent Neural Network\\
+  SRN & Simple Recurrent Network\\
+  ESN & Echo State Network\\
+  LSM & Liquid State Machine\\
+  SNN & Spiking Neural Network\\
+  LSTM & Long Short-Term Memory\\
+  BRNN & Bi-directional Recurrent Neural Network\\
+  RMLP & Recurrent Multilayer Perceptron\\
+  \hline
+ \end{tabular}
+\end{center}
+}
+
+\newcommand{\termi}[1]{\hyperlink{terminologie}{\uppercase{#1}} }
 \newcommand{\rbf}{\termi{rbf}}
 \newcommand{\mlp}{\termi{mlp}}
+
+\newcommand{\enum}[1]{``#1''}%{\og\textbf{#1}\fg}
