@@ -32,10 +32,50 @@ Et enfin, nous aurons invévitablement des bruitages dans les données fournies 
 
 \section{Principaux réseaux de neurones artificiels}
 \terminologie
-\subsection{Perceptron mutli-couches}
-\subsection{Base radiale}
-\subsection{Convolutif}
-\subsection{Récurrent}
+\subsection{Perceptron mutli-couches (MLP)}
+\subsubsection*{Neurone}
+\begin{figure}
+ \centering
+ \includegraphics[scale=0.5]{../invalid.png}
+ \caption{Un neurone artificiel. \textbf{Source}: Haykin\cite{Haykin}}
+ \label{neuronemlp}
+\end{figure}
+\begin{figure}
+ \centering
+ %insert tableau de statistica here
+ <Tableau STATISTICA>
+ \caption{Fonctions principalement utilisés dans un neurone d'un MLP. \textbf{Source}: STATISTICA Réseaux de Neurones Automatisés (SANN)\cite{statistica}}
+ \label{mlpfonc}
+\end{figure}
+Tout d'abord focalisons-nous sur le travail d'un neurone (Figure \ref{neuronemlp}).
+Un neurone effectue tout d'abord une somme pondérée de ses entrées.
+Chaque terme est mutiplié par un poid. Ce sont les poids qui seront modifiés lors de la phase d'apprentissage.
+Ensuite il applique la fonction $\phi(x)$ sur la somme pondérée.%TODO notation dans l'image
+Le domaine de $y$ est généralement $[0,1]$ ou $[-1,1]$.\cite{Haykin}
+La fonction $\phi(x)$ utilisé dépend du problème qu'on veut résoudre (Figure \ref{mlpfonc}).
+\subsubsection*{Structure}
+\begin{figure}
+ \centering
+ \includegraphics[scale=0.5]{../invalid.png}
+ \caption{Structure MLP à une couche cachée. \textbf{Source}: ?}
+ \label{structuremlp}
+\end{figure}
+Un \mlp est composé de plusieurs couches (Figure \ref{structuremlp}):\\
+couche d'entrée $\rightarrow$ couches cachées $\rightarrow$ couche de sortie.
+Un neurone envoie sa sortie vers tous les neurones de la couche suivantes.
+Chaque neurones de la couche d'entrée correspond à une dimension du vecteur d'entrée et renvoie juste la valeur de l'entrée dans cette dimension.
+Chaque neurones de sortie correspond à une dimension du vecteur de sortie.
+Chaque neurones cachés correspond à un neurones de la Figure \ref{neuronemlp}.
+\subsubsection*{Applications}
+À une couche cachée, un \mlp peut déja servir dans la prédiction de profil.\cite{statistica}\\
+Les \mlp sont aussi utilisés en commande de robot par caméra.\cite{Pomerleau}
+
+\subsection{Base radiale (RBF)}
+
+
+\subsection{Convolutif (CNN)}
+\subsection{Récurrent (RNN)}
+\subsection{CMAC}
 \section{Architectures}
 \section{Design du vecteur d'entrée}
 \subsection{Données utiles}
@@ -78,9 +118,7 @@ Le vecteur de sortie sera la puissance à donner pour les deux moteurs.
 
 \section{Choix de l'architecture}
 Nous n'avons pas besoin d'un réseau de neurones récurrent. Les commandes à appliquer au moment $t$ ne dépendent pas de la vitesse, position et autres données fournies à $t-T$.
-
 Le réseau le mieux adapté pour notre problème est un réseau de neurones à base radial.
-
 En effet, les \rbf sont moins sensibles au bruit que les \mlp \cite{adversarial,Gauthier}.%gauthier p 39,40
 %TODO pourquoi
 Un inconvénient des \rbf, celui du nombre de neurones cachés qui croît avec la dimension et la taille du vecteur d'entrée, ne pose pas de problème dans notre cas
@@ -92,6 +130,11 @@ Il existe également des APIs créé par la communauté:\cite{gosphero} \textbf{
 %TODO
 \section{Conclusion}
 \subsection*{Remerciements}
+\noindent Je remercie monsieur Pierre \textsc{Hauweele} de m'avoir proposé un projet qui est exactement dans le domaine que je voulais, de son aide et d'avoir choisi d'être directeur de mon projet.\\
+
+\noindent Je remercie monsieur Hadrien Mélot d'être directeur de mon projet et de l'aide qu'il m'a apporté.\\
+
+\noindent Je remercie monsieur Tom Mens d'être rapporteur de mon projet et de son aide.\\
 
 \bibliographystyle{plain}
 \bibliography{../bibli}
