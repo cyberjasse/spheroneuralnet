@@ -1,17 +1,15 @@
 \documentclass[12pt,a4paper,oneside, titlepage]{article}
 \usepackage[left=2cm,right=2cm,top=2cm,bottom=2cm]{geometry}
-\usepackage[nottoc, notlof, notlot]{tocbibind}
 \usepackage[pdftex]{graphicx}
 \usepackage[final]{pdfpages}
-\usepackage[frenchb]{babel}
+%\usepackage[frenchb]{babel}
 \usepackage[utf8]{inputenc}
-\usepackage{hyperref}
 \usepackage{cite}
+\usepackage{hyperref}
 \begin{document}
 \input{../titlepage}
 \input{../commands}
 \spherotitle{Pré-rapport}{Décembre 2016}
-\tableofcontents
 \section{Introduction}
 \subsection*{Énoncé}
 Ce projet consiste à implémenter un \emph{réseau de neurones artificiels} \hypertarget{rna}{(RNA)} de commander la Sphero.
@@ -31,56 +29,70 @@ En effet, Il est très difficile de générer les commandes de manières analyti
 Grâce au fait qu'un RNA agit comme une boite noire et est approximateur universel de fonction, nous pouvons nous passer de la conception d'un simulateur ou d'une tentative de formule analytique pour génerer les commandes.
 De plus, si l'apprentissage se fait on-line, le réseau de neurones pourra s'adapter si le coefficient de frottement du sol change ou si il y une modification à la Sphero.
 Et enfin, nous aurons invévitablement des bruitages dans les données fournies par les capteurs.
+
 \section{Principaux réseaux de neurones artificiels}
+\terminologie
 \subsection{Perceptron mutli-couches}
 \subsection{Base radiale}
+\subsection{Convolutif}
+\subsection{Récurrent}
 \section{Architectures}
-\section{Design du vecteur d'entrée et de sortie}
-Avant de choisir le réseau de neurones à utiliser, il est important d'identifier ce que nous souhaitons obtenir en sortie et les informations que nous pouvons fournir en sortie sans fournir des données inutiles.
+\section{Design du vecteur d'entrée}
+\subsection{Données utiles}
+Avant de choisir le réseau de neurones à utiliser, il est important d'identifier ce que nous souhaitons obtenir en sortie et les informations que nous pouvons fournir en entrée sans fournir des données inutiles.
 Si le vecteur d'entrée est de dimension très grande, alors un réseau \rbf devra avoir un trop grand nombre de neurones cachés\cite{Gauthier}.
 Si nous supposons que la sortie produite peut dépendre non seulement de l'input actuel mais aussi des entrées précédentes, alors un réseau récurrent devra être utilisé.
+
 La Sphero peut nous fournir:
 \begin{itemize}%TODO les unités
  \item Sa position grâce à un odomètre,
  \item Son vecteur vitesse,
  \item Son vecteur d'accélération grâce à un accéleromètre,
  \item L'orientation, par rapport à la coque, du rotor permettant les mouvements balanciers,
- \item Son niveau de charge (Label \og Bon \fg, \og Bas \fg, \og Critique \fg),%TODO tous les labels sont là ?
+ \item Son niveau de charge (Label \enum{Bon}, \enum{Bas}, \enum{Critique}),%TODO tous les labels sont là ?
  \item État des LEDs, évènement de collision, ... %TODO completer
 \end{itemize}
+
 Parmis ces données, nous n'avons pas besoin de l'état des LEDs car il n'influence pas la conduite de la Shero.
+
 Le niveau de charge pourrait influencer la conduite.
 Il se pourrait que la puissance maximale des moteurs diminuent lorsque la charge est trop faible.
-Pour ne pas devoir effectuer un entrainement pour chaque niveau de charge différente, on entrainera la Sphero que pour les cas où le niveau de charge est à \og Bon \fg.
-Et on supposera donc que la conduite sera effectuée qu'avec ce niveau de charge.
+Pour ne pas devoir effectuer un entrainement pour chaque niveau de charge différente, on entrainera la Sphero que pour les cas où le niveau de charge est à \enum{Bon} et on supposera donc que la conduite sera effectuée qu'avec ce niveau de charge.
+
 Pour l'accélération, les commandes à appliquer à l'instant $t$ ne dépendent pas de l'accélération à l'instant $t$ juste avant l'application des commandes.
 Mais par contre, cette donnée peut être utile pour anticiper la vitesse de la Sphero au moment où elle reçoit les commandes car du à la latence d'envoi de paquet, la vitesse à l'instant $t$ n'est plus la même que celle communiquée.
 Si cette donnée impacte peu dans les résultats obtenus, alors nous pourrions décider de nous passer de ce paramètre.
-Une dimension de plus dans le vecteur d'entrée demandera un plus grand nombre d'exemples pour la phases d'apprentissage car il faut balayer toutes les configurations pussibles de vecteur d'entrée.
+Ajouter cette dimension dans le vecteur d'entrée demandera un plus grand nombre d'exemples pour la phases d'apprentissage car il faut balayer toutes les configurations possibles de vecteur d'entrée.
 
+\subsection{Choix du design}
  %TODO montrer les design repris chez gauthier
 
 La vitesse maximale de la Sphero est de 4,5 miles par heure\cite{product}.
 Ce qui fait environ 2 mètres pas seconde.
 %Or les temps de récéption de ping après envoi son de 9ms avec quelque pics allants jusqu'à 37ms. TODO meilleurs mesures
 Pour de meilleures précisions, on ajoute un vecteur vitesse à atteindre sur le point de destination.
-Pour économiser un neurone d'entrée, on aligne l'axe des abscisses avec l'axe de l'orientation du moteur.
+On aligne l'axe des abscisses avec l'axe de l'orientation du moteur afin de reduire le domaine d'entrée et donc le nombre d'exemples à créer pour l'apprentissage.
 Le vecteur d'entrée contiendra donc le vecteur vitesse, la position relative à atteindre dans $T$ secondes où $T$ sera la période à laquelle on échantillonera les données des capteurs et le vecteur vitesse à atteindre sur cette position de destination.
 Nous avons donc un vecteur d'entrée à 6 dimensions.
 Le vecteur de sortie sera la puissance à donner pour les deux moteurs.
 
 \section{Choix de l'architecture}
+Nous n'avons pas besoin d'un réseau de neurones récurrent. Les commandes à appliquer au moment $t$ ne dépendent pas de la vitesse, position et autres données fournies à $t-T$.
+
 Le réseau le mieux adapté pour notre problème est un réseau de neurones à base radial.
+
 En effet, les \rbf sont moins sensibles au bruit que les \mlp \cite{adversarial,Gauthier}.%gauthier p 39,40
 %TODO pourquoi
 Un inconvénient des \rbf, celui du nombre de neurones cachés qui croît avec la dimension et la taille du vecteur d'entrée, ne pose pas de problème dans notre cas
 car le nombre de dimensions est faible
 et le domaine d'entrée est assez faible pour chaque dimensions.
-%TODO montrer avant les dimensions et les domaines
-\section{API disponibles}
 \section{Choix de l'API}
+Les APIs officiels sont:\cite{SDKofficiels} \textbf{Objective-C}, \textbf{Swift}, \textbf{Android}.\\
+Il existe également des APIs créé par la communauté:\cite{gosphero} \textbf{C\#}, \textbf{JavaScript}, \textbf{Ruby}, \textbf{Python}\cite{pythonAPI}, \textbf{Arduino}, \textbf{C++}\cite{cppAPI}.\\
+%TODO
 \section{Conclusion}
 \subsection*{Remerciements}
-\bibliographystyle{unsrt-fr}
+
+\bibliographystyle{plain}
 \bibliography{../bibli}
 \end{document}
