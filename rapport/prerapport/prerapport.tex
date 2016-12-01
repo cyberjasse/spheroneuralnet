@@ -10,6 +10,8 @@
 \input{../titlepage}
 \input{../commands}
 \spherotitle{Pré-rapport}{Décembre 2016}
+\tableofcontents
+\newpage
 \section{Introduction}
 \subsection*{Énoncé}
 Ce projet consiste à implémenter un \emph{réseau de neurones artificiels} \hypertarget{rna}{(RNA)} de commander la Sphero.
@@ -36,21 +38,21 @@ Et enfin, nous aurons invévitablement des bruitages dans les données fournies 
 \subsubsection*{Neurone}
 \begin{figure}
  \centering
- \includegraphics[scale=0.5]{../figures/invalid.png}
+ \includegraphics[scale=0.5]{../figures/neurone.jpg}
  \caption{Un neurone artificiel. \textbf{Source}: Haykin\cite{Haykin}}
  \label{neuronemlp}
 \end{figure}
 \begin{figure}
  \centering
  %insert tableau de statistica here
- <Tableau STATISTICA>
+ \textbf{Tableau STATISTICA}
  \caption{Fonctions principalement utilisés dans un neurone d'un MLP. \textbf{Source}: STATISTICA Réseaux de Neurones Automatisés (SANN)\cite{statistica}}
  \label{mlpfonc}
 \end{figure}
 Tout d'abord focalisons-nous sur le travail d'un neurone (Figure \ref{neuronemlp}).
-Un neurone effectue tout d'abord une somme pondérée de ses entrées.
-Chaque terme est mutiplié par un poid. Ce sont les poids qui seront modifiés lors de la phase d'apprentissage.
-Ensuite il applique la fonction $\phi(x)$ sur la somme pondérée.%TODO notation dans l'image
+Un neurone effectue tout d'abord une somme pondérée $v = b+\sum_{i=0}^{m}x_{i}w_{i}$ de ses entrées.
+Chaque terme est mutiplié par un poid $w$. Ce sont les poids qui seront modifiés lors de la phase d'apprentissage.
+Ensuite il applique la fonction $\phi(x)$ sur la somme pondérée.
 Le domaine de $y$ est généralement $[0,1]$ ou $[-1,1]$.\cite{Haykin}
 La fonction $\phi(x)$ utilisé dépend du problème qu'on veut résoudre (Figure \ref{mlpfonc}).
 \subsubsection*{Structure}
@@ -62,9 +64,9 @@ La fonction $\phi(x)$ utilisé dépend du problème qu'on veut résoudre (Figure
 \end{figure}
 Un \mlp est composé de plusieurs couches (Figure \ref{structuremlp}):\\
 couche d'entrée $\rightarrow$ couches cachées $\rightarrow$ couche de sortie.
-Un neurone envoie sa sortie vers tous les neurones de la couche suivantes.
+Un neurone envoie sa sortie vers tous les neurones de la couche suivante.
 Chaque neurones de la couche d'entrée correspond à une dimension du vecteur d'entrée et renvoie juste la valeur de l'entrée dans cette dimension.
-Chaque neurones de sortie correspond à une dimension du vecteur de sortie.%TODO quelle fonction ?
+Chaque neurones de sortie correspond à une dimension du vecteur de sortie. %TODO quelle fonction ?
 Chaque neurones cachés correspond à un neurones de la Figure \ref{neuronemlp}.
 \subsubsection*{Applications}
 À une couche cachée, un \mlp peut déja servir dans la prédiction de profil.\cite{statistica}\\
@@ -95,6 +97,31 @@ Un \rbf peut aussi servir dans la prédiction de profil.\cite{statistica}
 
 \subsection{Convolutif (CNN)}
 \subsection{Récurrent (RNN)}
+\subsubsection*{Structure}
+\begin{figure}
+ \centering
+ \includegraphics[scale=0.5]{../figures/structurermlp.jpg}
+ \caption{Structure RLMP. \textbf{Source}: Haykin. p795\cite{Haykin}}
+ \label{structurermlp}
+\end{figure}
+\begin{figure}
+ \centering
+ \includegraphics[scale=0.5]{../figures/neuronermlp.jpg}
+ \caption{Neurone caché d'un RMLP}
+ \label{neuronermlp}
+\end{figure}
+Un réseau de neurones récurrent est un réseaux présentant des boucles dans sa structure.
+Des \enum{retardeurs} notés $Z^{-1}$ sont présents sur certains arcs dans le réseau afin de retarder d'une étape la transmission d'une valeur.
+Une étape dans un réseau consiste à recevoir une entrée et en générer une sortie.
+Il existe plusieurs réseaux de type récurrent (récurrent simple, machine à états liquide, etc).
+La Figure \ref{structurermlp} Présente un réseau de type perceptron multi-couches récurrent (\rmlp).
+Il s'agit d'un \mlp dont les neurones de la couches cachée ont un arc qui boucle sur le neurone lui-même avec un $Z^{-1}$ sur cet arc, comme sur la Figure \ref{neuronermlp}.
+\subsubsection*{Applications}
+Grâce aux \enum{retardeurs} $Z^{-1}$, le réseau peut approximer des fonctions dont la sortie ne dépend pas seulement de l'entrée actuelle mais aussi des entrées précédentes.
+Par exemple, le réseau de neurones récurrent simple (\srn), qui est un \rmlp à une seule couche cachée, peu déja effectuer des prédictions de symbole en suivant une séquence.
+Les \emph{machines à états liquides} (\lsm), donc les connections se font de manière aléàtoire, sont utilisés pour la reconnaissance automatique de la parole. %TODO citer
+Les \emph{long-short term memory} sont utilisés pour la reconnaissance automatique de la parole ou de l'écriture manuscrite. %TODO citer
+
 \subsection{CMAC}
 \section{Architectures}
 \section{Design du vecteur d'entrée}
@@ -103,21 +130,22 @@ Avant de choisir le réseau de neurones à utiliser, il est important d'identifi
 Si le vecteur d'entrée est de dimension très grande, alors un réseau \rbf devra avoir un trop grand nombre de neurones cachés\cite{Gauthier}.
 Si nous supposons que la sortie produite peut dépendre non seulement de l'input actuel mais aussi des entrées précédentes, alors un réseau récurrent devra être utilisé.
 
-La Sphero peut nous fournir:
+La Sphero peut nous fournir:\cite{SDKofficiels}
 \begin{itemize}%TODO les unités
- \item Sa position grâce à un odomètre,
- \item Son vecteur vitesse,
- \item Son vecteur d'accélération grâce à un accéleromètre,
- \item L'orientation, par rapport à la coque, du rotor permettant les mouvements balanciers,
- \item Son niveau de charge (Label \enum{Bon}, \enum{Bas}, \enum{Critique}),%TODO tous les labels sont là ?
- \item État des LEDs, évènement de collision, ... %TODO completer
+ \item Sa position grâce à un odomètre (cm),
+ \item Son vecteur vitesse (mm/s),
+ \item Son vecteur d'accélération grâce à un accéleromètre (mG),
+ \item Son orientation (-179$\rightarrow$180 degrés),
+ \item Son niveau de charge (Label \enum{En charge}, \enum{OK}, \enum{Bas}, \enum{Critique}),
+ \item État des LEDs, évènement de collision, voltage de la batterie, nombre de charges, version ...
 \end{itemize}
 
-Parmis ces données, nous n'avons pas besoin de l'état des LEDs car il n'influence pas la conduite de la Shero.
+Parmis ces données, nous n'avons pas besoin de l'état des LEDs, version et nombre de charges car ils n'influencent pas la conduite de la Shero.
+Dans ce projet, nous ne prenons pas en compte les éventuels collisions.
 
 Le niveau de charge pourrait influencer la conduite.
 Il se pourrait que la puissance maximale des moteurs diminuent lorsque la charge est trop faible.
-Pour ne pas devoir effectuer un entrainement pour chaque niveau de charge différente, on entrainera la Sphero que pour les cas où le niveau de charge est à \enum{Bon} et on supposera donc que la conduite sera effectuée qu'avec ce niveau de charge.
+Pour ne pas devoir effectuer un entrainement pour chaque niveau de charge différente, on entrainera la Sphero que pour les cas où le niveau de charge est à \enum{OK} et on supposera donc que la conduite sera effectuée qu'avec ce niveau de charge.
 
 Pour l'accélération, les commandes à appliquer à l'instant $t$ ne dépendent pas de l'accélération à l'instant $t$ juste avant l'application des commandes.
 Mais par contre, cette donnée peut être utile pour anticiper la vitesse de la Sphero au moment où elle reçoit les commandes car du à la latence d'envoi de paquet, la vitesse à l'instant $t$ n'est plus la même que celle communiquée.
@@ -136,7 +164,7 @@ Le vecteur d'entrée contiendra donc le vecteur vitesse, la position relative à
 Nous avons donc un vecteur d'entrée à 6 dimensions.
 Le vecteur de sortie sera la puissance à donner pour les deux moteurs.
 
-\section{Choix de l'architecture}
+\section{Choix du réseau}
 Nous n'avons pas besoin d'un réseau de neurones récurrent. Les commandes à appliquer au moment $t$ ne dépendent pas de la vitesse, position et autres données fournies à $t-T$.
 Le réseau le mieux adapté pour notre problème est un réseau de neurones à base radial.
 En effet, les \rbf sont moins sensibles au bruit que les \mlp \cite{adversarial,Gauthier}.%gauthier p 39,40
