@@ -13,13 +13,30 @@ Chaque terme $x_j$ est mutiplié par un poid $w_{kj}$. Ce sont les poids qui ser
 Le biai $b_k$ est souvent ajouté à la pondération. Mais pour simplifier les formules, nous pouvons considèrer $b_k$ comme étant l'entrée $x_0 = 1$ de poid fixe $w_{k0} = 1$.
 Et la somme pondérée est donc maintenant de la forme \[v_k = \sum_{j=0}^{m}x_{j}w_{kj}\]
 Ensuite le neurone applique la \emph{fonction d'activation} $\phi$ sur la somme pondérée.
-Le domaine de $y$ est généralement $[0,1]$ ou $[-1,1]$.\cite{Haykin}
+Le domaine de $y$ est généralement $[0,1]$ ou $[-1,1]$.\cite{Haykin,statistica}
 La fonction $\phi$ utilisée dépend du problème qu'on veut résoudre (Figure \ref{mlpfonc}).
 \begin{figure}
  \centering
  %insert tableau de statistica here
- \textbf{Tableau STATISTICA}
- \caption{Fonctions principalement utilisés dans un neurone d'un MLP. \textbf{Source}: STATISTICA Réseaux de Neurones Automatisés (SANN)\cite{statistica}}
+ \textbf{Fonctions d'activations.} (fonction de $x$)\\
+ \begin{tabular}{|l|c|c|}
+  Nom & Formule & Image\\
+  \hline
+  Identité & $x$ & $]-\infty,\infty[$\\
+  \hline
+  Sigmoïde & $\frac{1}{1+\exp^{-x}}$ & $]0,1]$\\
+  \hline
+  Tangente hyperbolique & $\frac{\exp^{x}-\exp^{-x}}{\exp^{x}+\exp^{-x}}$ & $]-1,1[$\\
+  \hline
+  Exponentielle & $e^{-x}$ & $]0,\infty[$\\
+  \hline
+  Sinus & $\sin{x}$ & $[-1,1]$\\
+  \hline
+  Softmax & $\frac{\exp^{x}}{\sum{\exp^{x_i}}}$ & $]0,1[$\\
+  \hline
+ \end{tabular}
+
+ \caption{Fonctions d'activation principalement utilisés dans un MLP. \textbf{Source}: STATISTICA Réseaux de Neurones Automatisés (SANN)\cite{statistica}}
  \label{mlpfonc}
 \end{figure}
 \subsubsection*{Structure}
