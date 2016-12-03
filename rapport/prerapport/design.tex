@@ -1,0 +1,39 @@
+\section{Design du vecteur d'entrée}
+\subsection{Données utiles}
+Avant de choisir le réseau de neurones à utiliser, il est important d'identifier ce que nous souhaitons obtenir en sortie et les informations que nous pouvons fournir en entrée sans fournir des données inutiles.
+Si le vecteur d'entrée est de dimension très grande, alors un réseau \rbf devra avoir un trop grand nombre de neurones cachés\cite{Gauthier}.
+Si nous supposons que la sortie produite peut dépendre non seulement de l'input actuel mais aussi des entrées précédentes, alors un réseau récurrent devra être utilisé.
+
+La Sphero peut nous fournir:\cite{SDKofficiels}
+\begin{itemize}
+ \item Sa position grâce à un odomètre (cm),
+ \item Son vecteur vitesse (mm/s),
+ \item Son vecteur d'accélération grâce à un accéleromètre (mG),
+ \item Son orientation (-179$\rightarrow$180 degrés),
+ \item Son niveau de charge (Label \enum{En charge}, \enum{OK}, \enum{Bas}, \enum{Critique}),
+ \item État des LEDs, évènement de collision, voltage de la batterie, nombre de charges, version ...
+\end{itemize}
+
+Parmis ces données, nous n'avons pas besoin de l'état des LEDs, version et nombre de charges car ils n'influencent pas la conduite de la Shero.
+Dans ce projet, nous ne prenons pas en compte les éventuels collisions.
+
+Le niveau de charge pourrait influencer la conduite.
+Il se pourrait que la puissance maximale des moteurs diminuent lorsque la charge est trop faible.
+Pour ne pas devoir effectuer un entrainement pour chaque niveau de charge différent, on entrainera la Sphero que pour les cas où le niveau de charge est à \enum{OK} et on supposera donc que la conduite sera effectuée qu'avec ce niveau de charge.
+
+Pour l'accélération, les commandes à appliquer à l'instant $t$ ne dépendent pas de l'accélération à l'instant $t$ juste avant l'application des commandes.
+Mais par contre, cette donnée peut être utile pour anticiper la vitesse de la Sphero au moment où elle reçoit les commandes car du à la latence d'envoi de paquet, la vitesse à l'instant $t$ n'est plus la même que celle communiquée.
+Si cette donnée impacte peu dans les résultats obtenus, alors nous pourrions décider de nous passer de ce paramètre.
+Ajouter cette dimension dans le vecteur d'entrée demandera un plus grand nombre d'exemples pour la phases d'apprentissage car il faut balayer toutes les configurations possibles de vecteur d'entrée.
+
+\subsection{Choix du design}
+ %TODO montrer les design repris chez gauthier
+
+La vitesse maximale de la Sphero est de 4,5 miles par heure\cite{product}.
+Ce qui fait environ 2 mètres par seconde.
+%Or les temps de récéption de ping après envoi son de 9ms avec quelque pics allants jusqu'à 37ms. TODO meilleurs mesures
+Pour de meilleures précisions, on ajoute un vecteur vitesse à atteindre sur le point de destination.
+On aligne l'axe des abscisses avec l'axe de l'orientation du moteur afin de reduire le domaine d'entrée et donc le nombre d'exemples à créer pour l'apprentissage.
+Le vecteur d'entrée contiendra donc le vecteur vitesse, la position relative à atteindre dans $T$ secondes où $T$ sera la période à laquelle on échantillonera les données des capteurs et le vecteur vitesse à atteindre sur cette position de destination.
+Nous avons donc un vecteur d'entrée à 6 dimensions.
+Le vecteur de sortie sera la puissance à donner pour les deux moteurs.
