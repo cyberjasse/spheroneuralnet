@@ -6,6 +6,8 @@
 \usepackage[utf8]{inputenc}
 \usepackage{cite}
 \usepackage{hyperref}
+\usepackage{amsmath}
+\usepackage{amsthm}
 \begin{document}
 \input{../titlepage}
 \input{../commands}
@@ -32,16 +34,25 @@ Grâce au fait qu'un RNA agit comme une boite noire et est approximateur univers
 De plus, si l'apprentissage se fait on-line, le réseau de neurones pourra s'adapter si le coefficient de frottement du sol change ou si il y une modification à la Sphero.
 Et enfin, nous aurons invévitablement des bruitages dans les données fournies par les capteurs.
 
-\section{Principaux réseaux de neurones artificiels}
+\section{Modèles de réseaux de neurones artificiels}
 \terminologie
 \subsection{Perceptron mutli-couches (MLP)}
 \subsubsection*{Neurone}
+Tout d'abord focalisons-nous sur le travail d'un neurone.
+Sur la Figure \ref{neuronemlp}), $k$ est l'indice du neurone.
 \begin{figure}
  \centering
  \includegraphics[scale=0.5]{../figures/neurone.jpg}
  \caption{Un neurone artificiel. \textbf{Source}: Haykin\cite{Haykin}}
  \label{neuronemlp}
 \end{figure}
+Un neurone effectue tout d'abord une somme pondérée de ses entrées \[v_k = b_k+\sum_{j=1}^{m}x_{j}w_{kj}\] où $x$ est le vecteur d'entrée de dimensions $m$.\\
+Chaque terme $x_j$ est mutiplié par un poid $w_{kj}$. Ce sont les poids qui seront modifiés lors de la phase d'apprentissage.
+Le biai $b_k$ est souvent ajouté à la pondération. Mais pour simplifier les formules, nous pouvons considèrer $b_k$ comme étant l'entrée $x_0 = 1$ de poid fixe $w_{k0} = 1$.
+Et la somme pondérée est donc maintenant de la forme \[v_k = \sum_{j=0}^{m}x_{j}w_{kj}\]
+Ensuite le neurone applique la \emph{fonction d'activation} $\phi$ sur la somme pondérée.
+Le domaine de $y$ est généralement $[0,1]$ ou $[-1,1]$.\cite{Haykin}
+La fonction $\phi$ utilisée dépend du problème qu'on veut résoudre (Figure \ref{mlpfonc}).
 \begin{figure}
  \centering
  %insert tableau de statistica here
@@ -49,12 +60,6 @@ Et enfin, nous aurons invévitablement des bruitages dans les données fournies 
  \caption{Fonctions principalement utilisés dans un neurone d'un MLP. \textbf{Source}: STATISTICA Réseaux de Neurones Automatisés (SANN)\cite{statistica}}
  \label{mlpfonc}
 \end{figure}
-Tout d'abord focalisons-nous sur le travail d'un neurone (Figure \ref{neuronemlp}).
-Un neurone effectue tout d'abord une somme pondérée $v = b+\sum_{i=0}^{m}x_{i}w_{i}$ de ses entrées.
-Chaque terme est mutiplié par un poid $w$. Ce sont les poids qui seront modifiés lors de la phase d'apprentissage.
-Ensuite il applique la fonction $\phi(x)$ sur la somme pondérée.
-Le domaine de $y$ est généralement $[0,1]$ ou $[-1,1]$.\cite{Haykin}
-La fonction $\phi(x)$ utilisé dépend du problème qu'on veut résoudre (Figure \ref{mlpfonc}).
 \subsubsection*{Structure}
 \begin{figure}
  \centering
@@ -66,8 +71,58 @@ Un \mlp est composé de plusieurs couches (Figure \ref{structuremlp}):\\
 couche d'entrée $\rightarrow$ couches cachées $\rightarrow$ couche de sortie.
 Un neurone envoie sa sortie vers tous les neurones de la couche suivante.
 Chaque neurones de la couche d'entrée correspond à une dimension du vecteur d'entrée et renvoie juste la valeur de l'entrée dans cette dimension.
-Chaque neurones de sortie correspond à une dimension du vecteur de sortie. %TODO quelle fonction ?
-Chaque neurones cachés correspond à un neurones de la Figure \ref{neuronemlp}.
+Chaque neurones de sortie correspond à une dimension du vecteur de sortie.
+Les neurones cachés et neurones de sortie correspondent à la Figure \ref{neuronemlp}.
+\subsubsection*{Apprentissage}
+Il existe plusieurs algorithmes pour changer les poids sur un réseau. Mais le plus connu pour les \mlp est l'algorithme de de rétropropagation.\cite{Haykin,Gauthier}
+Il s'agit d'un algorithme d'\emph{apprentissage supervisé}.
+\begin{definition}
+L'apprentissage supervisé est une méthode visant à améliorer un approximateur grâce à un calcul d'erreur (appelé aussi mesure de performance\cite{Gauthier}) comparant une sortie générée avec la sortie attendue.
+\end{definition}
+Nous avons donc besoin d'un ensemble de paires d'entrées/sorties. L'algorithme applique la formule développée ci-dessous pour à tous les neurones sauf les neurones d'entrée.\\
+
+Soit $\phi$, la fonction d'activation. Soit $\phi'$ la dérivée de $\phi$. Soit $Q$ l'\emph{erreur quadratique} utilisé comme mesure de performance.
+\[Q = \frac{1}{2}\sum_{i}(a_i-s_i)^2\] où $a_i$ est la sortie du neurone de sortie $i$ et $s_i$ la sortie attendue pour la dimension $i$.
+La modification du poid $W_{ij}$ vaut \[\Delta W_{ij} = -\eta\partiel{Q}{W_{ij}}\] où $\eta$ est une constante appelé \emph{pas du gradient}.
+Par le théorème de dérivation des fonctions composées, \[\partiel{Q}{W_{ij}} = \partiel{Q}{\phi_i} \partiel{\phi_i}{v_i} \partiel{v_i}{W_{ij}}\]
+\begin{thm}[dérivation des fonctions composées]
+Soit $f:A~\rightarrow~B : y~\rightarrow~f(y)$ et $g:B~\rightarrow~C : x~\rightarrow~g(x)$. Alors la dérivée de $f~\circ~g$ en $x$ vaut
+\[\partiel{f}{x} = \partiel{f}{g} \partiel{g}{x}\]
+\end{thm}
+Posons $\delta_i = \partiel{Q}{\phi_i} \partiel{\phi_i}{v_i}$. $\delta_i$ est appelé \emph{contridution à l'erreur} du neurone $i$ et est utilisé pour l'apprentissage des neurones de la couche prédédente.
+Ensuite, soit $x_i$ l'entrée du neurone $i$,
+\begin{equation}
+ \begin{split}
+  \partiel{v_i}{W_{ij}} & = \partiel{(W_{i0}x_i)}{W_{ij}} + \partiel{(W_{i1}x_i)}{W_{ij}} + ... + \partiel{(W_{ij}x_i)}{W_{ij}} + ... + \partiel{(W_{im}x_m)}{W_{ij}}\\
+  ~ & = x_i
+  \end{split}
+\end{equation}
+On a donc \[\Delta W_{ij} = -\eta \delta_i x_i\].
+Déterminons la valeur de $\delta_i$.\\
+
+\textbf{Si le neurone $i$ est un neurone de sortie,}
+Soit $m$ la dimension de l'entrée $x$ (du neurone). Soit $l$ la dimension du vecteur de sortie du réseau.
+\begin{equation}
+ \begin{split}
+  \partiel{Q}{\phi_i} & = \frac{1}{2} \left( \partiel{(\phi_0 - s_0)^2}{phi_i} + \partiel{(\phi_1 - s_1)^2}{\phi_i} + ... + \partiel{(\phi_i - s_i)^2}{\phi_i} + ... + \partiel{(\phi_l - s_l)^2}{\phi_i} \right)\\
+  ~ & = \frac{1}{2}2(\phi_i - s_i)\partiel{(\phi_i - s_i)}{\phi_i}\\
+  ~ & = (\phi_i - s_i)\\
+  \partiel{\phi_i}{v_i} & = \phi'(v_i)
+ \end{split}
+\end{equation}
+On obtient donc \[\delta_i = (\phi_i - s_i)\phi'(v_i)\]
+
+\textbf{Si le neurone $i$ est un neurone caché,}
+Soit $m$ la dimension de l'entrée $x$ (du neurone). Soit $n$ le nombre de neurone de la couche suivante.
+L'indice $k$ sera utilisé pour désigner un neurone de la couche suivante.
+\begin{equation}
+ \begin{split}
+  \partiel{Q}{\phi_i} & = \sum_{k=1}^{n} \partiel{Q}{\phi_k} \partiel{\phi_k}{v_k} \partiel{v_k}{\phi_i}\\
+  ~ & = \delta_k \partiel{v_k}{\phi_i}
+ \end{split}
+\end{equation}
+Or $\phi_i$ est l'entrée du neurone $k$ recevant la sortie du neurone $i$. Posons $W_{ki}$ le poid que $k$ attribue à $\phi_i$.
+On obtient donc \[\delta_i = \phi'(v_i) \sum_{k=1}^{n}\delta_{k}W_{ki}\]
 \subsubsection*{Applications}
 À une couche cachée, un \mlp peut déja servir dans la prédiction de profil.\cite{statistica}\\
 Les \mlp sont aussi utilisés en commande de robot par caméra.\cite{Pomerleau}
@@ -145,7 +200,7 @@ Dans ce projet, nous ne prenons pas en compte les éventuels collisions.
 
 Le niveau de charge pourrait influencer la conduite.
 Il se pourrait que la puissance maximale des moteurs diminuent lorsque la charge est trop faible.
-Pour ne pas devoir effectuer un entrainement pour chaque niveau de charge différente, on entrainera la Sphero que pour les cas où le niveau de charge est à \enum{OK} et on supposera donc que la conduite sera effectuée qu'avec ce niveau de charge.
+Pour ne pas devoir effectuer un entrainement pour chaque niveau de charge différent, on entrainera la Sphero que pour les cas où le niveau de charge est à \enum{OK} et on supposera donc que la conduite sera effectuée qu'avec ce niveau de charge.
 
 Pour l'accélération, les commandes à appliquer à l'instant $t$ ne dépendent pas de l'accélération à l'instant $t$ juste avant l'application des commandes.
 Mais par contre, cette donnée peut être utile pour anticiper la vitesse de la Sphero au moment où elle reçoit les commandes car du à la latence d'envoi de paquet, la vitesse à l'instant $t$ n'est plus la même que celle communiquée.
@@ -156,7 +211,7 @@ Ajouter cette dimension dans le vecteur d'entrée demandera un plus grand nombre
  %TODO montrer les design repris chez gauthier
 
 La vitesse maximale de la Sphero est de 4,5 miles par heure\cite{product}.
-Ce qui fait environ 2 mètres pas seconde.
+Ce qui fait environ 2 mètres par seconde.
 %Or les temps de récéption de ping après envoi son de 9ms avec quelque pics allants jusqu'à 37ms. TODO meilleurs mesures
 Pour de meilleures précisions, on ajoute un vecteur vitesse à atteindre sur le point de destination.
 On aligne l'axe des abscisses avec l'axe de l'orientation du moteur afin de reduire le domaine d'entrée et donc le nombre d'exemples à créer pour l'apprentissage.
@@ -176,7 +231,7 @@ et le domaine d'entrée est assez faible pour chaque dimensions.
 Les APIs officiels sont:\cite{SDKofficiels} \textbf{Objective-C}, \textbf{Swift}, \textbf{Android}.\\
 Il existe également des APIs créé par la communauté:\cite{gosphero} \textbf{C\#}, \textbf{JavaScript}, \textbf{Ruby}, \textbf{Python}\cite{pythonAPI}, \textbf{Arduino}, \textbf{C++}\cite{cppAPI}.\\
 %TODO
-\section{Conclusion}
+\section{Avancement du projet et perspective}
 \subsection*{Remerciements}
 \noindent Je remercie monsieur Pierre \textsc{Hauweele} de m'avoir proposé un projet qui est exactement dans le domaine que je voulais, de son aide et d'avoir choisi d'être directeur de mon projet.\\
 
