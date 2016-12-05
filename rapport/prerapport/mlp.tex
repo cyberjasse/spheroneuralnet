@@ -1,5 +1,5 @@
 \subsection{Perceptron mutli-couches (MLP)}
-\subsubsection*{Neurone}
+\subsubsection{Neurone}
 Tout d'abord focalisons-nous sur le travail d'un neurone.
 Sur la Figure \ref{neuronemlp}), $k$ est l'indice du neurone.
 \begin{figure}
@@ -39,7 +39,7 @@ La fonction $\phi$ utilisée dépend du problème qu'on veut résoudre (Figure \
  \caption{Fonctions d'activation principalement utilisés dans un MLP. \textbf{Source}: STATISTICA Réseaux de Neurones Automatisés (SANN)\cite{statistica}}
  \label{mlpfonc}
 \end{figure}
-\subsubsection*{Structure}
+\subsubsection{Structure}
 \begin{figure}
  \centering
  \includegraphics[scale=0.5]{../figures/nnstruct.png}
@@ -52,7 +52,7 @@ Un neurone envoie sa sortie vers tous les neurones de la couche suivante.
 Chaque neurones de la couche d'entrée correspond à une dimension du vecteur d'entrée et renvoie juste la valeur de l'entrée dans cette dimension.
 Chaque neurones de sortie correspond à une dimension du vecteur de sortie.
 Les neurones cachés et neurones de sortie correspondent à la Figure \ref{neuronemlp}.
-\subsubsection*{Apprentissage}
+\subsubsection{Apprentissage supervisé}\label{sec:appmlp}
 Il existe plusieurs algorithmes pour changer les poids sur un réseau. Mais le plus connu pour les \mlp est l'algorithme de de rétropropagation.\cite{Haykin,Gauthier}
 Il s'agit d'un algorithme d'\emph{apprentissage supervisé}.
 \begin{definition}
@@ -101,7 +101,10 @@ L'indice $k$ sera utilisé pour désigner un neurone de la couche suivante.
  \end{split}
 \end{equation}
 Or $\phi_i$ est l'entrée du neurone $k$ recevant la sortie du neurone $i$. Posons $W_{ki}$ le poid que $k$ attribue à $\phi_i$.
-On obtient donc \[\delta_i = \phi'(v_i) \sum_{k=1}^{n}\delta_{k}W_{ki}\]
-\subsubsection*{Applications}
+On obtient donc \
+\subsubsection{Apprentissage non supervisé}
+Il existe également des algorithmes d'apprentissage non supervisé.
+Ces algorithmes ne cherche pas à minimiser une erreur mais plutôt à maximiser un score calculé à partie de la sortie du réseau.
+\subsubsection{Applications}
 À une couche cachée, un \mlp peut déja servir dans la prédiction de profil.\cite{statistica}\\
 Les \mlp sont aussi utilisés en commande de robot par caméra.\cite{Pomerleau}

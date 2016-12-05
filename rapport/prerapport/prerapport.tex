@@ -25,7 +25,6 @@
 \input{cmac}
 
 \input{surgeneralisation}
-\section{Manières d'utiliser un réseau de neurone}
 
 \section{Choix du réseau}
 Nous n'avons pas besoin d'un réseau de neurones récurrent. Les commandes à appliquer au moment $t$ ne dépendent pas de la vitesse, position et autres données fournies à $t-T$.
@@ -35,6 +34,11 @@ En effet, les \rbf sont moins sensibles au bruit que les \mlp \cite{adversarial,
 Un inconvénient des \rbf, celui du nombre de neurones cachés qui croît avec la dimension et la taille du vecteur d'entrée, ne pose pas de problème dans notre cas
 car le nombre de dimensions est faible
 et le domaine d'entrée est assez faible pour chaque dimensions.
+
+\input{architecture}
+
+\section{Choix de la méthode}
+
 \section{Choix de l'API}
 Les APIs officiels sont:\cite{SDKofficiels} \textbf{Objective-C}, \textbf{Swift}, \textbf{Android}.\\
 Il existe également des APIs créé par la communauté:\cite{gosphero} \textbf{C\#}, \textbf{JavaScript}, \textbf{Ruby}, \textbf{Python}\cite{pythonAPI}, \textbf{Arduino}, \textbf{C++}\cite{cppAPI}.\\

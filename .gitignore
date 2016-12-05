@@ -3,6 +3,7 @@
 
 #ignore LaTex intermediary files
 *.tex.backup
+*.tex.kate-swp
 *.aux
 *.log
 *.bbl
