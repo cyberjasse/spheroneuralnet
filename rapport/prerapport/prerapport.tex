@@ -38,6 +38,19 @@ et le domaine d'entrée est assez faible pour chaque dimensions.
 \input{architecture}
 
 \section{Choix de la méthode}
+Vu toutes les inconnues mécaniques du mouvement de la Sphero, il s'avère difficile d'établir une équation permettant de prédire de manière précise l'état suivant en fonction des commandes éxécutées.
+Nous préfèrons donc nous passer d'un modèle analytique.
+Dans ce cas, nous ne pouvons pas utiliser la méthode de l'apprentissage sépcialisé.
+De plus, télécommander une Sphero pour suivre une trajectoire est très difficile pour un humain.
+Nous n'avons alors pas de contrôleur pour un apprentissage par reproduction d'un contrôleur.\\
+Nous pouvons obtenir un maître distant à chaque étape et donc nous n'avons pas besoin de l'architecture de Nguyen et Widrow.\\
+Au vu de l'inconvénient d'un apprentissage indirect, le fait qu'il converge vers une solution triviale, nous ne tenterons pas de l'utiliser.\\
+
+Il nous reste deux méthodes dont l'adaptabilité est sacrifiée: l'apprentissage en deux phases et apprentissage utilisant un modèle différentiable.
+Les deux sont envisageables. Les tests seront effectués toujours sur le même sol horizontal.
+La méthode avec modèle différentiable apportera un nouveau facteur influcençant la réussite du projet: la fiabilité du modèle.
+Mais puisque le sytème ne changera pas, si on arrive à obtenir un modèle fiable, nous pourrons effectuer un apprentissage en-ligne qui permettra à la Sphero de parfaire le suivi d'une trajectoire si cette trajectoire est ammené à être répétée.
+Nous utiliserons la méthode en deux phases pour obtenir un ensemble de paires cible/commande où la précision dépend seulement des capteurs et pas de la fiabilité d'un modèle.
 
 \section{Choix de l'API}
 Les APIs officiels sont:\cite{SDKofficiels} \textbf{Objective-C}, \textbf{Swift}, \textbf{Android}.\\
@@ -51,6 +64,6 @@ Il existe également des APIs créé par la communauté:\cite{gosphero} \textbf{
 
 \noindent Je remercie monsieur Tom Mens d'être rapporteur de mon projet et de son aide.\\
 
-\bibliographystyle{plain}
+\bibliographystyle{plain}%plainnat-fr ou frplain Pour reference par auteur et annee au lieu de numero
 \bibliography{../bibli}
 \end{document}
