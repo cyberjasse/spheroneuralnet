@@ -97,11 +97,13 @@ L'indice $k$ sera utilisé pour désigner un neurone de la couche suivante.
 \begin{equation}
  \begin{split}
   \partiel{Q}{\phi_i} & = \sum_{k=1}^{n} \partiel{Q}{\phi_k} \partiel{\phi_k}{v_k} \partiel{v_k}{\phi_i}\\
-  ~ & = \delta_k \partiel{v_k}{\phi_i}
+  ~ & = \sum_{k=1}^{n} \delta_k \partiel{v_k}{\phi_i}
  \end{split}
 \end{equation}
 Or $\phi_i$ est l'entrée du neurone $k$ recevant la sortie du neurone $i$. Posons $W_{ki}$ le poid que $k$ attribue à $\phi_i$.
-On obtient donc \
+On obtient donc \[\partiel{v_k}{\phi_i} = \partiel{W_{ki}\phi_i}{\phi_i} = W_{ki}\]
+Comme pour les neurones de sorties, $\partiel{\phi_i}{v_i} = \phi_i'(v_i)$.
+Et du coup, \[\delta_i = \phi_i'(v_i) \sum_{k=1}^{n} \delta_k W_{ki}\]
 \subsubsection{Apprentissage non supervisé}
 Il existe également des algorithmes d'apprentissage non supervisé.
 Ces algorithmes ne cherche pas à minimiser une erreur mais plutôt à maximiser un score calculé à partie de la sortie du réseau.
