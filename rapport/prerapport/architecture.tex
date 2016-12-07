@@ -1,4 +1,4 @@
-\section{Méthodes de commandes directes}
+\section{Méthodes d'apprentissage avec maître distant}
 Nous allons observer différentes architectures intéressantes dans le cas de génération de commandes.
 Le mot \enum{architecture} utilisé ici ne désigne pas l'architecture d'un réseau de neurones mais l'architecture d'une méthode utilisant des réseaux de neurones dont la convention graphique est montré dans la Figure \ref{legendearchi}.
 \begin{figure}
@@ -8,7 +8,7 @@ Le mot \enum{architecture} utilisé ici ne désigne pas l'architecture d'un rés
  \label{legendearchi}
 \end{figure}
 
-\subsection{Apprentissage avec maître distant}
+\subsection{Le problème}
 Dans cette section, nous allons voir différentes méthodes pour entrainer un réseau de neurones pour générer des commandes.
 Ces méthodes visent à contourner le \emph{problème de l'apprentissage avec maître distant}.
 Dans l'apprentissage supervisé, un \emph{maître} est ce qui permet de fournir une erreur entre la sortie d'un réseau de neurones et la sortie attendue.
@@ -17,7 +17,7 @@ Par contre nous pouvons avoir un maître qui compare l'état résultant de l'éx
 
 Dans les architectures qui suivront, le Système désigne l'application, dans la réalité, de la commande entrée et le passage à l'état suivant.
 
-\subsubsection{Reproduction d'un contrôleur}
+\subsection{Reproduction d'un contrôleur}
 \begin{figure}
  \centering
  \includegraphics[scale=0.5]{../figures/appsimple.jpg}
@@ -27,7 +27,7 @@ Dans les architectures qui suivront, le Système désigne l'application, dans la
 Dans cette méthode d'apprentissage, le \rna apprend à reproduire les commandes d'un contrôleur existant (\textbf{Figure \ref{appcontroleur}}).
 Cette méthode a été utilisé pour commander le volant d'une voiture pour suivre des virages où le controlleur est un humain.\cite{Pomerleau}
 
-\subsubsection{Apprentissage spécialisé}\label{sec:appspecial}
+\subsection{Apprentissage spécialisé}\label{sec:appspecial}
 \begin{figure}
  \centering
  \includegraphics[scale=0.5]{../figures/invalid.png}
@@ -44,7 +44,7 @@ Et connaître le facteur $\partiel{y}{\hat{u}}$ est la difficulté de cette mét
 Il faut pouvoir modèliser le système par une fonction $y(\hat{u})$ dérivable en $\hat{u}$.
 %TODO et dans le cas d'un RBF ?
 
-\subsubsection{Apprentissage en deux phases}\label{sec:app2phases}
+\subsection{Apprentissage en deux phases}\label{sec:app2phases}
 \begin{figure}
  \centering
  \includegraphics[scale=0.5]{../figures/app2phases.jpg}
@@ -62,7 +62,7 @@ Cette méthode est inadapté au cas où il existe plusieurs commandes idéales p
 En effet, imaginons qu'il éxiste deux commandes idéales pour atteindre le même état cible et que ces deux commandes sont rencontrées lors de la phase (a).
 Alors les poids seront modifiés pour converger la sortie vers la première commande idéale rencontrée, puis l'autre et ainsi de suite et finallement, la sortie du réseau pour cet état cible ne va pas converger vers une des commandes idéales.
 
-\subsubsection{Apprentissage indirecte}
+\subsection{Apprentissage indirecte}
 \begin{figure}
  \centering
  \includegraphics[scale=0.5]{../figures/appindirect.jpg}
@@ -74,7 +74,7 @@ Une méthode qui permet de retrouver l'adaptabilité qui est sacrifiée dans l'a
 RNA1 et RNA2 ne sont pas deux réseaux différents. Il s'agit du même réseau de neurones et RNA1 et RNA2 partagent les mêmes poids.
 Mais selon Gauthier\cite{Gauthier}, cette méthode tend à toujours donner la même commande.
 
-\subsubsection{Apprentissage par modèle différentiable}\label{sec:appmodele}
+\subsection{Apprentissage par modèle différentiable}\label{sec:appmodele}
 \begin{figure}
  \centering
  \includegraphics[scale=0.5]{../figures/invalid.png}
@@ -85,13 +85,15 @@ Mais selon Gauthier\cite{Gauthier}, cette méthode tend à toujours donner la m�
 L'idée ici est d'utiliser la méthode de l'apprentissage spécialisé à la section \ref{sec:appspecial} mais en se servant d'un \rna comme modèle différentiable (\textbf{Figure \ref{appindirect}}).
 Il faut donc dans un premier temps établir un \rna qui va apprendre à prédire l'état du robot selon la commande à éxecuter.
 Nous n'avons pas le problème de l'apprentissage avec maître distant pour ce \rna.
-Ensuite, on utilise ce \rna comme modèle. Et là nous pouvons connaître $\partiel{\varepsilon_y}{\hat{u}_1}$ grâce aux formule de rétropropagation de la section \ref{sec:appmlp}.
+Ensuite, on utilise ce \rna comme modèle. Et là nous pouvons connaître $\partiel{\varepsilon_y}{\hat{u}_1}$ grâce aux formule de rétropropagation de la section \ref{sec:appmlp}.\\
 %TODO prouver et parler aussi de formule de backpropagation pour rbf
+
+L'adaptabilité est sacrifiée ici car si le système change et que le modèle n'a pas été entrainé pour ce nouveau système, l'algorithme de rétropropagation va converger la solution vers des commandes inadaptés pour le nouveau système.
 
 \subsection{Apprentissage sur plusieurs étapes}
 Un autre problème qui peut se présenter pour la commande par réseaux de neurones est d'obtenir un maître distant seulement après plusieurs étapes.
-Par exemple, imaginons que nous voulons commander la marche d'un robot avec un réseau de neurones qui fournira des commandes à partir de l'état actuel tous les $T$ secondes.
-Si le robot tombe et que nous pouvons en obtenir un maître, nous ne savons pas à quelles étapes avant la chutte le réseau à fourni des commandes responsable de la chutte.\\
+Par exemple, imaginons que nous voulons commander la marche d'un robot avec un réseau de neurones qui fournira des commandes tous les $T$ secondes.
+Si le robot tombe et que nous pouvons en obtenir un maître, nous ne savons pas à quelles étapes avant la chutte le réseau a fourni des commandes responsables de la chutte.\\
 
 Une solution à ce problème est l'architecture de Nguyen et Widrow, Figure \ref{appNguyenWidrow}.
 \begin{figure}
