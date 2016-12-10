@@ -31,3 +31,6 @@ cpp/sphero
 
 #ignore the explanation from Gauvain Devillez
 cpp/compileExplain.sh
+
+#ignore the plantUML software
+uml/plantuml.jar

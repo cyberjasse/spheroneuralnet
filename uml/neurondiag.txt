@@ -1,0 +1,53 @@
+@startuml
+interface Neuron {
+	+ double compute(double[] input)
+	+ double errorContribution(double[] nexLayerContributions)
+}
+class MLPneuron {
+	- Function f
+	- double[] weights
+	- double lastWeightedSum
+	- double weightedSum(double[] input)
+}
+class RBFneuron {
+	- double[] prototype
+	- double[] variances
+}
+class RBFexitNeuron {
+	- double[] weights
+}
+interface Function {
+	+ double f(double x)
+	+ double fPrime(double x)
+}
+abstract class Layer {
+	+ Neuron[] neurons
+	- double[] lastInput
+	+ double[] compute(double[] input)
+	+ double[] errorContribution(double[] nexLayerContributions)
+}
+class HiddenLayer {
+	+ Layer prevLayer
+	+ Layer nextLayer
+}
+class ExitLayer {
+	+ Layer prevLayer
+}
+class Net {
+	- Layer[] hiddenLayers
+	- Layer firsLayer
+	- Layer exitLayer
+	- double[] lastOutput
+	+ double[] compute(double[] input)
+	+ double[] backpropagation(double[] expected)
+}
+MLPneuron o-- "1" Function
+Neuron <|-- MLPneuron
+Neuron <|-- RBFneuron
+Neuron <|-- RBFexitNeuron
+Layer <|-- HiddenLayer
+Layer <|-- ExitLayer
+Layer *-- "1-*" Neuron
+Net *-- "1-*" HiddenLayer
+Net *-- "1" ExitLayer
+@enduml
