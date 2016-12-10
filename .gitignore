@@ -25,3 +25,9 @@
 cpp/sphero-linux-api
 python/sphero-ros
 doc/
+
+#ignore sphero copied header from c++ API
+cpp/sphero
+
+#ignore the explanation from Gauvain Devillez
+cpp/compileExplain.sh
