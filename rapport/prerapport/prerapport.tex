@@ -32,10 +32,12 @@
 Nous n'avons pas besoin d'un réseau de neurones récurrent. Les commandes à appliquer au moment $t$ ne dépendent pas de la vitesse, position et autres données fournies à $t-T$.
 Le réseau le mieux adapté pour notre problème est un réseau de neurones à base radial.
 En effet, les \rbf sont moins sensibles au bruit que les \mlp \cite{adversarial,Gauthier}.%gauthier p 39,40
-%TODO pourquoi
-Un inconvénient des \rbf, celui du nombre de neurones cachés qui croît avec la dimension et la taille du vecteur d'entrée, ne pose pas de problème dans notre cas
-car le nombre de dimensions est faible
-et le domaine d'entrée est assez faible pour chaque dimensions.
+Car dans la couche cachée, chaque neurone envoit une sortie indiquant la proximité entre le vecteur d'entrée et son prototype.
+Donc typiquement, la contribution à l'erreur est presque entièrement celle du neurone ayant son prototype le plus proche de l'entrée.
+Les autres neurones cachés auront une modification insignifiante de son écart-type et de son prototype.\\
+
+
+Un inconvénient des \rbf, celui du nombre de neurones cachés qui croît avec la dimension et la taille du vecteur d'entrée, ne pose pas de problème dans notre cas car le nombre de dimensions est faible
 
 \input{architecture}
 
