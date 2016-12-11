@@ -2,7 +2,7 @@
 \usepackage[left=2cm,right=2cm,top=2cm,bottom=2cm]{geometry}
 \usepackage[pdftex]{graphicx}
 \usepackage[final]{pdfpages}
-%\usepackage[frenchb]{babel}
+\usepackage[frenchb]{babel}
 \usepackage[utf8]{inputenc}
 \usepackage{cite}
 \usepackage{hyperref}
@@ -17,7 +17,6 @@
 \input{introduction}
 
 \section{Modèles de réseaux de neurones artificiels}
-\terminologie
 \input{mlp}
 \input{rbf}
 \input{cnn}
@@ -29,15 +28,15 @@
 \input{design}
 
 \section{Choix du réseau}
-Nous n'avons pas besoin d'un réseau de neurones récurrent. Les commandes à appliquer au moment $t$ ne dépendent pas de la vitesse, position et autres données fournies à $t-T$.
+Nous n'avons pas besoin d'un réseau de neurones récurrent.
+Les commandes à appliquer ne dépendent pas de la vitesse, position et autres données fournies aux étapes précédentes.
 Le réseau le mieux adapté pour notre problème est un réseau de neurones à base radial.
 En effet, les \rbf sont moins sensibles au bruit que les \mlp \cite{adversarial,Gauthier}.%gauthier p 39,40
 Car dans la couche cachée, chaque neurone envoit une sortie indiquant la proximité entre le vecteur d'entrée et son prototype.
 Donc typiquement, la contribution à l'erreur est presque entièrement celle du neurone ayant son prototype le plus proche de l'entrée.
-Les autres neurones cachés auront une modification insignifiante de son écart-type et de son prototype.\\
+Les autres neurones cachés auront une modification insignifiante de l'écart-type et du prototype.\\
 
-
-Un inconvénient des \rbf, celui du nombre de neurones cachés qui croît avec la dimension et la taille du vecteur d'entrée, ne pose pas de problème dans notre cas car le nombre de dimensions est faible
+Un inconvénient des \rbf, celui du nombre de neurones cachés qui croît avec la dimension et la taille du vecteur d'entrée, ne pose pas de problème dans notre cas car le nombre de dimensions est faible.
 
 \input{architecture}
 
@@ -62,16 +61,18 @@ Il existe également des APIs créé par la communauté:\cite{gosphero} \textbf{
 %TODO
 \section{Avancement du projet et perspective}
 \subsection*{Remerciements}
-\noindent Je remercie monsieur Pierre \textsc{Hauweele} de m'avoir proposé un projet qui est exactement dans le domaine que je voulais, de son aide et d'avoir choisi d'être directeur de mon projet.\\
+\noindent Je remercie Monsieur Pierre \textsc{Hauweele} de m'avoir proposé un projet qui est exactement dans le domaine que je voulais, de son aide et d'avoir choisi d'être directeur de mon projet.\\
 
-\noindent Je remercie monsieur Hadrien Mélot d'être directeur de mon projet et de l'aide qu'il m'a apporté.\\
+\noindent Je remercie Monsieur Hadrien Mélot d'être directeur de mon projet et de l'aide qu'il m'a apporté.\\
 
-\noindent Je remercie monsieur Tom Mens d'être rapporteur de mon projet et de son aide.\\
+\noindent Je remercie Monsieur Tom Mens d'être rapporteur de mon projet et de son aide.\\
 
-\bibliographystyle{plain}%plainnat-fr ou frplain Pour reference par auteur et annee au lieu de numero
+\bibliographystyle{unsrt-fr}%unsrt-fr pour reference fr par num. plainnat-fr ou frplain Pour reference fr par auteur et annee
 \bibliography{../bibli}
 
 \appendix
+\section{Terminologie}
+\terminologie
 \section{Diagramme implémentation de réseaux de neurones}\label{uml}
 \includegraphics[width=\textwidth]{../../uml/neurondiag.png}
 Diagramme de classe de réseaux de neurones.\\Généré par \href{http://plantuml.com/class-diagram}{plantUML}

@@ -4,16 +4,16 @@
 Un neurone \textbf{caché} d'un \rbf n'effectue pas de somme pondérée de ses entrées. Il applique directement sa fonction
 \[\phi(x) = e^{-\frac{1}{2}\sum_{k=1}^{n}\frac{(x_k-\mu_{ik})^2}{\sigma_{ik}^{2}}}\]
 Une gaussienne de moyenne $\mu$ et d'écart-type $\sigma$ où $x$, de dimension $n$, est l'entrée du neurone et $i$ l'indice du neurone.
-$\phi(x)$ peut se résumer en: \[\phi(x) = e^{-\beta||x-\mu||^2} = \]
-Où $\beta$ est donc un coefficient qui règle la largeur de la courbe en cloche.\\
+%$\phi(x)$ peut se résumer en: \[\phi(x) = e^{-\beta||x-\mu||^2}\]Où $\beta$ est donc un coefficient qui règle la largeur de la courbe en cloche.\\
+\\
 
 Un neurone \textbf{de sortie} d'un \rbf n'effectue pas non plus de somme pondérée de ses entrées. Sa fonction d'activation est:
-\[\phi(x) = \frac{\sum_{j=1}^{m}W_{ij}x_{j}}{\\sum_{j=1}^{m}x_{j}}\]
+\[\phi(x) = \frac{\sum_{j=1}^{m}W_{ij}x_{j}}{\sum_{j=1}^{m}x_{j}}\]
 Où $i$ est l'indice du neurone et $x$ l'entrée de dimension $m$.
 \begin{figure}
  \centering
  \includegraphics[scale=0.7]{../figures/RBFactivation.png}
- \caption{Activation d'un neurone RBF avec différentes valeurs pour $\beta$}
+ \caption{Activation d'un neurone RBF avec différentes valeurs d'écart-type}
  \label{rbfactivation}
 \end{figure}
 La Figure \ref{rbfactivation} représente la sortie d'un neurone \rbf où $\mu$ et $x$ sont de dimension 1 et $\mu = 0$.\\
@@ -27,9 +27,9 @@ Pour résumer, un neurone \rbf renvoie une valeur indiquant la simularité entre
 \end{figure}
 La structure d'un \rbf est comme celle du \mlp sauf qu'il n'y a qu'une seule couche cachée (Figure \ref{structurerbf}).
 \subsubsection{Apprentissage}
-Dans ce réseau, les paramètres qui seront modifier lors de l'apprentissage sont les poids des neurones de sortie et les moyennes et écart-type des neurones cachés.
+Dans ce réseau, les paramètres qui seront modifiés lors de l'apprentissage sont les poids des neurones de sortie et les moyennes et écart-types des neurones cachés.
 Reprenons l'erreur quadratique $Q$ défini dans la section \ref{sec:appmlp}.
-Les paramètres devront être modifié de la sorte:
+Les paramètres devront être modifiés de la sorte:
 \[\Delta W_{ij} = -\eta \partiel{Q}{W_{ij}}, \Delta \mu_{ik} = -\eta \partiel{Q}{\mu_{ik}}, \Delta \sigma_{ik} = \eta \partiel{Q}{\sigma_{ik}}\]
 On a vu dans la section \ref{sec:appmlp} que si $\phi_i$ est la sortie de la fonction d'activation d'un neurone de sortie $i$ et $s_i$ la sortie attendue du neurone $i$,
 \[\partiel{Q}{\phi_i} = (\phi_i - s_i)\]
@@ -89,7 +89,7 @@ Dès lors,
 Ensuite,
 \[\partiel{\phi_i}{\mu_{ik}} = \phi_i \frac{x_k-\mu_{ik}}{\sigma_{ik}^2}\]
 Au final,
-\[\Delta\mu_{ik} = -\eta \left(\sum_{i}(\phi_j - s_j) \frac{1}{R^2} \left(W_{jr}R - \sum_{k=1}^{n}W_{jk}x_k\right)\right) \phi_i\frac{x_k-\mu_{ik}}{\sigma_{ik}^2}\]
+\[\Delta\mu_{ik} = -\eta \left[\sum_{i}(\phi_j - s_j) \frac{1}{R^2} \left(W_{jr}R - \sum_{k=1}^{n}W_{jk}x_k\right)\right] \phi_i\frac{x_k-\mu_{ik}}{\sigma_{ik}^2}\]
 si $i$ est un \textbf{neurone caché},
 \begin{equation}
  \begin{split}
@@ -99,6 +99,6 @@ si $i$ est un \textbf{neurone caché},
 \end{equation}
 Or \[\partiel{\phi}{\sigma_{ik}} = \phi_i \frac{(x_k-\mu_{ik})^2}{\sigma_{ik}^3}\]
 Au final,
-\[\Delta \sigma_{ik} = -\eta \left(\sum_{i}(\phi_j - s_j) \frac{1}{R^2} \left(W_{jr}R - \sum_{k=1}^{n}W_{jk}x_k\right)\right) \phi_i \frac{(x_k-\mu_{ik})^2}{\sigma_{ik}^3}\]
+\[\Delta \sigma_{ik} = -\eta \left[\sum_{i}(\phi_j - s_j) \frac{1}{R^2} \left(W_{jr}R - \sum_{k=1}^{n}W_{jk}x_k\right)\right] \phi_i \frac{(x_k-\mu_{ik})^2}{\sigma_{ik}^3}\]
 \subsubsection{Applications}
 Un \rbf peut aussi servir dans la prédiction de profil.\cite{statistica}

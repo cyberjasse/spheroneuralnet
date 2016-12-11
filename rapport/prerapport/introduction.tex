@@ -1,13 +1,12 @@
 \section{Introduction}
 \subsection{Énoncé}
-Ce projet consiste à implémenter un \emph{réseau de neurones artificiels} \hypertarget{rna}{(RNA)} de commander la Sphero.
-Il devra effecter n'importe quel trajectoire et aussi des trajectoire à grande vitesse et gèrer les dérapages.
-La Sphero sera commandé sur un sol plat sans obstacle.
+Ce projet consiste à implémenter un \emph{réseau de neurones artificiels} \hypertarget{rna}{(RNA)} pour commander la Sphero.
+Il devra effectuer n'importe quelle trajectoire qui peut être à grande vitesse et aussi gérer les dérapages.
+La Sphero sera commandée sur un sol plat sans obstacle.
 \subsection{Présentation de la Sphero}
-La Sphero est une boule robotisée.
+La Sphero est une boule robotisée téléguidée, connectée par Bluetooth.
 À l'intérieur, il y a deux moteurs: un pour faire tourner le poid et l'autre pour changer l'orientation de l'appareil.
 En faisant tourner le poid, la Sphero déplace son centre de gravité en dehors de sa base de sustentation, faisant ainsi rouler l'appareil.
-Elle est téléguidée en lui envoyant les commandes par Bluetooth.
 \subsection{Avantages d'un réseau de neurones}
 \begin{itemize}
  \item \textbf{parallélisme}: L'apprentissage et la génération de vecteur de sortie est massivement parallélisable dans un RNA.\cite{corelet,Haykin}

@@ -1,7 +1,7 @@
 \subsection{Perceptron mutli-couches (MLP)}
 \subsubsection{Neurone}
 Tout d'abord focalisons-nous sur le travail d'un neurone.
-Sur la Figure \ref{neuronemlp}), $k$ est l'indice du neurone.
+Sur la Figure \ref{neuronemlp}, $k$ est l'indice du neurone.
 \begin{figure}
  \centering
  \includegraphics[scale=0.5]{../figures/neurone.jpg}
@@ -46,22 +46,25 @@ La fonction $\phi$ utilisée dépend du problème qu'on veut résoudre (Figure \
  \caption{Structure MLP à une couche cachée. \textbf{Source}: McCormick\cite{RBFtuto}}
  \label{structuremlp}
 \end{figure}
-Un \mlp est composé de plusieurs couches (Figure \ref{structuremlp}):\\
-couche d'entrée $\rightarrow$ couches cachées $\rightarrow$ couche de sortie.
+Un \mlp est composé de plusieurs couches (Figure \ref{structuremlp}):
+\begin{center}
+ couche d'entrée $\rightarrow$ couches cachées $\rightarrow$ couche de sortie.
+\end{center}
 Un neurone envoie sa sortie vers tous les neurones de la couche suivante.
-Chaque neurones de la couche d'entrée correspond à une dimension du vecteur d'entrée et renvoie juste la valeur de l'entrée dans cette dimension.
-Chaque neurones de sortie correspond à une dimension du vecteur de sortie.
+Chaque neurone de la couche d'entrée correspond à une dimension du vecteur d'entrée et renvoie juste la valeur de l'entrée dans cette dimension.
+Chaque neurone de sortie correspond à une dimension du vecteur de sortie.
 Les neurones cachés et neurones de sortie correspondent à la Figure \ref{neuronemlp}.
 \subsubsection{Apprentissage supervisé}\label{sec:appmlp}
-Il existe plusieurs algorithmes pour changer les poids sur un réseau. Mais le plus connu pour les \mlp est l'algorithme de de rétropropagation.\cite{Haykin,Gauthier}
+Il existe plusieurs algorithmes pour changer les poids sur un réseau. Mais le plus connu est l'algorithme de de rétropropagation.\cite{Haykin,Gauthier}
 Il s'agit d'un algorithme d'\emph{apprentissage supervisé}.
 \begin{definition}
 L'apprentissage supervisé est une méthode visant à améliorer un approximateur grâce à un calcul d'erreur (appelé aussi mesure de performance\cite{Gauthier}) comparant une sortie générée avec la sortie attendue.
 \end{definition}
-Nous avons donc besoin d'un ensemble de paires d'entrées/sorties. L'algorithme applique la formule développée ci-dessous pour à tous les neurones sauf les neurones d'entrée.\\
+Nous avons donc besoin d'un ensemble de paires d'entrées/sorties.
+L'algorithme applique la formule développée ci-dessous à tous les neurones sauf les neurones d'entrée.\\
 
 Soit $\phi$, la fonction d'activation. Soit $\phi'$ la dérivée de $\phi$. Soit $Q$ l'\emph{erreur quadratique} utilisé comme mesure de performance.
-\[Q = \frac{1}{2}\sum_{i}(a_i-s_i)^2\] où $a_i$ est la sortie du neurone de sortie $i$ et $s_i$ la sortie attendue pour la dimension $i$.
+\[Q = \frac{1}{2}\sum_{i}(\phi_i-s_i)^2\] où $\phi_i$ est la sortie du neurone de sortie $i$ et $s_i$ la sortie attendue pour la dimension $i$.
 La modification du poid $W_{ij}$ vaut \[\Delta W_{ij} = -\eta\partiel{Q}{W_{ij}}\] où $\eta$ est une constante appelé \emph{pas du gradient}.
 Par le théorème de dérivation des fonctions composées, \[\partiel{Q}{W_{ij}} = \partiel{Q}{\phi_i} \partiel{\phi_i}{v_i} \partiel{v_i}{W_{ij}}\]
 \begin{thm}[dérivation des fonctions composées]
@@ -83,9 +86,9 @@ Déterminons la valeur de $\delta_i$.\\
 Soit $m$ la dimension de l'entrée $x$ (du neurone). Soit $l$ la dimension du vecteur de sortie du réseau.
 \begin{equation}
  \begin{split}
-  \partiel{Q}{\phi_i} & = \frac{1}{2} \left( \partiel{(\phi_0 - s_0)^2}{phi_i} + \partiel{(\phi_1 - s_1)^2}{\phi_i} + ... + \partiel{(\phi_i - s_i)^2}{\phi_i} + ... + \partiel{(\phi_l - s_l)^2}{\phi_i} \right)\\
+  \partiel{Q}{\phi_i} & = \frac{1}{2} \left( \partiel{(\phi_0 - s_0)^2}{\phi_i} + \partiel{(\phi_1 - s_1)^2}{\phi_i} + ... + \partiel{(\phi_i - s_i)^2}{\phi_i} + ... + \partiel{(\phi_l - s_l)^2}{\phi_i} \right)\\
   ~ & = \frac{1}{2}2(\phi_i - s_i)\partiel{(\phi_i - s_i)}{\phi_i}\\
-  ~ & = (\phi_i - s_i)\\
+  ~ & = (\phi_i - s_i) 1\\
   \partiel{\phi_i}{v_i} & = \phi'(v_i)
  \end{split}
 \end{equation}\label{eq:a}
@@ -106,11 +109,11 @@ Comme pour les neurones de sorties, $\partiel{\phi_i}{v_i} = \phi_i'(v_i)$.
 Et du coup, \[\delta_i = \phi_i'(v_i) \sum_{k=1}^{n} \delta_k W_{ki}\]
 \subsubsection{Apprentissage non supervisé}
 Il existe également des algorithmes d'apprentissage non supervisé.
-Ces algorithmes ne cherche pas à minimiser une erreur mais plutôt à maximiser un score calculé à partie de la sortie du réseau.
+Ces algorithmes ne cherche pas à minimiser une erreur mais plutôt à maximiser un score calculé à partir de la sortie du réseau.
 \subsubsection{Apprentissage sur plusieurs MLP}
-Lorque l'une des dimensions du vecteur d'entrée est discrète et finie, il est conseillé d'utiliser un \mlp différent par valeur différentes sur cette dimension.\cite{Gauthier}
-Cette technique peut aussi être utilisé sur nous pouvons classer tous les états possibles selon le contexte.
-Par exemple, pour la Sphero nous pourrions utiliser un \mlp pour le contexte \enum{dérapage} et un autre \mlp pour le contexte \enum{sans dérapage}.
+Lorque l'une des dimensions du vecteur d'entrée est discrète et finie, il est conseillé d'utiliser un \mlp différent par valeur différente sur cette dimension.\cite{Gauthier}
+Cette technique peut aussi être utilisé si nous pouvons classer tous les états possibles selon le contexte.
+Par exemple, pour la Sphero nous pourrions utiliser un \mlp pour le contexte \enum{en train de déraper} et un autre \mlp pour le contexte \enum{ne dérape pas}.
 \subsubsection{Applications}
 À une couche cachée, un \mlp peut déja servir dans la prédiction de profil.\cite{statistica}\\
 Les \mlp sont aussi utilisés en commande de robot par caméra.\cite{Pomerleau}

@@ -34,6 +34,6 @@ Ce qui fait environ 2 mètres par seconde.
 %Or les temps de récéption de ping après envoi son de 9ms avec quelque pics allants jusqu'à 37ms. TODO meilleurs mesures
 Pour de meilleures précisions, on ajoute un vecteur vitesse à atteindre sur le point de destination.
 On aligne l'axe des abscisses avec l'axe de l'orientation du moteur afin de reduire le domaine d'entrée et donc le nombre d'exemples à créer pour l'apprentissage.
-Le vecteur d'entrée contiendra donc le vecteur vitesse, la position relative à atteindre dans $T$ secondes où $T$ sera la période à laquelle on échantillonera les données des capteurs et le vecteur vitesse à atteindre sur cette position de destination.
+Le vecteur d'entrée contiendra donc le vecteur vitesse, la position relative à atteindre dans $T$ secondes où $T$ sera la période à laquelle on échantillonera les données des capteurs, et le vecteur vitesse à atteindre sur cette position de destination.
 Nous avons donc un vecteur d'entrée à 6 dimensions.
-Le vecteur de sortie sera la puissance à donner pour les deux moteurs.
+Le vecteur de sortie sera la puissance à donner pour chaque moteur.
