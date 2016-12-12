@@ -7,7 +7,7 @@
 #include "sphero/bluetooth/bluez_adaptor.h"
 #include "sphero/Sphero.hpp"
 
-DEFAULT_ADDRESS = "68:86:E7:00:58:83"
+string DEFAULT_ADDRESS = "68:86:E7:00:58:83";
 //in a global variable to use it in the signal handler:
 Sphero* sph = NULL;
 
