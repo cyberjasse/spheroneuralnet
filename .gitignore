@@ -18,6 +18,7 @@
 *.class
 
 #ignore c++ compiled files
+cpp/build/
 *.o
 *.out
 

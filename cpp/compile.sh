@@ -1,4 +1,5 @@
 FILE=$1
+BUILDFOLDER='build/'
 
 #test if api is cloned
 if [ -d sphero-linux-api/ ]
@@ -30,9 +31,16 @@ else
 	find -type f | grep -i ".h$\|.hpp$\|.tpp" | xargs -i cp {} ../../sphero/{}
 	cd ../..
 fi
-
+#test if the build folder exist
+if [ -d ${BUILDFOLDER} ]
+then
+	echo "The build folder already exist."
+else
+	echo "The build folder doesn't exist. Creating..."
+	mkdir ${BUILDFOLDER}
+fi
 #now compile my files
 echo "   Compile ${FILE}.cpp"
-g++ -std=c++11 -c ${FILE}.cpp && g++ -Lsphero-linux-api/ -o ${FILE} ${FILE}.o -lsphero
+g++ -std=c++11 -c ${FILE}.cpp -o ${BUILDFOLDER}${FILE}.o && g++ -Lsphero-linux-api/ -o ${FILE} ${BUILDFOLDER}${FILE}.o -lsphero
 echo "define variable LD_LIBRARY_PATH=sphero-linux-api/"
 export LD_LIBRARY_PATH=sphero-linux-api/
