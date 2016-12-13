@@ -1,7 +1,6 @@
 \subsection{Perceptron mutli-couches (MLP)}
 \subsubsection{Neurone}
-Tout d'abord focalisons-nous sur le travail d'un neurone.
-Sur la Figure \ref{neuronemlp}, $k$ est l'indice du neurone.
+La Figure \ref{neuronemlp} schématise le travail d'un neurone d'indice $k$.
 \begin{figure}
  \centering
  \includegraphics[scale=0.5]{../figures/neurone.jpg}
@@ -9,8 +8,10 @@ Sur la Figure \ref{neuronemlp}, $k$ est l'indice du neurone.
  \label{neuronemlp}
 \end{figure}
 Un neurone effectue tout d'abord une somme pondérée de ses entrées \[v_k = b_k+\sum_{j=1}^{m}x_{j}w_{kj}\] où $x$ est le vecteur d'entrée de dimensions $m$.\\
-Chaque terme $x_j$ est mutiplié par un poid $w_{kj}$. Ce sont les poids qui seront modifiés lors de la phase d'apprentissage.
-Le biai $b_k$ est souvent ajouté à la pondération. Mais pour simplifier les formules, nous pouvons considèrer $b_k$ comme étant l'entrée $x_0 = 1$ de poid fixe $w_{k0} = 1$.
+Chaque terme $x_j$ est mutiplié par un poids $w_{kj}$.
+Ce sont les poids qui seront modifiés lors de la phase d'apprentissage.
+Le biais $b_k$ est souvent ajouté à la pondération.
+Mais pour simplifier les formules, nous pouvons considèrer $b_k$ comme étant l'entrée $x_0 = 1$ de poid fixe $w_{k0} = 1$.
 Et la somme pondérée est donc maintenant de la forme \[v_k = \sum_{j=0}^{m}x_{j}w_{kj}\]
 Ensuite le neurone applique la \emph{fonction d'activation} $\phi$ sur la somme pondérée.
 Le domaine de $y$ est généralement $[0,1]$ ou $[-1,1]$.\cite{Haykin,statistica}
@@ -51,7 +52,8 @@ Un \mlp est composé de plusieurs couches (Figure \ref{structuremlp}):
  couche d'entrée $\rightarrow$ couches cachées $\rightarrow$ couche de sortie.
 \end{center}
 Un neurone envoie sa sortie vers tous les neurones de la couche suivante.
-Chaque neurone de la couche d'entrée correspond à une dimension du vecteur d'entrée et renvoie juste la valeur de l'entrée dans cette dimension.
+Il y a autant de neurones d'entrées que la dimension du vecteur d'entrée.
+Le $k$\textsuperscript{ième} neurone d'entrée renvoie juste le $k$\textsuperscript{ième} élément du vecteur d'entrée.
 Chaque neurone de sortie correspond à une dimension du vecteur de sortie.
 Les neurones cachés et neurones de sortie correspondent à la Figure \ref{neuronemlp}.
 \subsubsection{Apprentissage supervisé}\label{sec:appmlp}
@@ -109,11 +111,11 @@ Comme pour les neurones de sorties, $\partiel{\phi_i}{v_i} = \phi_i'(v_i)$.
 Et du coup, \[\delta_i = \phi_i'(v_i) \sum_{k=1}^{n} \delta_k W_{ki}\]
 \subsubsection{Apprentissage non supervisé}
 Il existe également des algorithmes d'apprentissage non supervisé.
-Ces algorithmes ne cherche pas à minimiser une erreur mais plutôt à maximiser un score calculé à partir de la sortie du réseau.
+Ces algorithmes ne cherche pas à minimiser une erreur mais maximisent un score calculé à partir de la sortie du réseau.
 \subsubsection{Apprentissage sur plusieurs MLP}
 Lorque l'une des dimensions du vecteur d'entrée est discrète et finie, il est conseillé d'utiliser un \mlp différent par valeur différente sur cette dimension.\cite{Gauthier}
 Cette technique peut aussi être utilisé si nous pouvons classer tous les états possibles selon le contexte.
 Par exemple, pour la Sphero nous pourrions utiliser un \mlp pour le contexte \enum{en train de déraper} et un autre \mlp pour le contexte \enum{ne dérape pas}.
 \subsubsection{Applications}
-À une couche cachée, un \mlp peut déja servir dans la prédiction de profil.\cite{statistica}\\
+À une couche cachée, un \mlp peut déja servir pour la classification non linéaire.\cite{statistica}\\
 Les \mlp sont aussi utilisés en commande de robot par caméra.\cite{Pomerleau}

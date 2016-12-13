@@ -1,6 +1,6 @@
 \section{Design du vecteur d'entrée}
 \subsection{Données utiles}
-Avant de choisir le réseau de neurones à utiliser, il est important d'identifier ce que nous souhaitons obtenir en sortie et les informations que nous pouvons fournir en entrée sans fournir des données inutiles.
+Avant de choisir le réseau de neurones à utiliser, il est important d'identifier ce que nous souhaitons obtenir en sortie et les informations que nous pouvons fournir en entrée en omettant les données inutiles.
 Si le vecteur d'entrée est de dimension très grande, alors un réseau \rbf devra avoir un trop grand nombre de neurones cachés\cite{Gauthier}.
 Si nous supposons que la sortie produite peut dépendre non seulement de l'input actuel mais aussi des entrées précédentes, alors un réseau récurrent devra être utilisé.
 
@@ -32,7 +32,7 @@ Ajouter cette dimension dans le vecteur d'entrée demandera un plus grand nombre
 La vitesse maximale de la Sphero est de 4,5 miles par heure\cite{product}.
 Ce qui fait environ 2 mètres par seconde.
 %Or les temps de récéption de ping après envoi son de 9ms avec quelque pics allants jusqu'à 37ms. TODO meilleurs mesures
-Pour de meilleures précisions, on ajoute un vecteur vitesse à atteindre sur le point de destination.
+Pour une meilleure précision, on ajoute un vecteur vitesse à atteindre sur le point de destination.
 On aligne l'axe des abscisses avec l'axe de l'orientation du moteur afin de reduire le domaine d'entrée et donc le nombre d'exemples à créer pour l'apprentissage.
 Le vecteur d'entrée contiendra donc le vecteur vitesse, la position relative à atteindre dans $T$ secondes où $T$ sera la période à laquelle on échantillonera les données des capteurs, et le vecteur vitesse à atteindre sur cette position de destination.
 Nous avons donc un vecteur d'entrée à 6 dimensions.

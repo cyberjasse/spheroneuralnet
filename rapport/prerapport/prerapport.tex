@@ -11,7 +11,7 @@
 \begin{document}
 \input{../titlepage}
 \input{../commands}
-\spherotitle{Pré-rapport}{Décembre 2016}
+\spherotitle{Pré-rapport}{Année 2016-2017}
 \tableofcontents
 \newpage
 \input{introduction}
@@ -20,9 +20,9 @@
 \terminologie
 \input{mlp}
 \input{rbf}
-\input{cnn}
+%\input{cnn}
 \input{rnn}
-\input{cmac}
+%\input{cmac}
 
 \input{surgeneralisation}
 
@@ -37,30 +37,32 @@ Car dans la couche cachée, chaque neurone envoit une sortie indiquant la proxim
 Donc typiquement, la contribution à l'erreur est presque entièrement celle du neurone ayant son prototype le plus proche de l'entrée.
 Les autres neurones cachés auront une modification insignifiante de l'écart-type et du prototype.\\
 
-Un inconvénient des \rbf, celui du nombre de neurones cachés qui croît avec la dimension et la taille du vecteur d'entrée, ne pose pas de problème dans notre cas car le nombre de dimensions est faible.
+Un des inconvénients des \rbf est que le nombre de neurones cachés croît avec la dimension et la taille du vecteur d'entrée.
+Ceci ne pose pas de problème dans notre cas car le nombre de dimensions est faible.
 
 \input{architecture}
 
 \section{Choix de la méthode}
-Vu toutes les inconnues mécaniques du mouvement de la Sphero, il s'avère difficile d'établir une équation permettant de prédire de manière précise l'état suivant en fonction des commandes éxécutées.
+Vu toutes les inconnues mécaniques du mouvement de la Sphero, il s'avère difficile d'établir une équation permettant de prédire de manière précise l'état suivant en fonction des commandes exécutées.
 Nous préfèrons donc nous passer d'un modèle analytique.
-Dans ce cas, nous ne pouvons pas utiliser la méthode de l'apprentissage sépcialisé.
+Dans ce cas, nous ne pouvons pas utiliser la méthode de l'apprentissage spécialisé.
 De plus, télécommander une Sphero pour suivre une trajectoire est très difficile pour un humain.
-Nous n'avons alors pas de contrôleur pour un apprentissage par reproduction d'un contrôleur.\\
+Uiliser un apprentissage par reproduciton de contrôleur n'est donc pas envisageable.\\
 Nous pouvons obtenir un maître distant à chaque étape et donc nous n'avons pas besoin de l'architecture de Nguyen et Widrow.\\
-Au vu de l'inconvénient d'un apprentissage indirect, le fait qu'il converge vers une solution triviale, nous ne tenterons pas de l'utiliser.\\
+Le de convergence vers une solution triviale, impliquée dans le cas d'un apprentissage indirect (section \ref{sec:appindirect}) exclu l'utilisation de cette méthode dans le cadre de ce projet.\\
 
-Il nous reste deux méthodes dont l'adaptabilité est sacrifiée: l'apprentissage en deux phases et apprentissage utilisant un modèle différentiable.
-Les deux sont envisageables. Les tests seront effectués toujours sur le même sol horizontal.
-La méthode avec modèle différentiable apportera un nouveau facteur influcençant la réussite du projet: la fiabilité du modèle.
-Mais puisque le sytème ne changera pas, si on arrive à obtenir un modèle fiable, nous pourrons effectuer un apprentissage en-ligne qui permettra à la Sphero de parfaire le suivi d'une trajectoire si cette trajectoire est ammené à être répétée.
-Nous utiliserons la méthode en deux phases pour obtenir un ensemble de paires cible/commande où la précision dépend seulement des capteurs et pas de la fiabilité d'un modèle.
+Il nous reste deux méthodes pour lesquelles l'adaptabilité est sacrifiée: l'apprentissage en deux phases et apprentissage utilisant un modèle différentiable.
+Les deux sont envisageables. Les tests seront effectués toujours sur le même sol horizontal.\\
 
-\section{Choix de l'API}
+La méthode avec modèle différentiable apportera un nouveau facteur influençant la réussite du projet: la fiabilité du modèle.
+Mais puisque le sytème ne change pas, lorsqu'on arrive à obtenir un modèle fiable, nous pouvons effectuer un apprentissage en-ligne qui permettra à la Sphero de parfaire le suivi d'une trajectoire si cette trajectoire est ammenée à être répétée.
+Nous utiliserons dans un premier temps la méthode en deux phases pour obtenir un ensemble de paires cible/commande où la précision dépend seulement des capteurs et pas de la fiabilité d'un modèle.
+
+\section{Les API}%choix de l'API ici
 Les APIs officiels sont:\cite{SDKofficiels} \textbf{Objective-C}, \textbf{Swift}, \textbf{Android}.\\
 Il existe également des APIs créé par la communauté:\cite{gosphero} \textbf{C\#}, \textbf{JavaScript}, \textbf{Ruby}, \textbf{Python}\cite{pythonAPI}, \textbf{Arduino}, \textbf{C++}\cite{cppAPI}.\\
 %TODO
-\section{Avancement du projet et perspective}
+%\section{Avancement du projet et perspective}
 \subsection*{Remerciements}
 \noindent Je remercie Monsieur Pierre \textsc{Hauweele} de m'avoir proposé un projet qui est exactement dans le domaine que je voulais, de son aide et d'avoir choisi d'être directeur de mon projet.\\
 

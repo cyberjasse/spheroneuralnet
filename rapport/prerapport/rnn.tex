@@ -13,10 +13,10 @@
  \label{neuronermlp}
 \end{figure}
 Un réseau de neurones récurrent est un réseaux présentant des boucles dans sa structure.
-Des \emph{délais} notés $Z^{-1}$ sont présents sur certains arcs dans le réseau afin de retarder d'une étape la transmission d'une valeur.
-Une étape dans un réseau consiste à recevoir une entrée et en générer une sortie.
+Des \emph{délais} notés $Z^{-1}$ sont présents sur certains arcs dans le réseau afin de retarder d'une étape, la transmission d'une valeur.
+Une étape dans un réseau consiste à recevoir une entrée et de générer une sortie.
 Il existe plusieurs réseaux de type récurrent (récurrent simple, machine à états liquide, etc).
-La Figure \ref{structurermlp} Présente un réseau de type perceptron multi-couches récurrent (\rmlp).
+La Figure \ref{structurermlp} présente un réseau de type perceptron multi-couches récurrent (\rmlp).
 Il s'agit d'un \mlp dont les neurones des couches cachées ont un arc qui boucle sur le neurone lui-même avec un $Z^{-1}$ sur cet arc, comme sur la Figure \ref{neuronermlp}.
 \subsubsection*{Applications}
 Grâce aux délais, le réseau peut approximer des fonctions dont la sortie ne dépend pas seulement de l'entrée actuelle mais aussi des entrées précédentes.
