@@ -1,28 +1,29 @@
 FILE=$1
 BUILDFOLDER='build/'
+THIS='compile.sh'
 
 #test if api is cloned
 if [ -d sphero-linux-api/ ]
 then
-	echo "API sphero-linux-api/ already exist."
+	echo "[${THIS}] API sphero-linux-api/ already exist."
 else
-	echo "API sphero-linux-api/ doesn't exist. Git clone..."
+	echo "[${THIS}] API sphero-linux-api/ doesn't exist. Git clone..."
 	git clone https://github.com/slock83/sphero-linux-api
 fi
 #test if the .so library is compiled
 if [ -f sphero-linux-api/libsphero.so ]
 then
-	echo "library sphero-linux-api/libsphero.so already exist."
+	echo "[${THIS}] library sphero-linux-api/libsphero.so already exist."
 else
-	echo "library sphero-linux-api/libsphero.so doesn't exist. Using makefile in sphero-linux-api..."
+	echo "[${THIS}] library sphero-linux-api/libsphero.so doesn't exist. Using makefile in sphero-linux-api..."
 	make -C sphero-linux-api/
 fi
 #test if the folder sphero exist
 if [ -d sphero/ ]
 then
-	echo "folder sphero/ already exist."
+	echo "[${THIS}] folder sphero/ already exist."
 else
-	echo "folder sphero/ doesn't exist. Creating..."
+	echo "[${THIS}] folder sphero/ doesn't exist. Creating..."
 	mkdir sphero
 	#copy the folder structure of sphero-linux-api/src/
 	cd sphero-linux-api/src/
@@ -34,13 +35,13 @@ fi
 #test if the build folder exist
 if [ -d ${BUILDFOLDER} ]
 then
-	echo "The build folder already exist."
+	echo "[${THIS}] The build folder already exist."
 else
-	echo "The build folder doesn't exist. Creating..."
+	echo "[${THIS}] The build folder doesn't exist. Creating..."
 	mkdir ${BUILDFOLDER}
 fi
 #now compile my files
-echo "   Compile ${FILE}.cpp"
+echo "[${THIS}]    Compile ${FILE}.cpp ..."
 g++ -std=c++11 -c ${FILE}.cpp -o ${BUILDFOLDER}${FILE}.o && g++ -Lsphero-linux-api/ -o ${FILE} ${BUILDFOLDER}${FILE}.o -lsphero
-echo "define variable LD_LIBRARY_PATH=sphero-linux-api/"
+echo "[${THIS}] define variable LD_LIBRARY_PATH=sphero-linux-api/"
 export LD_LIBRARY_PATH=sphero-linux-api/
