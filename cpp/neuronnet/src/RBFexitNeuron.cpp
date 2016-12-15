@@ -1,6 +1,11 @@
 #include "RBFexitNeuron.hpp"
 #include "Neuron.hpp"
 
+/** last Weighted sum*/
+double lastWeightedSum;
+/** sum of last input elements*/
+double lastSum;
+
 RBFexitNeuron::RBFexitNeuron(double weights[], neuronSize_t length){
 	ws = weights;
 	N = length;

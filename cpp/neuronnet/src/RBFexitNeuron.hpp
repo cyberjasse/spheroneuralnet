@@ -11,18 +11,15 @@ class RBFexitNeuron : public Neuron{
 		double* ws;
 		/** Number of weights*/
 		neuronSize_t N;
-		/** last Weighted sum*/
-		double lastWeightedSum;
-		/** sum of last input elements*/
-		double lastSum;
 
 	public:
 		/**
 		 * @param weights Initial weights
-		 * @param size The length of weights
+		 * @param length The number of weights
 		 */
-		RBFexitNeuron(double weights[], neuronSize_t lenght);
+		RBFexitNeuron(double weights[], neuronSize_t length);
 
+		//Override
 		virtual double compute(double input[]);
 		virtual void backpropagation(double errorContributions[], double lastInput[], double step, double thisContributions[]);
 };
