@@ -9,8 +9,6 @@ class RBFexitNeuron : public Neuron{
 	private:
 		/** weights*/
 		double* ws;
-		/** Number of weights*/
-		neuronSize_t N;
 
 	public:
 		/**
@@ -21,6 +19,6 @@ class RBFexitNeuron : public Neuron{
 
 		//Override
 		virtual double compute(double input[]);
-		virtual void backpropagation(double errorContributions[], double lastInput[], double step, double thisContributions[]);
+		virtual void backpropagation(double errorContribution, double lastInput[], double step, double thisContributions[]);
 };
 #endif

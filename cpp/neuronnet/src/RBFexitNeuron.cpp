@@ -21,11 +21,11 @@ double RBFexitNeuron::compute(double input[]){
 	return lastWeightedSum/lastSum;
 }
 
-void RBFexitNeuron::backpropagation(double errorContributions[], double lastInput[], double step, double thisContributions[]){
+void RBFexitNeuron::backpropagation(double errorContribution, double lastInput[], double step, double thisContributions[]){
 	double R2 = (lastSum*lastSum);
 	for(neuronSize_t r=0 ; r<N ; r++){
 		//modify weights
-		ws[r] += step * errorContributions[r] * lastInput[r]/lastSum;
+		ws[r] += step * errorContribution * lastInput[r]/lastSum;
 		//compute the error contribution of this neuron to the activation fonction of the jth neuron of the previous layer
 		thisContributions[r] = (ws[r]*lastSum - lastWeightedSum)/R2;
 	}

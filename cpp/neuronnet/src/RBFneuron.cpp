@@ -21,13 +21,13 @@ double RBFneuron::compute(double input[]){
 	return lastOutput;
 }
 
-void RBFneuron::backpropagation(double errorContributions[], double lastInput[], double step, double thisContributions[]){
+void RBFneuron::backpropagation(double errorContribution, double lastInput[], double step, double thisContributions[]){
 	for(neuronSize_t k=0 ; k<N ; k++){
 		double dif = lastInput[k]-mu[k];
 		double cor = dif/ (sigma[k]*sigma[k]);
 		cor *= lastOutput;
 		cor *= step;
-		cor *= errorContributions[k];
+		cor *= errorContribution;
 		mu[k] += cor;
 		cor *= dif;
 		cor /= sigma[k];

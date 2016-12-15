@@ -11,8 +11,6 @@ class RBFneuron : public Neuron{
 		double* mu;
 		/** The standard deviation*/
 		double* sigma;
-		/** Size of the prototype*/
-		neuronSize_t N;
 
 	public:
 		/**
@@ -24,6 +22,6 @@ class RBFneuron : public Neuron{
 
 		//Override
 		virtual double compute(double input[]);
-		virtual void backpropagation(double errorContributions[], double lastInput[], double step, double thisContributions[]);
+		virtual void backpropagation(double errorContribution, double lastInput[], double step, double thisContributions[]);
 };
 #endif
