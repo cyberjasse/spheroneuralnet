@@ -7,9 +7,9 @@ Layer::Layer(Neuron* neurons, layerSize_t length, double step){
 }
 
 void Layer::compute(double input[], double output[]){
-	lastInput = input;
 	for(layerSize_t i=0 ; i<size ; i++){
-		output[i] = ns[i].compute(input);
+		output[i] = ns[i].compute(input);//compute
+		lastInput[i] = input[i];//copy the input
 	}
 }
 

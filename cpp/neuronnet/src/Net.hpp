@@ -5,34 +5,38 @@
 
 #ifndef NET_HPP
 #define NET_HPP
-
 #include "Layer.hpp"
-
 class Net{
 	protected:
 		/** The last layer should be the exit layer*/
-		Layer layers[];
+		Layer* ls;
 		/** The last output generated*/
-		double lastOutput[];
+		double* lastOutput;
+		/** The number of layers*/
+		unsigned int nLayers;
 
 	public:
 		/**
 		 * @param layers Layer in this feedforward neural network, in order. The exit layer have to be the last layer. Don't include an entry layer
+		 * @param size The number of layers
 		 */
-		Net(Layer layers[]);
+		Net(Layer layers[], unsigned int size);
 
 		/**
 		 * @brief Generate a solution
 		 * @param input The input
-		 * @return The output
+		 * @param output The table where it will be stored the output
 		 */
-		double[] compute(double input[]);
+		void compute(double input[], double output[]);
 
 		/**
 		 * @brief Perform the backpropagation
-		 * @param errorContributions The error contribution of the last output generated
-		 * @return The error contribution of the first layer
+		 * @param expected The output expected from the last solution
+		 * @param thisContributions The error contributions of the first layer
+		 *  Let Q the quadratic error, Let x[i] the ith element of the input.
+		 *  thisContributions[i] = the parital derivate dQ/dx[i]
+		 * @return The quadratic error Q
 		 */
-		double[] backpropagation(double errorContributions[]);
-}
+		double backpropagation(double expected[], double thisContributions[]);
+};
 #endif//NET_HPP
