@@ -132,7 +132,7 @@ Soit $k$ un neurone de la couche suivante, on sait que $Q$ est fonction composé
 dépendant de $\phi_k$, lui-même dépendant de $v_k$, dépendant lui-même de $\phi_i$.
 C'est pour cela qu'en appliquant le théorème de dérivée des fonctions composées,
 \begin{equation}\label{eq:cache1beforebefore}
- \partiel{Q}{\phi_i} & = \sum_{k=1}^{n} \partiel{Q}{\phi_k} \partiel{\phi_k}{v_k} \partiel{v_k}{\phi_i}
+ \partiel{Q}{\phi_i} = \sum_{k=1}^{n} \partiel{Q}{\phi_k} \partiel{\phi_k}{v_k} \partiel{v_k}{\phi_i}
 \end{equation}
 Si on subsitue \eqref{eq:deltai} dans \eqref{eq:cache1beforebefore},
 \begin{equation}\label{eq:cache1before}
