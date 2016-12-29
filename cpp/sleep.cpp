@@ -42,10 +42,9 @@ int main(int argc, char* argv[]){
 	});
 	if(sph->connect()){
 		cout << " >connect() == true< " << endl;
-		cout<<"sleep 1 second"<<endl;
-		sleep(1);
-		cout<<"Stand by the Sphero"<<endl;
+		cout<<"Stand by the Sphero ...";
 		sph->sleep(0);
+		cout<<" Done." << endl;
 	}
 	else{
 		cout << " >connection failed< " << endl;
