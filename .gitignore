@@ -21,6 +21,8 @@
 cpp/build/
 *.o
 *.out
+cpp/sleep
+cpp/perf
 
 #ignore downloaded APIs
 cpp/sphero-linux-api
