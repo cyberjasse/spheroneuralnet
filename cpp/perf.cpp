@@ -24,7 +24,7 @@ void sigHandler(int num){
 }
 
 void top(struct timeval &before, struct timeval &after){
-	cerr << after.tv_sec-before.tv_sec << "s + " << (after.tv_usec-before.tv_usec) << "us" << endl;
+	cout << "top " << after.tv_sec-before.tv_sec << " " << (after.tv_usec-before.tv_usec)<< endl;
 }
 
 using namespace std;
@@ -63,21 +63,51 @@ int main(int argc, char* argv[]){
 	MyStreamingPacket* msp = new MyStreamingPacket();
 	sph->setDataStreaming(3,1,mask1,30,mask2);*/
 	// let the process
-	int packetCount;
 	uint16_t var;
 	struct timeval t1;
 	struct timeval t2;
-	for(packetCount=0 ; packetCount<1000 ; packetCount++){
-		usleep(25000);//maximum sampling frequency is 400Hz
-		int modulo = packetCount%3;
-		if(modulo == 0)
-			sph->setColor(255,0,0, false);
-		else if(modulo == 1)
-			sph->setColor(0,255,0,false);
-		else
-			sph->setColor(0,0,255,false);
-		cout <<sph->getX()<<" "<<sph->getY()<< " "<<sph->getSpeedX()<<" "<<sph->getSpeedY()<< endl;
+	gettimeofday(&t1, NULL);
+	int packetCount=0;
+	int x = sph->getX();
+	int y = sph->getY();
+	int speedx = sph->getSpeedX();
+	int speedy = sph->getSpeedY();
+	bool changed = false;
+	while(packetCount<10000){
+		//usleep(1000);//maximum sampling frequency is 400Hz
+		changed = false;
+		if(sph->getX() != x){
+			x = sph->getX();
+			changed = true;
+		}
+		if(sph->getY() != y){
+			y = sph->getY();
+			changed = true;
+		}
+		if(sph->getSpeedX() != speedx){
+			speedx = sph->getSpeedX();
+			changed = true;
+		}
+		if(sph->getSpeedY() != speedy){
+			speedy = sph->getSpeedY();
+			changed = true;
+		}
+		if(changed){
+			int modulo = packetCount%3;
+			if(modulo == 0)
+				sph->setColor(255,0,0, false);
+			else if(modulo == 1)
+				sph->setColor(0,255,0,false);
+			else
+				sph->setColor(0,0,255,false);
+			gettimeofday(&t2, NULL);
+			top(t1,t2);
+			t1=t2;
+			cerr<<".";//cerr <<sph->getX()<<" "<<sph->getY()<< " "<<sph->getSpeedX()<<" "<<sph->getSpeedY()<< endl;
+			packetCount++;
+		}
 	}
+	cerr<<"\n";
 	//terminate
 	delete sph;//calling destructor
 	return 0;
