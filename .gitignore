@@ -37,3 +37,6 @@ cpp/compileExplain.sh
 
 #ignore the plantUML software
 uml/plantuml.jar
+
+#ignore R history file
+*.Rhistory
