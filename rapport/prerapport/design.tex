@@ -21,13 +21,23 @@ Le niveau de charge pourrait influencer la conduite.
 Il se pourrait que la puissance maximale des moteurs diminuent lorsque la charge est trop faible.
 Pour ne pas devoir effectuer un entrainement pour chaque niveau de charge différent, on entrainera la Sphero que pour les cas où le niveau de charge est à \enum{OK} et on supposera donc que la conduite sera effectuée qu'avec ce niveau de charge.
 
+Un odomètre n'est pas approprié pour la mesure de position dans notre application.
+En effet, la distance parcourue n'est mesurée qu'à partir du roulement du moteur permettant le déplacement.
+La distance parcourue par dérapage ne sera pas comptabilisée.
+Cela a été vérifié lors de l'expérience menée dans la section \ref{sec:choixdesign}.
+Une camera sera utilisée pour tracer la position réelle de la Sphero.
+
 Pour l'accélération, les commandes à appliquer à l'instant $t$ ne dépendent pas de l'accélération à l'instant $t$ juste avant l'application des commandes.
 Mais par contre, cette donnée peut être utile pour anticiper la vitesse de la Sphero au moment où elle reçoit les commandes car du à la latence d'envoi de paquet, la vitesse à l'instant $t$ n'est plus la même que celle communiquée.
 Si cette donnée impacte peu dans les résultats obtenus, alors nous pourrions décider de nous passer de ce paramètre.
 Ajouter cette dimension dans le vecteur d'entrée demandera un plus grand nombre d'exemples pour la phases d'apprentissage car il faut balayer toutes les configurations possibles de vecteur d'entrée.
 
-\newcommand{\inchist}[1]{\includegraphics[width=12cm]{../figures/hist#1.jpeg}}
-\subsection{Choix du design}
+\newcommand{\inchist}[1]{
+ \begin{minipage}{0.48\textwidth}
+  \includegraphics[width=10cm]{../figures/hist#1.jpeg}
+ \end{minipage}
+}
+\subsection{Choix du design}\label{sec:choixdesign}
  %TODO montrer les design repris chez gauthier
 Pour une meilleure précision, on ajoute un vecteur vitesse à atteindre sur le point de destination.
 On aligne l'axe des abscisses avec l'axe de l'orientation du moteur afin de reduire le domaine d'entrée et donc le nombre d'exemples à créer pour l'apprentissage.
@@ -50,33 +60,41 @@ La vitesse maximale de la Sphero est de 4,5 miles par heure.\cite{product} Ce qu
 \begin{figure}
  \centering
  \inchist{20}
+ \inchist{40}
  \inchist{60}
  \inchist{80}
  \inchist{100}
  \inchist{200}
- \caption{Histogrammes de temps de réception de packet streamé}
+ \caption{Histogrammes de temps de réception de packet streamé. Générés via script R}
  \label{histogrammes}
 \end{figure}
 
-À la Figure \ref{histogrammes} sont repris les histogrammes de temps de réceptions de paquets pour différentes fréquence d'échantillonage.
+À la Figure \ref{histogrammes} sont repris les histogrammes de temps de réceptions de paquets pour différentes fréquences d'échantillonage.
 En plus du streaming, pour chaque paquet reçu, un paquet est envoyé à la Sphero pour changer les leds.
-Cela nous permet d'obtenir des résultats qui se rapprocheront de ce que nous obtiendrons si nous envoyons de nouvelles commande chaque pour chaque période $T$.
+Cela nous permet d'obtenir des résultats qui se rapprocheront de ce que nous obtiendrons si nous envoyons une nouvelle commande à chaque période $T$.
+La configuration de l'ordinateur utilisé est la suivante:
+\begin{itemize}
+ \item AMD Athlon(tm) X2 Dual-Core QL-64
+ \item Carte mère EI Capitan
+ \item 3 Go de RAM DDR2
+ \item disque dur ST9250827AS 5400rpm
+ \item Adapteur USB bluetooth BT009x, transfert 1Mbs.
+ \item OS: Linux 4.4.0-57-generic, Ubuntu 16.04.4
+\end{itemize}
+
 On observe tout d'abord que les temps de réception ont l'air de suivre une cadence de 1ms.
 Cela peut s'expliquer par le fait que la Sphero 2.0 a une granularité de 1ms pour l'éxecution de macro.\cite{product}
+%Plus $T$ est petit, plus notre système de commande est réactif et, toutes choses égales par ailleur, nous pouvons effectuer des mouvements plus précis.
+Pour les critères de choix d'une valeur pour $T$, deux critères sont pris en compte:
+\begin{enumerate}
+ \item La stabilité du streaming. Moins la densité de probabilité de temps de réception de paquet est concentrée sur le voisinage de $T$, moins la solutions sera précise.
+ \item Le temps de réaction. Plus $T$ est grand, moins la trajectoire de la Sphero sera fidèle à la trajectoire voulue.
+ Nous pouvons compenser ce manque de précision par un vecteur d'entrée plus complexe mais la solution converge alors moins vite et un ensemble d'apprentissage plus conséquent doit être fournis.
+\end{enumerate}
 
-Voici les moyennes et écart-types estimées temps de récéptions de packet:\\ %FIXME pas gaussien FIXME inclure config du PC FIXME pas encore parler des donnees collectees
-
-\begin{center}
-\begin{tabular}{|l|r|r|}
- \hline
- Fréquence & Moyenne estimée & écart-type estimé\\
- de streaming (Hz) & (microseconde) & (microseconde)\\
- \hline
- 20 & 52814 & 16256\\
- 60 & 15682 & 6143\\
- 80 & 13201 & 6639\\
- 100 & 10681 & 6567\\
- 200 & 8070 & 2632\\
- \hline
-\end{tabular}
-\end{center}
+On oberve que la stabilité du streaming varie selon la fréquence.
+Prenons le streaming à 60Hz. On observe que en moyenne les paquets arrivent toutes les 15 millisecondes.
+La distance maximale que peut parcourir la Sphero en 15ms est de 3 cm.
+Le manque de précision dû au temps de réaction est dans ce cas négligeable pour des trajectoires à grande vitesse de l'ordre de quelque mètres.
+De plus, ce streaming étant le plus stable, c'est cette fréquence qui sera utilisée.
+Nous considèrerons donc que $T$ = 15ms malgré que la fréquence est règlée à 60Hz.
