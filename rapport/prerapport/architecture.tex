@@ -37,7 +37,7 @@ Cette méthode a été utilisé pour commander le volant d'une voiture pour suiv
  \label{appspecialise}
 \end{figure}
 Ici on applique l'algorithme de rétropropagation en démarrant depuis le maître distant et en passant par le système.
-Nous avons vu que, dans le cas d'un \mlp, section \ref{sec:appmlp}, l'apprentissage est l'application de la formule \[\Delta W_{ij} = -\eta\partiel{Q}{W_{ij}} = \partiel{Q}{\phi_i} \partiel{\phi_i}{v_i} \partiel{v_i}{W_{ij}}\]
+Par exemple, nous avons vu que, dans le cas d'un \mlp, section \ref{sec:appmlp}, l'apprentissage est l'application de la formule \[\Delta W_{ij} = -\eta\partiel{Q}{W_{ij}} = \partiel{Q}{\phi_i} \partiel{\phi_i}{v_i} \partiel{v_i}{W_{ij}}\]
 En reprenant la notation de la Figure \ref{appspecialise}, \[\Delta W_{ij} = -\eta\partiel{\varepsilon_y}{W_{ij}} = \partiel{\varepsilon_y}{\hat{u}} \partiel{\hat{u}}{v_i} \partiel{v_i}{W_{ij}}\]
 Où $v_i$ est la somme pondérée des entrées du neurones $i$.
 Or $\partiel{\varepsilon_y}{\hat{u}} = \partiel{\varepsilon_y}{y}\partiel{y}{\hat{u}}$. Et donc la formule devient

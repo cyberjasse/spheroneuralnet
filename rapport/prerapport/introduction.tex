@@ -14,9 +14,9 @@ En faisant tourner le poid, la Sphero déplace son centre de gravité en dehors 
  \item \textbf{Approximation non-linéaire}: Les RNA présentés dans ce rapport sont des approximateurs universels de fonctions non-linéaires.\cite{Haykin}
  \item \textbf{Adaptabilité}: Un RNA avec apprentissage on-line s'adapte aux changements dans le système.\cite{Haykin}
  \item \textbf{Boite noire}: Un RNA agit comme une boite noire. L'utilisateur n'a pas besoin de connaitre le fonctionnement du réseaux.
- \item \textbf{Tolérance au bruit}: Le bruitage dans la phase d'apprentissage impacte peu les performances d'un RNA.\cite{Haykin}
+ \item \textbf{Tolérance au bruit}: Le bruit dans la phase d'apprentissage impacte peu les performances d'un RNA.\cite{Haykin}
 \end{itemize}
-C'est caractéristiques font d'un réseaux de neurones artificiels, un candidat intéressant pour commander une Sphero. 
+Ces caractéristiques font d'un réseaux de neurones artificiels, un candidat intéressant pour commander une Sphero. 
 En effet, Il est très difficile de concevoir, de manière analytique, un système de commande éfficace en pratique à cause des trop nombreux paramètres à gèrer (Centre de gravité changeant, frottement, dérapages, équilibre, défauts,...).
 Un RNA, agissant comme une boite noire et étant un approximateur universel de fonction, nous permet de nous passer de la conception d'un simulateur ou d'un système de commande analytique.
 De plus, si l'apprentissage se fait on-line, le réseau de neurones pourra s'adapter en cas de changement de système. (Si le coefficient de frottement du sol change ou si la Sphero se déforme, par exemple)

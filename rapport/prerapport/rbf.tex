@@ -34,9 +34,9 @@ La structure d'un \rbf est comme celle du \mlp sauf qu'il n'y a qu'une seule cou
 \subsubsection{Apprentissage}
 Dans ce réseau, les paramètres qui seront modifiés lors de l'apprentissage sont les poids des neurones de sortie et les moyennes et écart-types des neurones cachés.
 L'algorithme de rétropropagation peut être utilisé pour un apprentissage supervisé d'un \rbf.
-Reprenons \eqref{eq:Q} l'erreur quadratique $Q$ défini dans la section \ref{sec:appmlp}.
+Reprenons \eqref{eq:Q}, l'erreur quadratique $Q$ défini dans la section \ref{sec:appmlp}.
 En reprenant le même raisonnement que la rétropropagation dans un \mlp,
-on va faire un pas de $\eta$ dans le sens opposé et proportionnel au gradient pour chaque poid $W_{ij}$ Des neurones de sortie mais aussi des prototypes $\mu_i$ et écart-types $\sigma_i$ des neurones cachés.
+on va faire un pas de $\eta$ dans le sens opposé et proportionnel au gradient pour chaque poid $W_{ij}$ des neurones de sortie mais aussi des prototypes $\mu_i$ et écart-types $\sigma_i$ des neurones cachés.
 C'est à dire que les paramètres seront modifiés de la sorte:
 \begin{equation}\label{eq:modifpoid}
  \Delta W_{ij} = -\eta \partiel{Q}{W_{ij}}
