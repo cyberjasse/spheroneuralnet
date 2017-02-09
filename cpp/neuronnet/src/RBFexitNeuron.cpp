@@ -1,5 +1,7 @@
 #include "RBFexitNeuron.hpp"
 #include "Neuron.hpp"
+#include <cstdlib>
+#include <time.h>
 
 /** last Weighted sum*/
 double lastWeightedSum;
@@ -11,9 +13,19 @@ RBFexitNeuron::RBFexitNeuron(double weights[], neuronSize_t length){
 	N = length;
 }
 
+RBFexitNeuron::RBFexitNeuron(neuronSize_t length){
+	ws = new double[length];
+	srand(time(NULL));
+	for(neuronSize_t i=0 ; i<length ; i++){
+		ws[i] = (rand()/(double)RAND_MAX)*2.0 -1.0;
+	}
+	N = length;
+}
+
+
 double RBFexitNeuron::compute(double input[]){
-	double lastSum = 0.0;
-	double lastWeightedSum = 0.0;
+	double lastSum = 1.0;// 1 instead of 0 because we add a bias
+	double lastWeightedSum = 1.0;//idem
 	for(neuronSize_t j=0 ; j<N ; j++){
 		lastSum += input[j];
 		lastWeightedSum += input[j]*ws[j];

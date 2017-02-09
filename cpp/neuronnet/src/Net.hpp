@@ -9,7 +9,7 @@
 class Net{
 	protected:
 		/** The last layer should be the exit layer*/
-		Layer* ls;
+		Layer** ls;
 		/** The last output generated*/
 		double* lastOutput;
 		/** The number of layers*/
@@ -20,14 +20,14 @@ class Net{
 		 * @param layers Layer in this feedforward neural network, in order. The exit layer have to be the last layer. Don't include an entry layer
 		 * @param size The number of layers
 		 */
-		Net(Layer layers[], unsigned int size);
+		Net(Layer **layers, unsigned int size);
 
 		/**
 		 * @brief Generate a solution
 		 * @param input The input
 		 * @param output The table where it will be stored the output
 		 */
-		void compute(double input[], double output[]);
+		virtual void compute(double input[], double output[]);
 
 		/**
 		 * @brief Perform the backpropagation
@@ -37,6 +37,6 @@ class Net{
 		 *  thisContributions[i] = the parital derivate dQ/dx[i]
 		 * @return The quadratic error Q
 		 */
-		double backpropagation(double expected[], double thisContributions[]);
+		virtual double backpropagation(double expected[], double thisContributions[]);
 };
 #endif//NET_HPP

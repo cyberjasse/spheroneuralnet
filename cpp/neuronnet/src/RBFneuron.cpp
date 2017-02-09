@@ -1,5 +1,6 @@
 #include "RBFneuron.hpp"
 #include <cmath>
+#include <iostream>
 
 double lastOutput;
 
