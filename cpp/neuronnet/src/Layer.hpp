@@ -15,7 +15,7 @@ class Layer{
 		
 	public:
 		/** Neurons in this layer*/
-		Neuron* ns;
+		Neuron** ns;
 		/** The number of neurons*/
 		layerSize_t size;
 
@@ -24,7 +24,7 @@ class Layer{
 		 * @param length The number of neurons
 		 * @param step The negative of the gradient step (-eta)
 		 */
-		Layer(Neuron* neurons, layerSize_t length, double step);
+		Layer(Neuron** neurons, layerSize_t length, double step);
 
 		/**
 		 * Compute the activation function off all neurons

@@ -17,6 +17,12 @@ class RBFexitNeuron : public Neuron{
 		 */
 		RBFexitNeuron(double weights[], neuronSize_t length);
 
+		/**
+		 * Create with random initial weights between -1 and 1
+		 * @param weights The number of weights
+		 */
+		RBFexitNeuron(neuronSize_t length);
+
 		//Override
 		virtual double compute(double input[]);
 		virtual void backpropagation(double errorContribution, double lastInput[], double step, double thisContributions[]);
