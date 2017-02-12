@@ -27,7 +27,7 @@ class RBFnet : public Net{
 		 * @param prototypes Initial prototypes
 		 * @param weights Initial weights
 		 */
-		 RBFnet(unsigned int inputSize, unsigned int outputSize, unsigned int hiddenSize, double sd, double step, double **prototypes, double **weights);
+		RBFnet(unsigned int inputSize, unsigned int outputSize, unsigned int hiddenSize, double sd, double step, double **prototypes, double **weights);
 
 	private:
 		/**

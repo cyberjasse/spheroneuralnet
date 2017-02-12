@@ -1,4 +1,5 @@
 #include "Net.hpp"
+#include <iostream>
 Net::Net(Layer **layers, unsigned int size){
 	ls = layers;
 	nLayers = size;

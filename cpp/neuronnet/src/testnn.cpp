@@ -5,13 +5,12 @@
 #include <iostream>
 
 int main(int argc, char* argv[]){
-	double **prototypes = new double*[1];
+	double **prototypes = new double *[1];
 	prototypes[0] = new double[1];
-	double **weights = new double*[1];
+	double **weights = new double *[1];
 	weights[0] = new double[1];
-	prototypes[0][0] = 0.0;
-	weights[0][0] = 0.5;
-	RBFnet net = RBFnet(1, 1, 2, 5, -5.0,  prototypes, weights);
+	weights[0][0] = 0.0;
+	RBFnet net = RBFnet(1, 1, 1, 5, -1.0,  prototypes, weights);
 	int i;
 	double input[1];
 	double output[1];
