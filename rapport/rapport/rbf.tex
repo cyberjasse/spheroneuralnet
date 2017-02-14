@@ -61,9 +61,6 @@ Ensuite,
  \begin{split}
   \partiel{\phi_i}{W_{ij}} & = \partiel{\frac{\sum_{r=1}^{m}W_{ir}x_{j}}{\factnorm}}{W_{ij}}\\
   ~ & = \frac{1}{\factnorm} \partiel{\sum_{r=1}^{m}W_{ir}x_{j}}{W_{ij}}\\
-  ~ & = \frac{1}{\factnorm} \partiel{\left(W_{i1}x_1 + W_{i2}x_2 + ... + W_{ij}x_j + ... + W_{im}x_m\right)}{W_{ij}}\\
-  ~ & = \frac{1}{\factnorm} \left(\partiel{W_{i1}x_1}{W_{ij}} + \partiel{W_{i2}x_2}{W_{ij}} + ... + \partiel{W_{ij}x_j}{W_{ij}} + ... + \partiel{W_{im}x_m}{W_{ij}}\right)\\
-  ~ & = \frac{1}{\factnorm} \left(0 + 0 + ... + x_j + ... + 0\right)\\
   ~ & = \frac{x_j}{\factnorm}
  \end{split}
 \end{equation}
@@ -93,7 +90,6 @@ Pour trouver la valeur de $\partiel{\phi_j}{\phi_i}$, nous aurons besoin de trou
 \begin{equation}\label{eq:1sr}
  \begin{split}
  \partiel{\frac{1}{R}}{x_k} & = \frac{-1}{R^2}\partiel{R}{x_k}\\
- ~ & = \frac{-1}{R^2}\partiel{x_1+x_2+...+x_k+...+x_n}{x_k}\\
  ~ & = \frac{-1}{R^2} 1
  \end{split}
 \end{equation}
@@ -102,13 +98,10 @@ Dès lors, utilisons \eqref{eq:1sr} pour simplifier l'équation suivante;
  \begin{split}
  \partiel{\phi_j}{\phi_i} & = \partiel{\phi_j}{x_r}\\
  ~ & = \partiel{\left(\frac{\sum_{k=1}^{n}W_{jk}x_k}{\sum_{k=1}{n}x_k}\right)}{x_r}\\
- ~ & = \partiel{\left(\frac{W_{j1}x_1}{R} + \frac{W_{j2}x_2}{R} + ... + \frac{W_{jr}x_r}{R} + ... + \frac{W_{jn}x_n}{R}\right)}{x_r}\\
  ~ & = \partiel{\left(\frac{W_{j1}x_1}{R}\right)}{x_r} + \partiel{\left(\frac{W_{j2}x_2}{R}\right)}{x_r} + ... + \partiel{\left(\frac{W_{jr}x_r}{R}\right)}{x_r} + .. + \partiel{\left(\frac{W_{jn}x_n}{R}\right)}{x_r}\\
  ~ & = (W_{j1}x_1)\frac{-1}{R^2} + (W_{j2}x_2)\frac{-1}{R^2} + ... + \left[(W_{jr}x_r)\partiel{\frac{1}{R}}{x_r}+\partiel{(W_{jr}x_r)}{x_r}\frac{1}{R}\right] + ... + (W_{jn}x_n)\frac{-1}{R^2}\\
- ~ & = (W_{j1}x_1)\frac{-1}{R^2} + (W_{j2}x_2)\frac{-1}{R^2} + ... + \left[(W_{jr}x_r)\frac{-1}{R^2}+W_{jr}\frac{1}{R}\right] + ... + (W_{jn}x_n)\frac{-1}{R^2}\\
  ~ & = \left(\sum_{k=1}^{n}W_{jk}x_k\frac{-1}{R^2}\right)-W_{jr}x_r\frac{-1}{R^2} + \left[(W_{jr}x_r)\frac{-1}{R^2}+W_{jr}\frac{1}{R}\right]\\
  ~ & = \frac{-1}{R^2} \left[\left(\sum_{k=1}^{n}W_{jk}x_k\right)-W_{jr}x_r + (W_{jr}x_r) + W_{jr}(-R)\right]\\
- ~ & = \frac{-1}{R^2} \left(W_{jr}(-R) + \sum_{k=1}^{n}W_{jk}x_k\right)\\
  ~ & = \frac{1}{R^2} \left(W_{jr}R - \sum_{k=1}^{n}W_{jk}x_k\right)
  \end{split}
 \end{equation}
