@@ -50,3 +50,19 @@ void RBFneuron::backpropagation(double errorContribution, double lastInput[], do
 		return; //TODO this contribution
 	}
 }
+
+#ifdef NEUROPRINT
+#include <iostream>
+void RBFneuron::neuroprint(){
+	std::cout << "RBFneuron --------\n  mu= ";
+	int i;
+	for(i=0 ; i<N ; i++){
+		std::cout << mu[i] << "| ";
+	}
+	std::cout << "\n  sigma= ";
+	for(i=0 ; i<N ; i++){
+		std::cout << sigma[i] << "| ";
+	}
+	std::cout << std::endl;
+}
+#endif

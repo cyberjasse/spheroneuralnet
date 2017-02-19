@@ -30,3 +30,11 @@ void Layer::backpropagation(double nextLayerContributions[], double thisContribu
 			}
 		}
 }
+
+#ifdef NEUROPRINT
+void Layer::neuroprint(){
+	for(int i=0 ; i<size ; i++){
+		ns[i]->neuroprint();
+	}
+}
+#endif

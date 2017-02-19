@@ -58,3 +58,14 @@ void RBFexitNeuron::backpropagation(double errorContribution, double lastInput[]
 	}
 	return;
 }
+
+#ifdef NEUROPRINT
+#include <iostream>
+void RBFexitNeuron::neuroprint(){
+	std::cout << "RBFexitNeuron --------\n  weights= ";
+	for(int i=0 ; i<N ; i++){
+		std::cout << ws[i] << "| ";
+	}
+	std::cout << std::endl;
+}
+#endif

@@ -48,5 +48,12 @@ class Layer{
 		 * @brief Get the last input vector given in compute()
 		 */
 		double* getLastInput();
+	
+		#ifdef NEUROPRINT
+		/**
+		 * @brief print current parameters of neurons in this layer
+		 */
+		void neuroprint();
+		#endif
 };
 #endif

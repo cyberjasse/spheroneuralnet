@@ -4,24 +4,65 @@
 #include <time.h>
 #include <iostream>
 
+/**
+ * Create a nrow*ncol matrix
+ */
+void matrix(int nrow, int ncol, double value, double **&matrix){
+	matrix = new double *[nrow];
+	for(int i=0 ; i<nrow ; i++){
+		matrix[i] = new double[ncol];
+		for(int j=0 ; j<ncol ; j++){
+			matrix[i][j] = value;
+		}
+	}
+}
+
+/**
+ * Generate a random number of type double and in [min,max[
+ * From http://stackoverflow.com/questions/2704521/generate-random-double-numbers-in-c
+ */
+double fRand(double fMin, double fMax)
+{
+    double f = (double)rand() / RAND_MAX;
+    return fMin + f * (fMax - fMin);
+}
+
 int main(int argc, char* argv[]){
-	double **prototypes = new double *[1];
-	prototypes[0] = new double[1];
-	double **weights = new double *[1];
-	weights[0] = new double[1];
-	weights[0][0] = 0.0;
-	RBFnet net = RBFnet(1, 1, 1, 5, -1.0,  prototypes, weights);
+	/*double **prototypes;
+	matrix(2,1, 0.0, prototypes);
+	std::cout << "prot:" << prototypes[0][0] << " , " << prototypes[1][0] << std::endl;
+	double **weights;
+	matrix(1,2, 0.5, weights);
+	std::cout << "ws:" << weights[0][0] << " , " << weights[0][1] << std::endl;*/
+	RBFnet net = RBFnet(2, 1, 20, 200.0, -0.5);
 	int i;
-	double input[1];
+	double input[2];
 	double output[1];
 	double backpropa[1];
 	srand(time(NULL));//init seed
-	for(i=0 ; i<1 ; i++){
-		input[0] = 3;//(double)(rand() % 1000) / 1000.0;
+	double min = -100.0;
+	double max = 100.0;
+	//Practice time
+	for(i=0 ; i<500000 ; i++){
+		input[0] = fRand(min,max);
+		input[1] = fRand(min,max);
 		net.compute(input, output);
-		std::cout << "input "<< input[0]<< ", Got "<< output[0] <<std::endl;
-		net.backpropagation( input, backpropa);
+		double *expected = new double[1];
+		expected[0] = input[0] + input[1];
+		net.backpropagation(expected , backpropa);
 	}
+	//Test time
+	for(i=0 ; i<20 ; i++){
+		input[0] = fRand(min,max);
+		input[1] = fRand(min,max);
+		net.compute(input, output);
+		double *expected = new double[1];
+		expected[0] = input[0] + input[1];
+		std::cout << "Got "<< output[0] << "  expected "<< expected[0] << std::endl;
+	}
+	#ifdef NEUROPRINT
+	net.neuroprint();
+	#endif
 }
 /*
 With 1 input, 1 hidden neuron, 1 exit neuron, sd=5, mu=0, weight=0.5

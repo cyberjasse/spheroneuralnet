@@ -38,5 +38,12 @@ class Net{
 		 * @return The quadratic error Q
 		 */
 		virtual double backpropagation(double expected[], double thisContributions[]);
+		
+		#ifdef NEUROPRINT
+		/**
+		 * @brief print current neuron parameters
+		 */
+		virtual void neuroprint();
+		#endif
 };
 #endif//NET_HPP

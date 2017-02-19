@@ -23,5 +23,8 @@ class RBFneuron : public Neuron{
 		//Override
 		virtual double compute(double input[]);
 		virtual void backpropagation(double errorContribution, double lastInput[], double step, double thisContributions[]);
+		#ifdef NEUROPRINT
+		virtual void neuroprint();
+		#endif
 };
 #endif

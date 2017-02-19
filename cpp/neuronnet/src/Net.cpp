@@ -1,5 +1,4 @@
 #include "Net.hpp"
-#include <iostream>
 Net::Net(Layer **layers, unsigned int size){
 	ls = layers;
 	nLayers = size;
@@ -40,3 +39,18 @@ double Net::backpropagation(double expected[], double thisContributions[]){
 	thisContributions = layerIn;
 	return error/2;
 }
+
+#ifdef NEUROPRINT
+#include <iostream>
+void Net::neuroprint(){
+	for(int i=0 ; i<nLayers ; i++){
+		if(i == 0){
+			std::cout << "ENTRY LAYER  (LAYER 0):\n";
+		}
+		else{
+			std::cout << "HIDDEN LAYER (LAYER " << i << ");\n";
+		}
+		ls[i]->neuroprint();
+	}
+}
+#endif

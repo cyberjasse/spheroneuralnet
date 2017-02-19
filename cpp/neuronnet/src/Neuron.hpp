@@ -30,5 +30,12 @@ class Neuron{
 		 *  Let Q the quadratic error, thisContribution[i] = the partial derivate dQ/df * df/dg[i]
 		 */
 		virtual void backpropagation(double errorContribution, double lastInput[], double step, double thisContributions[]) =0;
+		
+		#ifdef NEUROPRINT
+		/**
+		 * @brief Print current parameters
+		 */
+		virtual void neuroprint() =0;
+		#endif
 };
 #endif
