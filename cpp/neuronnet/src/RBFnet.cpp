@@ -15,16 +15,16 @@ void RBFnet::init(unsigned int inputSize, unsigned int outputSize, unsigned int 
         //create standard deviations
         int j;
         double* sds = new double[inputSize];
-        for (j = 0 ; j < inputSize ; j++)
+        for (j=0 ; j<inputSize ; j++)
         {
-            sds[i] = sd;
+            sds[j] = sd;
         }
         hiddens[i] = new RBFneuron(prototypes[i], sds, inputSize);
     }
     ls[0] = new Layer(hiddens, hiddenSize, step);
     //create exit neurons
     Neuron** exits = new Neuron *[outputSize];
-    for (i = 0 ; i < outputSize ; i++)
+    for (i=0 ; i<outputSize ; i++)
     {
         exits[i] = new RBFexitNeuron(weights[i], hiddenSize);
     }

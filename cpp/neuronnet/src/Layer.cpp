@@ -1,5 +1,4 @@
 #include "Layer.hpp"
-#include <iostream>
 
 Layer::Layer(Neuron** neurons, layerSize_t length, double step){
 	ns = neurons;
@@ -9,10 +8,12 @@ Layer::Layer(Neuron** neurons, layerSize_t length, double step){
 }
 
 void Layer::compute(double input[], double output[]){
+	//compute
 	for(layerSize_t i=0 ; i<size ; i++){
-		output[i] = ns[i]->compute(input);//compute
-		lastInput[i] = input[i];//copy the input
+		output[i] = ns[i]->compute(input);
 	}
+	//copy the input
+	lastInput = input;
 }
 
 void Layer::backpropagation(double nextLayerContributions[], double thisContributions[]){
