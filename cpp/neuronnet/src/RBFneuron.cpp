@@ -38,17 +38,17 @@ void RBFneuron::backpropagation(double errorContribution, double lastInput[], do
 		cor *= step;
 		cor *= errorContribution;
 		#ifdef PRINT
-		std::cout << "Hidden neuron <- error=" << errorContribution << " MODIFICATION mu=" << cor;
+		std::cout << "Hidden neuron <- error=" << errorContribution << " MODIFICATION mu["<<k<<"]=" << cor;
 		#endif
 		mu[k] += cor;
 		cor *= dif;
 		cor /= sigma[k];
 		#ifdef PRINT
-		std::cout << " MODIFICATION sigma=" << cor << std::endl;
+		std::cout << " MODIFICATION sigma["<<k<<"]=" << cor << std::endl;
 		#endif
 		sigma[k] += cor;
-		return; //TODO this contribution
 	}
+	//TODO return this contribution
 }
 
 #ifdef NEUROPRINT

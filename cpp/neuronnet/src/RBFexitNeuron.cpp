@@ -56,7 +56,6 @@ void RBFexitNeuron::backpropagation(double errorContribution, double lastInput[]
 		#endif
 		ws[r] += modification;
 	}
-	return;
 }
 
 #ifdef NEUROPRINT
