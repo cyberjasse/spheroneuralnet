@@ -18,6 +18,10 @@
 
 \section{Modèles de réseaux de neurones artificiels}
 \terminologie
+Tout d'abord, analysons les différents modèles de réseau de neurones artificiels éxistants afin de pouvoir sélectionner celui qui convient le mieux à notre application.
+Les plus connus d'entre eux sont le perceptron multi-couche et la fonction à base radiale, tous deux non récurrents.
+Ensuite nous verrons les réseaux de neurones récurrents qui approximent des fonctions qui peuvent dépendre de toutes les entrées précédentes.
+Les terminologies utilisées proviennent de la littérature anglophone et tous ceux rencontrés sont répertoriés à la table \ref{terminologie}.
 \input{mlp}
 \input{rbf}
 %\input{cnn}
@@ -59,28 +63,11 @@ Mais puisque le sytème ne change pas, lorsqu'on arrive à obtenir un modèle fi
 Nous utiliserons dans un premier temps la méthode en deux phases pour obtenir un ensemble de paires cible/commande où la précision dépend seulement des capteurs et pas de la fiabilité d'un modèle.
 
 \section{Les API}
+Certaines API permettant l'envoi de commande et réception de message provenant de la Sphere sont disponibles.
 Les APIs officiels sont:\cite{SDKofficiels} \textbf{Objective-C}, \textbf{Swift}, \textbf{Android}.\\
 Il existe également des APIs créés par la communauté:\cite{gosphero} \textbf{C\#}, \textbf{JavaScript}, \textbf{Ruby}, \textbf{Python}\cite{pythonAPI}, \textbf{Arduino}, \textbf{C++}\cite{cppAPI}.\\
 
 L'API choisie est l'API \textbf{C++} pour le langage de programmation connu et performant exécutable sur PC.
-
-\section{Avancement du projet et perspective}
-\begin{itemize}
- \item Un modèle de réseau de neurone a été choisi en excluant ceux qui ne sont pas destinés à notre application et en comparant les deux modèles envisageables: \mlp et \rbf.
- \item Deux méthodes visant à éviter le problème de surajustement ont été évoqués.
- \item Deux méthodes de résolutions pour contourner le problême de maître distant ont été retenus.
- \item Un design de vecteur d'entrée a été établi selon un compromis entre précision du mouvement et convergence de la solution.
- \item Un temps d'échantillonage pour notre ensemble d'apprentissage a été déterminé.
- \item Une implémentation d'un \rbf a débuté. Le paradigme orienté-objet est utilisé de sorte à pouvoir ajouter rapidement l'implémentation d'un \mlp (si le besoin se fait sentir) et obtenir un réseau différentiable sans réécriture de code.
-\end{itemize}
-Les tâches principales restantes sont:
-\begin{itemize}
- \item Terminer l'implémentation du \rbf et la tester
- \item Implémentation d'un programmation d'édition de trajectoire
- \item Obtenir l'ensemble d'apprentissage
- \item Trouver les paramètres optimaux pour le \rbf
- \item Déploiement
-\end{itemize}
 
 
 \subsection*{Remerciements}
