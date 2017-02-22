@@ -18,7 +18,7 @@ Le domaine de $y$ est généralement $[0,1]$ ou $[-1,1]$.\cite{Haykin,statistica
 La fonction $\phi$ utilisée dépend du problème qu'on veut résoudre (Figure \ref{mlpfonc}).
 \begin{figure}
  \centering
- %insert tableau de statistica here
+ % tableau de statistica
  \textbf{Fonctions d'activations.} (fonction de $x$)\\
  \begin{tabular}{|l|c|c|}
   Nom & Formule & Image\\
@@ -75,14 +75,14 @@ Nous voulons modifier la valeur des poids pour que la prochaine fois que nous pr
 Pour chaque poids $W_{ij}$, nous allons calculer le gradient $\partiel{Q}{W_{ij}}$ qui, par définition, indique la façon dont $Q$ varie si $W_{ij}$ augmente d'une valeur $\delta W_{ij}$ infiniment petite.
 Ensuite nous \enum{ferons un pas} dans le sens opposé et proportionel au gradient en ajoutant $-\eta\partiel{Q}{W_{ij}}$ à $W_{ij}$ où $\eta$ est une constante appelé \emph{pas du gradient}.
 Donc la modification du poid $W_{ij}$ que nous voulons appliquer vaut
-\begin{equation}\label{eq:Delta}
+\begin{equation}%\label{eq:Delta}
  \Delta W_{ij} = -\eta\partiel{Q}{W_{ij}}
 \end{equation}
 Déterminons à présent la valeur de ce gradient $\partiel{Q}{W_{ij}}$.
 Nous savons que $\phi_i$ est une équation à une variable.
 Mais en entrée de cette variable est donnée la somme pondérée $v_i$ et $W_{ij}$ est un des poids de $v_i$.
 Par le théorème de dérivation des fonctions composées,
-\begin{equation}\label{eq:gradient}
+\begin{equation}%\label{eq:gradient}
  \partiel{Q}{W_{ij}} = \partiel{Q}{\phi_i} \partiel{\phi_i}{v_i} \partiel{v_i}{W_{ij}}
 \end{equation}
 \begin{thm}[dérivation des fonctions composées]
@@ -90,67 +90,13 @@ Soit $f:A~\rightarrow~B : y~\rightarrow~f(y)$ et $g:B~\rightarrow~C : x~\rightar
 \[\partiel{f}{x} = \partiel{f}{g} \partiel{g}{x}\]
 \end{thm}
 Posons
-\begin{equation}\label{eq:deltai}
+\begin{equation}%\label{eq:deltai}
  \delta_i = \partiel{Q}{\phi_i} \partiel{\phi_i}{v_i}
 \end{equation}
 $\delta_i$ est appelé \emph{contribution à l'erreur} du neurone $i$.
 Nous verrons plus tard qu'elle sera utile pour la rétropropagation de la couche prédédente.
-En reprenant \eqref{eq:gradient}, nous avons maintenant que
-\begin{equation}\label{eq:graddelta}
- \partiel{Q}{W_{ij}} = \delta_i \partiel{v_i}{W_{ij}}
-\end{equation}
-Nous allons déterminer la valeur de $\delta_i$ et de $\partiel{v_i}{W_{ij}}$.
-Commençons par déterminer $\partiel{v_i}{W_{ij}}$.
-Soit $x_i$ l'entrée du neurone $i$,
-\begin{equation}\label{eq:gradsum}
- \begin{split}
-  \partiel{v_i}{W_{ij}} & = \partiel{(W_{i0}x_i)}{W_{ij}} + \partiel{(W_{i1}x_i)}{W_{ij}} + ... + \partiel{(W_{ij}x_i)}{W_{ij}} + ... + \partiel{(W_{im}x_m)}{W_{ij}}\\
-  ~ & = x_i
-  \end{split}
-\end{equation}
-Ensuite, déterminons la valeur de $\delta_i$ selond deux cas: Si $i$ est un neurone de sortie et si $i$ est un neurone caché.\\
-
-\textbf{Si le neurone $i$ est un neurone de sortie,}
-\begin{equation}\label{eq:sortie1}
- \begin{split}
-  \partiel{Q}{\phi_i} & = \frac{1}{2} \left( \partiel{(\phi_0 - s_0)^2}{\phi_i} + \partiel{(\phi_1 - s_1)^2}{\phi_i} + ... + \partiel{(\phi_i - s_i)^2}{\phi_i} + ... + \partiel{(\phi_l - s_l)^2}{\phi_i} \right)\\
-  ~ & = \frac{1}{2}2(\phi_i - s_i)\partiel{(\phi_i - s_i)}{\phi_i}\\
-  ~ & = (\phi_i - s_i)
- \end{split}
-\end{equation}
-Soit $\phi'$ la dérivée de $\phi$,
-\begin{equation}\label{eq:sortie2}
- \partiel{\phi_i}{v_i} = \phi'(v_i)
-\end{equation}
-Par \eqref{eq:sortie1} et \eqref{eq:sortie2}, on a
-\[\delta_i = (\phi_i - s_i)\phi'(v_i)\]\\
-
-\textbf{Si le neurone $i$ est un neurone caché,}
-Alors soit $n$ le nombre de neurone de la couche suivante.
-L'indice $k$ sera utilisé pour désigner un neurone de la couche suivante.
-Soit $k$ un neurone de la couche suivante, on sait que $Q$ est fonction composée,
-dépendant de $\phi_k$, lui-même dépendant de $v_k$, dépendant lui-même de $\phi_i$.
-C'est pour cela qu'en appliquant le théorème de dérivée des fonctions composées,
-\begin{equation}\label{eq:cache1beforebefore}
- \partiel{Q}{\phi_i} = \sum_{k=1}^{n} \partiel{Q}{\phi_k} \partiel{\phi_k}{v_k} \partiel{v_k}{\phi_i}
-\end{equation}
-Si on subsitue \eqref{eq:deltai} dans \eqref{eq:cache1beforebefore},
-\begin{equation}\label{eq:cache1before}
- \partiel{Q}{\phi_i} = \sum_{k=1}^{n} \delta_k \partiel{v_k}{\phi_i}
-\end{equation}
-Or $\phi_i$ est l'entrée du neurone $k$ recevant la sortie du neurone $i$. Posons $W_{ki}$ le poid que $k$ attribue à $\phi_i$.
-On peut alors continuer à développer \eqref{eq:cache1before} comme suit:
-\begin{equation}\label{eq:cache1}
- \partiel{v_k}{\phi_i} = \partiel{W_{ki}\phi_i}{\phi_i} = W_{ki}
-\end{equation}
-Pour la valeur de $\partiel{\phi_i}{v_i}$, nous pouvons reprendre \eqref{eq:sortie2}.
-Et du coup, \[\delta_i = \phi_i'(v_i) \sum_{k=1}^{n} \delta_k W_{ki}\]
-
-Nous connaissons maitenant la modification à appliquer sur $W_{ij}$. Pour résumé, subsituons $\delta_i$ et \eqref{eq:gradsum} à \eqref{eq:gradient},
-\begin{equation}\label{eq:subgradient}
- \partiel{Q}{W_{ij}} = \delta_i x_i
-\end{equation}
-Qu'on subsitue à \eqref{eq:Delta} et nous avons enfin
+Le dévellopement de la formule de rétropropagation a été fait en annexe \ref{sec:eqmlp}.
+Et voici ce que nous obtenons au final:\\
 \begin{equation}\label{eq:mlpretro}
  \Delta W_{ij} = -\eta \delta_i x_i \text{~où~}\left\{
   \begin{array}{lll}
