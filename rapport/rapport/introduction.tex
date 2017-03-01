@@ -8,16 +8,16 @@ La Sphero est une boule robotisée téléguidée, connectée par Bluetooth.
 À l'intérieur, il y a deux moteurs: un pour faire tourner le contre-poids et l'autre pour modifier l'orientation de l'appareil.
 En faisant tourner le poid, la Sphero déplace son centre de gravité en dehors de sa base de sustentation\footnote{Surface entre le solide et le sol au dessus duquel le centre de gravité doit se trouver pour que le solide garde l'équilibre.}, faisant ainsi rouler l'appareil.
 \subsection{Avantages d'un réseau de neurones}
-\begin{itemize}
- \item \textbf{parallélisme}: L'apprentissage et la génération de vecteur de sortie est massivement parallélisable dans un RNA.\cite{corelet,Haykin}
- \item \textbf{Généralisation}: Répond de manière raisonnable à une entrée non rencontrée durant la phase d'apprentissage.\cite{statistica,Haykin}
- \item \textbf{Approximation non-linéaire}: Les RNA présentés dans ce rapport sont des approximateurs universels de fonctions non-linéaires.\cite{Haykin}
- \item \textbf{Adaptabilité}: Un RNA avec apprentissage on-line s'adapte aux changements dans le système.\cite{Haykin}
- \item \textbf{Boite noire}: Un RNA agit comme une boite noire. L'utilisateur n'a pas besoin de connaitre le fonctionnement du réseaux.
- \item \textbf{Tolérance au bruit}: Le bruit dans la phase d'apprentissage impacte peu les performances d'un RNA.\cite{Haykin}
-\end{itemize}
+
+L'apprentissage et la génération de vecteur de sortie est massivement parallélisable dans un RNA.\cite{corelet,Haykin}
+De plus, il répond de manière raisonnable à une entrée non rencontrée durant la phase d'apprentissage. Cela s'appelle la \emph{généralisation}.\cite{statistica,Haykin}
+Les RNA présentés dans ce rapport sont des approximateurs universels de fonctions non-linéaires.\cite{Haykin}
+Un RNA avec apprentissage on-line s'adapte aux changements dans le système (\emph{adaptabilité}).\cite{Haykin}
+Un RNA agit comme une boite noire. L'utilisateur n'a pas besoin de connaitre le fonctionnement du réseaux.
+Et enfin, Le bruit dans la phase d'apprentissage impacte peu les performances d'un RNA.\cite{Haykin}
+
 Ces caractéristiques font d'un réseaux de neurones artificiels, un candidat intéressant pour commander une Sphero. 
 En effet, Il est très difficile de concevoir, de manière analytique, un système de commande éfficace en pratique à cause des trop nombreux paramètres à gèrer (Centre de gravité changeant, frottement, dérapages, équilibre, défauts,...).
 Un RNA, agissant comme une boite noire et étant un approximateur universel de fonction, nous permet de nous passer de la conception d'un simulateur ou d'un système de commande analytique.
-De plus, si l'apprentissage se fait on-line, le réseau de neurones pourra s'adapter en cas de changement de système. (Si le coefficient de frottement du sol change ou si la Sphero se déforme, par exemple)
+De plus, si l'apprentissage se fait on-line, le réseau de neurones pourra s'adapter en cas de changement de système (Si le coefficient de frottement du sol change ou si la Sphero se déforme, par exemple).
 Et enfin, du bruit sera inévitablement présent dans les données fournies par les capteurs.

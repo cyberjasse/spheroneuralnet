@@ -1,4 +1,5 @@
-\subsection{Base radiale (RBF)}
+\subsection{Base radiale}
+Nous désignerons un réseau de neurones \emph{fonction à base radiale} par sa terminologie anglaise: \rbf pour \enum{Rasial Basis Function}.
 \newcommand{\factnorm}{\sum_{r=1}^{m}x_{r}}
 \subsubsection{Neurone}
 Un neurone \textbf{caché} d'un \rbf n'effectue pas de somme pondérée de ses entrées.
@@ -12,12 +13,13 @@ Où $i$ est l'indice du neurone. $\mu$ s'appelle aussi \emph{prototype} dans le 
 
 Un neurone \textbf{de sortie} d'un \rbf n'effectue pas non plus de somme pondérée de ses entrées. Sa fonction d'activation est:
 \begin{equation}\label{eq:sortiephi}
+À une couche cachée, un \mlp peut déja servir pour la classification non linéaire.\cite{statistica}\\
  \phi(x) = \frac{\sum_{j=1}^{m}W_{ij}x_{j}}{\sum_{j=1}^{m}x_{j}}
 \end{equation}
 Où $i$ est l'indice du neurone et $x$ l'entrée de dimension $m$.
 \begin{figure}
  \centering
- \includegraphics[scale=0.7]{../figures/RBFactivation.png}
+ \includegraphics[scale=0.7]{../figures/RBFactivation.png}%TODO generer ça soit-même
  \caption{Activation d'un neurone RBF avec différentes valeurs d'écart-type}
  \label{rbfactivation}
 \end{figure}
@@ -59,4 +61,9 @@ posons aussi $R = \sum_{k=1}^{n}x_k$.
 \[\Delta \sigma_{ik} = -\eta \left[\sum_{i}(\phi_j - s_j) \frac{1}{R^2} \left(W_{jr}R - \sum_{k=1}^{n}W_{jk}x_k\right)\right] \phi_i \frac{(x_k-\mu_{ik})^2}{\sigma_{ik}^3}\]
 
 \subsubsection{Applications}
-Un \rbf peut aussi servir pour la classification non linéaire.\cite{statistica}
+Un \rbf peut aussi servir pour la commande de robot.\cite{Gauthier}
+
+Un des inconvénients des \rbf est que le nombre de neurones cachés croît avec la dimension et la taille du vecteur d'entrée puisqu'un neurone caché s'active seulement pour des entrées dans le voisinage de son prototype.
+Nous pouvons raisonablement envisager ce modèle pour notre application puisque la description de l'état actuel et de l'état cible contiendra typiquement une coordonnée, un vecteur vitesse, une orientation et éventuellement l'accéleration, etc...
+La taille de l'entrée sera donc relativement petite. Ce sera lors de la phase pratique qu'on évaluera le nombre de neurones cachés nécessaires.
+De plus, les \rbf sont moins sensibles au bruit.\cite{adversarial}

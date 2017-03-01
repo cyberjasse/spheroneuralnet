@@ -1,6 +1,6 @@
 \section{Design du vecteur d'entrée}
 \subsection{Données utiles}
-Avant de choisir le réseau de neurones à utiliser, il est important d'identifier ce que nous souhaitons obtenir en sortie et les informations que nous pouvons fournir en entrée en omettant les données inutiles.
+Avant de choisir le réseau de neurones à utiliser pour Générer des commandes pour la Sphero, il est important d'identifier ce que nous souhaitons obtenir en sortie et les informations que nous pouvons fournir en entrée en omettant les données inutiles.
 Si le vecteur d'entrée est de dimension très grande, alors un réseau \rbf devra avoir un trop grand nombre de neurones cachés\cite{Gauthier}.
 Si nous supposons que la sortie produite peut dépendre non seulement de l'input actuel mais aussi des entrées précédentes, alors un réseau récurrent devra être utilisé.
 
@@ -10,7 +10,7 @@ La Sphero peut nous fournir:\cite{SDKofficiels}
  \item Son vecteur vitesse (mm/s),
  \item Son vecteur d'accélération grâce à un accéleromètre (mG),
  \item Son orientation (-179$\rightarrow$180 degrés),
- \item Son niveau de charge (Label \enum{Chargement}, \enum{OK}, \enum{Bas}, \enum{Critique}),
+ \item Son niveau de charge (Pas de poucentage mais label \enum{Chargement}, \enum{OK}, \enum{Bas} et \enum{Critique}),
  \item État des LEDs, évènement de collision, voltage de la batterie, nombre de charges, version ...
 \end{itemize}
 
@@ -18,8 +18,8 @@ Parmis ces données, nous n'avons pas besoin de l'état des LEDs, version et nom
 Dans ce projet, nous ne prenons pas en compte les éventuels collisions.
 
 Le niveau de charge pourrait influencer la conduite.
-Il se pourrait que la puissance maximale des moteurs diminuent lorsque la charge est trop faible.
-Pour ne pas devoir effectuer un entrainement pour chaque niveau de charge différent, on entrainera la Sphero que pour les cas où le niveau de charge est à \enum{OK} et on supposera donc que la conduite sera effectuée qu'avec ce niveau de charge.
+Nous ne savons pas si la puissance maximale des moteurs diminuent lorsque la charge est trop faible.
+Si cela s'avère être le cas, pour ne pas devoir effectuer un entrainement pour chaque niveau de charge différent, on entrainera la Sphero que pour les cas où le niveau de charge est à \enum{OK} et on supposera donc que la conduite sera effectuée qu'avec ce niveau de charge.
 
 Un odomètre n'est pas approprié pour la mesure de position dans notre application.
 En effet, la distance parcourue n'est mesurée qu'à partir du roulement du moteur permettant le déplacement.

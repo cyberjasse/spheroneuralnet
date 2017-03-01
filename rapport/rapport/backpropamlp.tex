@@ -23,7 +23,7 @@ Soit $x_i$ l'entrée du neurone $i$,
   ~ & = x_i
   \end{split}
 \end{equation}
-Ensuite, déterminons la valeur de $\delta_i$ selond deux cas: Si $i$ est un neurone de sortie et si $i$ est un neurone caché.\\
+Ensuite, déterminons la valeur de $\delta_i$ selon deux cas: Si $i$ est un neurone de sortie et si $i$ est un neurone caché.\\
 
 \textbf{Si le neurone $i$ est un neurone de sortie,}
 \begin{equation}\label{eq:sortie1}
@@ -41,7 +41,7 @@ Par \eqref{eq:sortie1} et \eqref{eq:sortie2}, on a
 \[\delta_i = (\phi_i - s_i)\phi'(v_i)\]\\
 
 \textbf{Si le neurone $i$ est un neurone caché,}
-Alors soit $n$ le nombre de neurone de la couche suivante.
+Alors soit $n$ le nombre de neurones de la couche suivante.
 L'indice $k$ sera utilisé pour désigner un neurone de la couche suivante.
 Soit $k$ un neurone de la couche suivante, on sait que $Q$ est fonction composée,
 dépendant de $\phi_k$, lui-même dépendant de $v_k$, dépendant lui-même de $\phi_i$.
