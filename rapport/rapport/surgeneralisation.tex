@@ -1,5 +1,5 @@
-\section{Le problème du surajustement}
-\subsection{Le phénomène}
+\subsection{Le problème du surajustement}
+\subsubsection{Le phénomène}
 Lorsque un réseau de neurones à apprentissage supervisé apprend de trop nombreuses fois à partir du même set d'exemple, alors il se produit un phénomène appelé \emph{surajustement}.\cite{statistica}
 Le réseau devient dès lors de moins en moins efficace sur des entrées non rencontrées pendant les phases d'apprentissage.
 La Figure \ref{interruption} montre qu'au fil des cycles d'apprentissages, l'erreur diminue.
@@ -11,8 +11,8 @@ C'est à partir de là que le réseau de neurones surajuste.
  \caption{Interruption prématurée. \textbf{Source}: STATISTICA Réseaux de Neurones Automatisés (SANN)\cite{statistica}}
  \label{interruption}
 \end{figure}
-\subsection{Les solutions}
-\subsubsection*{Intérruption prématurée}
+\subsubsection{Les solutions}
+\ssstitle{Intérruption prématurée}
 Tout d'abord séparons notre ensemble de paires entrée/sortie en deux ensembles.
 L'un est nommé \emph{ensemble d'apprentissage} et l'autre \emph{ensemble de test}.
 Chacun de ces ensembles doit balayer toutes les valeurs de vecteur d'entrée possibles.
@@ -26,7 +26,7 @@ C'est à dire l'éfficacité du réseau sur des entrées jamais rencontrées.\\
 Dans la réalité, la courbe d'erreur de test n'est pas aussi lisse que dans la Figure \ref{interruption} mais présente un certain bruit.
 Il faut donc pouvoir s'assurer que l'interruption prématurée a bien lieu sur le minimum global de l'erreur de test.
 Comparer l'erreur de test à celui du cycle précédent permet de détecter un minimum local.
-\subsubsection*{Modération des poids}
+\ssstitle{Modération des poids}
 Cette méthode consiste à pénaliser l'utilisation de trop grand poids.
 Pour ce faire, on modifie le calcul d'erreur pour y prendre en compte leur valeur.\cite{statistica}
 Soit $E$ l'erreur, soit $W$ un vecteur contenant tous les poids (ne pas prendre les biais en compte), la nouvelle valeur de l'erreur est \[E_{new} = E + \frac{\sigma}{2}W^{T}W\]

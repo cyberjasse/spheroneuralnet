@@ -1,4 +1,4 @@
-\section{Méthodes d'apprentissage avec maître distant}
+\subsection{Méthodes d'apprentissage avec maître distant}
 Nous allons observer différentes architectures intéressantes dans le cas de génération de commandes.
 Le mot \enum{architecture} utilisé ici ne désigne pas l'architecture d'un réseau de neurones mais l'architecture d'une méthode d'utilisation de réseaux de neurones.
 La convention graphique est montré dans la Figure \ref{legendearchi}.
@@ -9,7 +9,7 @@ La convention graphique est montré dans la Figure \ref{legendearchi}.
  \label{legendearchi}
 \end{figure}
 
-\subsection{Le problème}
+\subsubsection{Le problème}
 Dans cette section, nous allons voir différentes méthodes pour entrainer un réseau de neurones à générer des commandes.
 Ces méthodes visent à contourner le \emph{problème de l'apprentissage avec maître distant}.
 Dans l'apprentissage supervisé, un \emph{maître} est ce qui permet de fournir une erreur entre la sortie d'un réseau de neurones et la sortie attendue.
@@ -19,7 +19,7 @@ Par contre nous pouvons avoir un maître qui compare l'état résultant de l'ex�
 Dans les figures qui suivront, Système désigne l'exécution, dans la réalité, de la commande entrée.
 En sortie du Système nous avons l'état résultat de l'exécution des commandes.
 
-\subsection{Reproduction d'un contrôleur}
+\subsubsection{Reproduction d'un contrôleur}
 \begin{figure}
  \centering
  \includegraphics[scale=0.5]{../figures/appsimple.jpg}
@@ -29,7 +29,7 @@ En sortie du Système nous avons l'état résultat de l'exécution des commandes
 Dans cette méthode d'apprentissage, le \rna apprend à reproduire les commandes d'un contrôleur existant (\textbf{Figure \ref{appcontroleur}}).
 Cette méthode a été utilisé pour commander le volant d'une voiture pour suivre des virages où le controlleur est un humain.\cite{Pomerleau}
 
-\subsection{Apprentissage spécialisé}\label{sec:appspecial}
+\subsubsection{Apprentissage spécialisé}\label{sec:appspecial}
 \begin{figure}
  \centering
  \includegraphics[scale=0.4]{../figures/appspecialise.jpg}
@@ -46,7 +46,7 @@ Et définir le facteur $\partiel{y}{\hat{u}}$ est la difficulté de cette métho
 Il faut pouvoir modèliser le système par une fonction $y(\hat{u})$ dérivable en $\hat{u}$.
 %TODO et dans le cas d'un RBF ?
 
-\subsection{Apprentissage en deux phases}\label{sec:app2phases}
+\subsubsection{Apprentissage en deux phases}\label{sec:app2phases}
 \begin{figure}
  \centering
  \includegraphics[scale=0.5]{../figures/app2phases.jpg}
@@ -65,7 +65,7 @@ En effet, imaginons qu'il existe deux commandes idéales pour atteindre le même
 Alors les poids seront modifiés pour que la sortie converge vers la première commande idéale rencontrée, puis l'autre et ainsi de suite.
 Et finalement, la sortie du réseau pour cet état cible ne va pas converger vers une des commandes idéales.
 
-\subsection{Apprentissage indirecte}\label{sec:appindirect}
+\subsubsection{Apprentissage indirecte}\label{sec:appindirect}
 \begin{figure}
  \centering
  \includegraphics[scale=0.5]{../figures/appindirect.jpg}
@@ -77,7 +77,7 @@ RNA1 et RNA2 ne sont pas deux réseaux différents. Il s'agit du même réseau d
 RNA1 et RNA2 partagent les mêmes poids.
 Mais selon Gauthier\cite{Gauthier}, cette méthode tend à toujours donner la même commande.
 
-\subsection{Apprentissage par modèle différentiable}\label{sec:appmodele}
+\subsubsection{Apprentissage par modèle différentiable}\label{sec:appmodele}
 \begin{figure}
  \centering
  \includegraphics[scale=0.5]{../figures/modelediferentiable.jpg}
@@ -93,7 +93,7 @@ Ensuite, on l'utilise comme modèle. Et là nous pouvons connaître $\partiel{\v
 
 L'adaptabilité est sacrifiée car si le système change et que le modèle n'a pas été entrainé pour ce nouveau système, l'algorithme de rétropropagation va faire converger la solution vers des commandes inadaptés pour le nouveau système.
 
-\subsection{Apprentissage sur plusieurs étapes}
+\subsubsection{Apprentissage sur plusieurs étapes}
 Un autre problème qui peut se présenter pour la commande par réseaux de neurones est d'obtenir un maître distant seulement après plusieurs étapes.
 Par exemple, imaginons que nous voulons commander la marche d'un robot avec un réseau de neurones qui fournira des commandes tous les $T$ secondes.
 Si le robot tombe et que nous pouvons en obtenir un maître, nous ne savons pas à quelles étapes avant la chute le réseau a fourni des commandes responsables de cette chute.\\

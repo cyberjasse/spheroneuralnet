@@ -16,12 +16,15 @@
 \newpage
 \input{introduction}
 
-\section{Modèles de réseaux de neurones artificiels}
+\newpage
+\section{Théorie}
+\subsection{Modèles de réseaux de neurones artificiels}
 \terminologie
 Tout d'abord, analysons les différents modèles de réseau de neurones artificiels éxistants afin de pouvoir sélectionner celui qui convient le mieux à notre application.
 Les plus connus d'entre eux sont le perceptron multi-couche et la fonction à base radiale, tous deux non récurrents.
 Ensuite nous verrons les réseaux de neurones récurrents qui approximent des fonctions qui peuvent dépendre de toutes les entrées précédentes.
 Les terminologies utilisées proviennent de la littérature anglophone et tous ceux rencontrés sont répertoriés à la table \ref{terminologie}.
+\newcommand{\ssstitle}[1]{\begin{center}\large\underline{#1}\normalsize\end{center}}
 \input{mlp}
 \input{rbf}
 %\input{cnn}
@@ -32,7 +35,11 @@ Les terminologies utilisées proviennent de la littérature anglophone et tous c
 
 \input{design}
 
-\section{Choix du réseau}
+\input{architecture}
+
+\newpage
+\section{Implémentation et application}
+\subsection{Choix du réseau}
 %TODO Tableau de comparaison
 Nous n'avons pas besoin d'un réseau de neurones récurrent.
 Les commandes à appliquer ne dépendent pas de la vitesse, position et autres données fournies aux étapes précédentes.
@@ -45,9 +52,7 @@ Les autres neurones cachés auront une modification insignifiante de l'écart-ty
 Un des inconvénients des \rbf est que le nombre de neurones cachés croît avec la dimension et la taille du vecteur d'entrée.
 Ceci ne pose pas de problème dans notre cas car le nombre de dimensions est faible.
 
-\input{architecture}
-
-\section{Choix de la méthode}
+\subsection{Choix de la méthode}
 Vu toutes les inconnues mécaniques du mouvement de la Sphero, il s'avère difficile d'établir une équation permettant de prédire de manière précise l'état suivant en fonction des commandes exécutées.
 Nous préfèrons donc nous passer d'un modèle analytique.
 Dans ce cas, nous ne pouvons pas utiliser la méthode de l'apprentissage spécialisé.
@@ -63,13 +68,15 @@ La méthode avec modèle différentiable apportera un nouveau facteur influença
 Mais puisque le sytème ne change pas, lorsqu'on arrive à obtenir un modèle fiable, nous pouvons effectuer un apprentissage en-ligne qui permettra à la Sphero de parfaire le suivi d'une trajectoire si cette trajectoire est ammenée à être répétée.
 Nous utiliserons dans un premier temps la méthode en deux phases pour obtenir un ensemble de paires cible/commande où la précision dépend seulement des capteurs et pas de la fiabilité d'un modèle.
 
-\section{Les API}
+\subsection{Les API}
 Certaines API permettant l'envoi de commande et réception de message provenant de la Sphero sont disponibles.
 Les APIs officiels sont disponibles en: \textbf{Objective-C}, \textbf{Swift}, \textbf{Android}.\cite{SDKofficiels}\\
 Il existe également des APIs créés par la communauté disponibles en:\cite{gosphero} \textbf{C\#}, \textbf{JavaScript}, \textbf{Ruby}, \textbf{Python}\cite{pythonAPI}, \textbf{Arduino}, \textbf{C++}\cite{cppAPI}.\\
 
 L'API choisie est l'API \textbf{C++} pour le langage de programmation connu et performant exécutable sur PC.
 
+\newpage
+\section{Validation}
 
 \subsection*{Remerciements}
 \noindent Je remercie Monsieur Pierre \textsc{Hauweele} de m'avoir proposé un projet qui est exactement dans le domaine que je voulais, de son aide et de la direction de mon projet.\\

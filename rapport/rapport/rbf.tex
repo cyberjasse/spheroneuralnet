@@ -1,7 +1,7 @@
-\subsection{Fonctions à base radiale}
+\subsubsection{Fonctions à base radiale}
 Nous désignerons un réseau de neurones \emph{fonctions à base radiale} par sa terminologie anglaise: \rbf pour \enum{Rasial Basis Function}.
 \newcommand{\factnorm}{\sum_{r=1}^{m}x_{r}}
-\subsubsection{Neurone}
+\ssstitle{Neurone}
 Un neurone \textbf{caché} d'un \rbf n'effectue pas de somme pondérée de ses entrées.
 Il applique directement sa fonction d'activation $\phi$, une gaussienne de moyenne $\mu$ et d'écart-type $\sigma$ où $x$, de dimension $n$, est l'entrée du neurone.
 \begin{equation}\label{eq:cachephi}
@@ -25,7 +25,7 @@ Où $i$ est l'indice du neurone et $x$ l'entrée de dimension $m$.
 \end{figure}
 La Figure \ref{rbfactivation} représente la sortie d'un neurone \rbf où $\mu$ et $x$ sont de dimension 1 et $\mu = 0$.\\
 Pour résumer, un neurone \rbf renvoie une valeur indiquant la simularité entre l'entrée et son prototype.
-\subsubsection{Structure}
+\ssstitle{Structure}
 \begin{figure}
  \centering
  \includegraphics[scale=0.5]{../figures/RBFstruct.png}
@@ -33,7 +33,7 @@ Pour résumer, un neurone \rbf renvoie une valeur indiquant la simularité entre
  \label{structurerbf}
 \end{figure}
 La structure d'un \rbf est comme celle du \mlp sauf qu'il n'y a qu'une seule couche cachée (Figure \ref{structurerbf}).
-\subsubsection{Apprentissage}
+\ssstitle{Apprentissage}
 Dans ce réseau, les paramètres qui seront modifiés lors de l'apprentissage sont les poids des neurones de sortie et les moyennes et écart-types des neurones cachés.
 L'algorithme de rétropropagation peut être utilisé pour un apprentissage supervisé d'un \rbf.
 Reprenons \eqref{eq:Q}, l'erreur quadratique $Q$ défini dans la section \ref{sec:appmlp}.
@@ -60,7 +60,7 @@ posons aussi $R = \sum_{k=1}^{n}x_k$.
 \[\Delta\mu_{ik} = -\eta \left[\sum_{i}(\phi_j - s_j) \frac{1}{R^2} \left(W_{jr}R - \sum_{k=1}^{n}W_{jk}x_k\right)\right] \phi_i\frac{x_k-\mu_{ik}}{\sigma_{ik}^2}\]
 \[\Delta \sigma_{ik} = -\eta \left[\sum_{i}(\phi_j - s_j) \frac{1}{R^2} \left(W_{jr}R - \sum_{k=1}^{n}W_{jk}x_k\right)\right] \phi_i \frac{(x_k-\mu_{ik})^2}{\sigma_{ik}^3}\]
 
-\subsubsection{Applications}
+\ssstitle{Applications}
 Un \rbf peut aussi servir pour la commande de robot.\cite{Gauthier}
 
 Un des inconvénients des \rbf est que le nombre de neurones cachés croît avec la dimension et la taille du vecteur d'entrée puisqu'un neurone caché s'active seulement pour des entrées dans le voisinage de son prototype.

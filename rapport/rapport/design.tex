@@ -1,5 +1,5 @@
-\section{Design du vecteur d'entrée}
-\subsection{Données utiles}
+\subsection{Design du vecteur d'entrée}
+\subsubsection{Données utiles}
 Avant de choisir le réseau de neurones à utiliser pour Générer des commandes pour la Sphero, il est important d'identifier ce que nous souhaitons obtenir en sortie et les informations que nous pouvons fournir en entrée en omettant les données inutiles.
 Si le vecteur d'entrée est de dimension très grande, alors un réseau \rbf devra avoir un trop grand nombre de neurones cachés\cite{Gauthier}.
 Si nous supposons que la sortie produite peut dépendre non seulement de l'input actuel mais aussi des entrées précédentes, alors un réseau récurrent devra être utilisé.
@@ -37,7 +37,7 @@ Ajouter cette dimension dans le vecteur d'entrée demandera un plus grand nombre
   \includegraphics[width=10cm]{../figures/hist#1.jpeg}
  \end{minipage}
 }
-\subsection{Choix du design}\label{sec:choixdesign}
+\subsubsection{Choix du design}\label{sec:choixdesign}
  %TODO montrer les design repris chez gauthier
 Pour une meilleure précision, on ajoute un vecteur vitesse à atteindre sur le point de destination.
 On aligne l'axe des abscisses avec l'axe de l'orientation du moteur afin de reduire le domaine d'entrée et donc le nombre d'exemples à créer pour l'apprentissage.
