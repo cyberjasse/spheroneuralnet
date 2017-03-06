@@ -33,6 +33,7 @@ Les terminologies utilisées proviennent de la littérature anglophone et tous c
 \input{design}
 
 \section{Choix du réseau}
+%TODO Tableau de comparaison
 Nous n'avons pas besoin d'un réseau de neurones récurrent.
 Les commandes à appliquer ne dépendent pas de la vitesse, position et autres données fournies aux étapes précédentes.
 Le réseau le mieux adapté pour notre problème est un réseau de neurones à base radial.
@@ -51,7 +52,7 @@ Vu toutes les inconnues mécaniques du mouvement de la Sphero, il s'avère diffi
 Nous préfèrons donc nous passer d'un modèle analytique.
 Dans ce cas, nous ne pouvons pas utiliser la méthode de l'apprentissage spécialisé.
 De plus, télécommander une Sphero pour suivre une trajectoire est très difficile pour un humain.
-Utiliser un apprentissage par reproduciton de contrôleur n'est donc pas envisageable.\\
+Utiliser un apprentissage par reproduction de contrôleur n'est donc pas envisageable.\\
 Nous pouvons obtenir un maître distant à chaque étape et donc nous n'avons pas besoin de l'architecture de Nguyen et Widrow.\\
 Le problème de convergence vers une solution triviale, impliquée dans le cas d'un apprentissage indirect (section \ref{sec:appindirect}) exclu l'utilisation de cette méthode dans le cadre de ce projet.\\
 
@@ -63,9 +64,9 @@ Mais puisque le sytème ne change pas, lorsqu'on arrive à obtenir un modèle fi
 Nous utiliserons dans un premier temps la méthode en deux phases pour obtenir un ensemble de paires cible/commande où la précision dépend seulement des capteurs et pas de la fiabilité d'un modèle.
 
 \section{Les API}
-Certaines API permettant l'envoi de commande et réception de message provenant de la Sphere sont disponibles.
-Les APIs officiels sont:\cite{SDKofficiels} \textbf{Objective-C}, \textbf{Swift}, \textbf{Android}.\\
-Il existe également des APIs créés par la communauté:\cite{gosphero} \textbf{C\#}, \textbf{JavaScript}, \textbf{Ruby}, \textbf{Python}\cite{pythonAPI}, \textbf{Arduino}, \textbf{C++}\cite{cppAPI}.\\
+Certaines API permettant l'envoi de commande et réception de message provenant de la Sphero sont disponibles.
+Les APIs officiels sont disponibles en: \textbf{Objective-C}, \textbf{Swift}, \textbf{Android}.\cite{SDKofficiels}\\
+Il existe également des APIs créés par la communauté disponibles en:\cite{gosphero} \textbf{C\#}, \textbf{JavaScript}, \textbf{Ruby}, \textbf{Python}\cite{pythonAPI}, \textbf{Arduino}, \textbf{C++}\cite{cppAPI}.\\
 
 L'API choisie est l'API \textbf{C++} pour le langage de programmation connu et performant exécutable sur PC.
 

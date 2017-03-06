@@ -1,5 +1,5 @@
-\subsection{Base radiale}
-Nous désignerons un réseau de neurones \emph{fonction à base radiale} par sa terminologie anglaise: \rbf pour \enum{Rasial Basis Function}.
+\subsection{Fonctions à base radiale}
+Nous désignerons un réseau de neurones \emph{fonctions à base radiale} par sa terminologie anglaise: \rbf pour \enum{Rasial Basis Function}.
 \newcommand{\factnorm}{\sum_{r=1}^{m}x_{r}}
 \subsubsection{Neurone}
 Un neurone \textbf{caché} d'un \rbf n'effectue pas de somme pondérée de ses entrées.
@@ -12,8 +12,8 @@ Où $i$ est l'indice du neurone. $\mu$ s'appelle aussi \emph{prototype} dans le 
 \\
 
 Un neurone \textbf{de sortie} d'un \rbf n'effectue pas non plus de somme pondérée de ses entrées. Sa fonction d'activation est:
-\begin{equation}\label{eq:sortiephi}
 À une couche cachée, un \mlp peut déja servir pour la classification non linéaire.\cite{statistica}\\
+\begin{equation}\label{eq:sortiephi}
  \phi(x) = \frac{\sum_{j=1}^{m}W_{ij}x_{j}}{\sum_{j=1}^{m}x_{j}}
 \end{equation}
 Où $i$ est l'indice du neurone et $x$ l'entrée de dimension $m$.
