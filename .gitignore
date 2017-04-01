@@ -9,6 +9,7 @@
 *.bbl
 *.blg
 *.toc
+rapport/prerapport/BURYprerapport.pdf
 
 #ignore Python compiled files
 *.pyc
@@ -23,6 +24,8 @@ cpp/build/
 *.out
 cpp/sleep
 cpp/perf
+cpp/prototype
+cpp/neuronnet/src/testnn
 
 #ignore downloaded APIs
 cpp/sphero-linux-api
