@@ -43,7 +43,31 @@ Pour une meilleure précision, on ajoute un vecteur vitesse à atteindre sur le 
 On aligne l'axe des abscisses avec l'axe de l'orientation du moteur afin de reduire le domaine d'entrée et donc le nombre d'exemples à créer pour l'apprentissage.
 Le vecteur d'entrée contiendra donc le vecteur vitesse, la position relative à atteindre dans $T$ secondes où $T$ sera la période à laquelle on échantillonera les données des capteurs.
 Nous avons donc un vecteur d'entrée à 6 dimensions (vitesse actuelle en x et y, position relative cible en x et y, vitesse cible en x et y).
-Le vecteur de sortie sera la puissance à donner pour chaque moteur.
+
+Deux possibilités s'offrent à nous pour le vecteur de sortie:\\
+\begin{tabular}{|l|l|l|}
+ \hline
+ \textbf{Vecteur} & \textbf{Avantages} & \textbf{Inconvénients}\\
+ \hline
+ \{puissance du moteur A & \tabitem Plus précis & \tabitem Stabilisateur désactivé\\
+ ~puissance du moteur B\} & \tabitem Permet plus de dérapage & \tabitem Risque de commande\\
+  & \tabitem Grande vitesse dans les & \enum{inutiles}\\
+  & virages & \tabitem Risque une déstabilisation\\
+  & & totale\\
+ \hline
+ \{vitesse, orientation\} & \tabitem Stabilisateur activé & \tabitem Moins précis\\
+  & \tabitem Toutes les commandes ont & \tabitem Évite les dérapages\\
+  & un effet &\\
+ \hline
+\end{tabular}\\
+Par commande \enum{inutiles}, nous entendons par là des commandes qui peuvent sembler absurdes.
+Par exemple, si la puissance donnée au moteur qui soulève le contre-poids est très élevée alors que la Sphero a une faible vitesse, le contre-poids tournera et se retrouvera dans le sens opposé à celui qui permettait de faire avancer la Sphero.
+Et la déstabilisation totale est une perte du repère qui sert à capturer l'orientation actuelle de la Sphero.
+En effet, l'orientation de la Sphero est donnée par rapport à un repère, 0 degré, qui est sensé resté constant.
+Si le stabilisateur est désactivé, la coque elle-même risque de changer d'orientation.
+Modifiant donc le repère.
+Ce qui biaisera toutes les orientations capturées par la suite.
+C'est pour cela que nous choisirons comme vecteur de sortie la vitesse et l'orientation.
 
 Estimons la valeur optimale que nous pouvons donner à $T$.
 Une commande de streaming de donnée peut être envoyée à la Sphero.

@@ -8,6 +8,8 @@
 \usepackage{hyperref}
 \usepackage{amsmath}
 \usepackage{amsthm}
+\usepackage{booktabs}% http://ctan.org/pkg/booktabs
+\newcommand{\tabitem}{~~\llap{\textbullet}~~}
 \begin{document}
 \input{../titlepage}
 \input{../commands}
@@ -33,12 +35,13 @@ Les terminologies utilisées proviennent de la littérature anglophone et tous c
 
 \input{surgeneralisation}
 
-\input{design}
-
 \input{architecture}
 
 \newpage
 \section{Implémentation et application}
+
+\input{design}
+
 \subsection{Choix du réseau}
 %TODO Tableau de comparaison
 Nous n'avons pas besoin d'un réseau de neurones récurrent.
