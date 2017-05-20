@@ -1,13 +1,11 @@
 @startuml
 interface Neuron {
 	+ double compute(double[] input)
-	+ double errorContribution(double[] nexLayerContributions)
+	+ void backpropagation(double[] errorContribution, double[] lastInput, double gradientStep, double[] thisContribution)
 }
 class MLPneuron {
 	- Function f
 	- double[] weights
-	- double lastWeightedSum
-	- double weightedSum(double[] input)
 }
 class RBFneuron {
 	- double[] prototype
@@ -18,36 +16,27 @@ class RBFexitNeuron {
 }
 interface Function {
 	+ double f(double x)
-	+ double fPrime(double x)
+	+ double df(double x)
 }
 abstract class Layer {
+	# double[] lastInput
+	# double gradientStep
 	+ Neuron[] neurons
-	- double[] lastInput
-	+ double[] compute(double[] input)
-	+ double[] errorContribution(double[] nexLayerContributions)
-}
-class HiddenLayer {
-	+ Layer prevLayer
-	+ Layer nextLayer
-}
-class ExitLayer {
-	+ Layer prevLayer
+	+ void compute(double[] input, double[] output)
+	+ void errorContribution(double[] nexLayerContributions, double[] thisContribution)
 }
 class Net {
-	- Layer[] hiddenLayers
-	- Layer firsLayer
-	- Layer exitLayer
-	- double[] lastOutput
-	+ double[] compute(double[] input)
-	+ double[] backpropagation(double[] expected)
+	# Layer[] layers
+	# double[] lastOutput
+	# unsigned numberOfLayers
+	+ void compute(double[] input, double[] output)
+	+ void backpropagation(double[] expected, double[] thisContribution)
 }
 MLPneuron o-- "1" Function
 Neuron <|-- MLPneuron
 Neuron <|-- RBFneuron
 Neuron <|-- RBFexitNeuron
-Layer <|-- HiddenLayer
-Layer <|-- ExitLayer
 Layer *-- "1-*" Neuron
-Net *-- "1-*" HiddenLayer
-Net *-- "1" ExitLayer
+Net *-- "1-*" Layer
+Net <|-- class RBFnet
 @enduml
