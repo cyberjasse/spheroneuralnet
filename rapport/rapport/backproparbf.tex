@@ -3,17 +3,17 @@ Les modifications à apporter aux paramètres d'un neurone $i$ vaut
 \begin{equation}\label{eq:modifpoid}
  \Delta W_{ij} = -\eta \partiel{Q}{W_{ij}}
 \end{equation}
-Pour le poid $j$ d'un neurone de sortie. Et
 \begin{equation}\label{eq:modifmu}
- \Delta \mu_{ik} = -\eta \partiel{Q}{\mu_{ik}}
+ \Delta \mu_{ij} = -\eta \partiel{Q}{\mu_{ij}}
 \end{equation}
 \begin{equation}\label{eq:modifsigma}
- \Delta \sigma_{ik} = \eta \partiel{Q}{\sigma_{ik}}
+ \Delta \sigma_{ij} = \eta \partiel{Q}{\sigma_{ij}}
 \end{equation}
-Pour l'entrée $k$ d'un neurone caché
 
-D'abord déterminons le facteur $\partiel{Q}{W_{ij}}$ dans \eqref{eq:modifpoid}. On est dans le cas où $i$ est un neurone de sortie.
-Par \eqref{eq:Q}, $Q$ dépend de $\phi_i$. Par \eqref{eq:sortiephi}, $phi_i$ dépend de $W_{ij}$.
+D'abord déterminons le facteur $\partiel{Q}{W_{ij}}$ dans \eqref{eq:modifpoid}.
+On est dans le cas où $i$ est un neurone de sortie.
+Par \eqref{eq:Q}, $Q$ dépend de $\phi_i$.
+Par \eqref{eq:sortiephi}, $phi_i$ dépend de $W_{ij}$.
 Par le théorème de dérivée des fonctions composés,
 \begin{equation}\label{eq:rbfsortie}
  \partiel{Q}{W_{ij}} = \partiel{Q}{\phi_i} \partiel{\phi_i}{W_{ij}}

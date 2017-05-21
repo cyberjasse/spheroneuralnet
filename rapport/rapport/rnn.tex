@@ -1,7 +1,7 @@
 \subsubsection{Réseau de neurones récurrent (RNN)}
 Jusque maintenant, nous avons vu des réseaux de neurones \emph{feedforward}.
 C'est à dire qu'ils ne présentent aucune boucle. Mais il éxiste des réseaux de neurones présentant des boucles.
-Cela leur permet de prendre en compte les entrées précédentes.
+Cela leur permet d'approximer des fonctions qui dépendent non seulement de l'entrée actuelle mais aussi des entrées précédentes.
 \ssstitle{Structure}
 \begin{figure}
  \centering
@@ -16,7 +16,7 @@ Cela leur permet de prendre en compte les entrées précédentes.
  \label{neuronermlp}
 \end{figure}
 Un réseau de neurones récurrent est un réseaux présentant des boucles dans sa structure.
-Des \emph{délais} notés $Z^{-1}$ sont présents sur certains arcs dans le réseau afin de retarder d'une étape, la transmission d'une valeur.
+Des \emph{délais} notés $Z^{-1}$ sont présents sur certains arcs dans le réseau afin de retarder d'une étape la transmission d'une valeur.
 Une étape dans un réseau consiste à recevoir une entrée et de générer une sortie.
 Il existe plusieurs réseaux de type récurrent (récurrent simple, machine à états liquide, etc).
 La Figure \ref{structurermlp} présente un réseau de type perceptron multi-couches récurrent (\rmlp).

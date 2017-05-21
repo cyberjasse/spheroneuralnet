@@ -1,11 +1,11 @@
 \subsection{Méthodes d'apprentissage avec maître distant}
-Nous allons observer différentes architectures intéressantes dans le cas de génération de commandes.
+Nous allons observer différentes architectures intéressantes dans notre cas de génération de commandes.
 Le mot \enum{architecture} utilisé ici ne désigne pas l'architecture d'un réseau de neurones mais l'architecture d'une méthode d'utilisation de réseaux de neurones.
-La convention graphique est montré dans la Figure \ref{legendearchi}.
+La convention graphique est montrée dans la Figure \ref{legendearchi}.
 \begin{figure}
  \centering
  \includegraphics[scale=0.6]{../figures/applegende.jpg}
- \caption{Conventions graphiques pour la descriptions de l'architecture d'une méthode utilisant des RNA. \textbf{Source}: Gauthier\cite{Gauthier}}
+ \caption{Conventions graphiques pour la description de l'architecture d'une méthode utilisant des RNA. \textbf{Source}: Gauthier\cite{Gauthier}}
  \label{legendearchi}
 \end{figure}
 
@@ -16,7 +16,7 @@ Dans l'apprentissage supervisé, un \emph{maître} est ce qui permet de fournir 
 Et effectivement dans notre cas, nous n'avons rien qui puisse nous permettre de définir les commandes idéales à éxécuter pour passer d'un certain état à l'autre.
 Par contre nous pouvons avoir un maître qui compare l'état résultant de l'exécution d'une commande à l'état cible.
 
-Dans les figures qui suivront, Système désigne l'exécution, dans la réalité, de la commande entrée.
+Dans les figures qui suivront, \emph{Système} désigne l'exécution, dans la réalité, de la commande entrée.
 En sortie du Système nous avons l'état résultat de l'exécution des commandes.
 
 \subsubsection{Reproduction d'un contrôleur}
@@ -27,7 +27,7 @@ En sortie du Système nous avons l'état résultat de l'exécution des commandes
  \label{appcontroleur}
 \end{figure}
 Dans cette méthode d'apprentissage, le \rna apprend à reproduire les commandes d'un contrôleur existant (\textbf{Figure \ref{appcontroleur}}).
-Cette méthode a été utilisé pour commander le volant d'une voiture pour suivre des virages où le controlleur est un humain.\cite{Pomerleau}
+Cette méthode a été utilisée pour commander le volant d'une voiture pour suivre des virages où le controlleur est un humain\cite{Pomerleau}.
 
 \subsubsection{Apprentissage spécialisé}\label{sec:appspecial}
 \begin{figure}
@@ -60,7 +60,7 @@ On continue la boucle pour balayer toutes les configurations possibles de $u$.
 
 Puis vient la phase d'utilisation (b) où on utilise le réseau cette fois pour génèrer les commandes. Mais sans apprentissage. L'adaptabilité est donc sacrifiée.\\
 
-Cette méthode est inadapté dans les cas où il existe plusieurs commandes idéales pour un même état cible.
+Cette méthode est inadaptée dans les cas où il existe plusieurs commandes idéales pour un même état cible.
 En effet, imaginons qu'il existe deux commandes idéales pour atteindre le même état cible et que ces deux commandes soient rencontrées lors de la phase (a).
 Alors les poids seront modifiés pour que la sortie converge vers la première commande idéale rencontrée, puis l'autre et ainsi de suite.
 Et finalement, la sortie du réseau pour cet état cible ne va pas converger vers une des commandes idéales.
@@ -72,7 +72,7 @@ Et finalement, la sortie du réseau pour cet état cible ne va pas converger ver
  \caption{Apprentissage indirect. \textbf{Source}: Gauthier\cite{Gauthier}}
  \label{appindirect}
 \end{figure}
-L'apprentissage indirecte, montré dans la \textbf{Figure \ref{appindirect}}, est une méthode qui permet de retrouver l'adaptabilité. (sacrifiée dans l'apprentissage en deux phases, section \ref{app2phases})
+L'apprentissage indirecte, montré dans la \textbf{Figure \ref{appindirect}}, est une méthode qui permet de retrouver l'adaptabilité (sacrifié dans l'apprentissage en deux phases, section \ref{app2phases}).
 RNA1 et RNA2 ne sont pas deux réseaux différents. Il s'agit du même réseau de neurones.
 RNA1 et RNA2 partagent les mêmes poids.
 Mais selon Gauthier\cite{Gauthier}, cette méthode tend à toujours donner la même commande.
@@ -91,13 +91,12 @@ Nous n'avons pas le problème de l'apprentissage avec maître distant pour ce \r
 Ensuite, on l'utilise comme modèle. Et là nous pouvons connaître $\partiel{\varepsilon_y}{\hat{u}_1}$ grâce aux formule de rétropropagation de la section \ref{sec:appmlp}.\\
 %TODO prouver et parler aussi de formule de backpropagation pour rbf
 
-L'adaptabilité est sacrifiée car si le système change et que le modèle n'a pas été entrainé pour ce nouveau système, l'algorithme de rétropropagation va faire converger la solution vers des commandes inadaptés pour le nouveau système.
+L'adaptabilité est sacrifiée car si le système change et que le modèle n'a pas été entrainé pour ce nouveau système, l'algorithme de rétropropagation va faire converger la solution vers des commandes inadaptées pour le nouveau système.
 
 \subsubsection{Apprentissage sur plusieurs étapes}
-Un autre problème qui peut se présenter pour la commande par réseaux de neurones est d'obtenir un maître distant seulement après plusieurs étapes.
-Par exemple, imaginons que nous voulons commander la marche d'un robot avec un réseau de neurones qui fournira des commandes tous les $T$ secondes.
-Si le robot tombe et que nous pouvons en obtenir un maître, nous ne savons pas à quelles étapes avant la chute le réseau a fourni des commandes responsables de cette chute.\\
-
+Un autre problème qui peut se présenter pour la commande par réseau de neurones est d'obtenir un maître distant seulement après plusieurs étapes.
+Par exemple, imaginons que nous voulons commander la marche d'un robot avec un réseau de neurones qui fournira des commandes toutes les $T$ secondes.
+Si le robot tombe et que nous pouvons en obtenir un maître, nous ne savons pas à quelles étapes avant la chute le réseau a fourni des commandes responsables de cette chute.
 Une solution à ce problème est l'architecture de Nguyen et Widrow, Figure \ref{appNguyenWidrow}.
 \begin{figure}
  \centering

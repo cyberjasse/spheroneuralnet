@@ -1,10 +1,10 @@
 \subsection{Design du vecteur d'entrée}
 \subsubsection{Données utiles}
-Avant de choisir le réseau de neurones à utiliser pour Générer des commandes pour la Sphero, il est important d'identifier ce que nous souhaitons obtenir en sortie et les informations que nous pouvons fournir en entrée en omettant les données inutiles.
+Avant de choisir le réseau de neurones à utiliser pour générer des commandes pour la Sphero, il est important d'identifier ce que nous souhaitons obtenir en sortie et les informations que nous pouvons fournir en entrée en omettant les données inutiles.
 Si le vecteur d'entrée est de dimension très grande, alors un réseau \rbf devra avoir un trop grand nombre de neurones cachés\cite{Gauthier}.
 Si nous supposons que la sortie produite peut dépendre non seulement de l'input actuel mais aussi des entrées précédentes, alors un réseau récurrent devra être utilisé.
 
-La Sphero peut nous fournir:\cite{SDKofficiels}
+La Sphero peut nous fournir\cite{SDKofficiels}:
 \begin{itemize}
  \item Sa position grâce à un odomètre (cm),
  \item Son vecteur vitesse (mm/s),
@@ -28,7 +28,7 @@ Cela a été vérifié lors de l'expérience menée dans la section \ref{sec:cho
 Une camera sera utilisée pour tracer la position réelle de la Sphero.
 
 Pour l'accélération, les commandes à appliquer à l'instant $t$ ne dépendent pas de l'accélération à l'instant $t$ juste avant l'application des commandes.
-Mais par contre, cette donnée peut être utile pour anticiper la vitesse de la Sphero au moment où elle reçoit les commandes car du à la latence d'envoi de paquet, la vitesse à l'instant $t$ n'est plus la même que celle communiquée.
+Mais par contre, cette donnée peut être utile pour anticiper la vitesse de la Sphero au moment où elle reçoit les commandes car, dû à la latence d'envoi de paquet, la vitesse à l'instant $t$ n'est plus la même que celle communiquée.
 Si cette donnée impacte peu dans les résultats obtenus, alors nous pourrions décider de nous passer de ce paramètre.
 Ajouter cette dimension dans le vecteur d'entrée demandera un plus grand nombre d'exemples pour la phases d'apprentissage car il faut balayer toutes les configurations possibles de vecteur d'entrée.
 
@@ -41,7 +41,7 @@ Ajouter cette dimension dans le vecteur d'entrée demandera un plus grand nombre
  %TODO montrer les design repris chez gauthier
 Pour une meilleure précision, on ajoute un vecteur vitesse à atteindre sur le point de destination.
 On aligne l'axe des abscisses avec l'axe de l'orientation du moteur afin de reduire le domaine d'entrée et donc le nombre d'exemples à créer pour l'apprentissage.
-Le vecteur d'entrée contiendra donc le vecteur vitesse, la position relative à atteindre dans $T$ secondes où $T$ sera la période à laquelle on échantillonera les données des capteurs.
+Le vecteur d'entrée contiendra donc le vecteur de la vitesse actuelle, le vecteur de la vitesse à atteindre et la position relative à atteindre dans $T$ secondes où $T$ sera la période à laquelle on échantillonera les données des capteurs.
 Nous avons donc un vecteur d'entrée à 6 dimensions (vitesse actuelle en x et y, position relative cible en x et y, vitesse cible en x et y).
 
 Deux possibilités s'offrent à nous pour le vecteur de sortie:\\
@@ -70,7 +70,7 @@ Ce qui biaisera toutes les orientations capturées par la suite.
 C'est pour cela que nous choisirons comme vecteur de sortie la vitesse et l'orientation.
 
 Estimons la valeur optimale que nous pouvons donner à $T$.
-Une commande de streaming de donnée peut être envoyée à la Sphero.
+Une commande de streaming de données peut être envoyée à la Sphero.
 Grâce à cette commande, nous pouvons demander à la Sphero d'envoyer uniquement les données qui nous interessent à une fréquence donnée.
 Trois paramètres de cette commande peuvent influencer les performances d'échantillonage:
 \begin{enumerate}
@@ -79,8 +79,8 @@ Trois paramètres de cette commande peuvent influencer les performances d'échan
  \item Le nombre de capteur à échantilloner.
 \end{enumerate}
 Un échantillonage consiste à obtenir seulement les données qui nous intéressent à un instant précis.
-La fréquence maximale d'échantillonage, un échantillon à la fois, est de 400Hz.\cite{SDKofficiels}
-La vitesse maximale de la Sphero est de 4,5 miles par heure.\cite{product} Ce qui fait environ 2 mètres par seconde.
+La fréquence maximale d'échantillonage, un échantillon à la fois, est de 400Hz\cite{SDKofficiels}.
+La vitesse maximale de la Sphero est de 4,5 miles par heure\cite{product}. Ce qui fait environ 2 mètres par seconde.
 \begin{figure}
  \centering
  \inchist{20}
@@ -107,13 +107,13 @@ La configuration de l'ordinateur utilisé est la suivante:
 \end{itemize}
 
 On observe tout d'abord que les temps de réception ont l'air de suivre une cadence de 1ms.
-Cela peut s'expliquer par le fait que la Sphero 2.0 a une granularité de 1ms pour l'éxecution de macro.\cite{product}
+Cela peut s'expliquer par le fait que la Sphero 2.0 a une granularité de 1ms pour l'éxecution de macro\cite{product}.
 %Plus $T$ est petit, plus notre système de commande est réactif et, toutes choses égales par ailleur, nous pouvons effectuer des mouvements plus précis.
 Pour les critères de choix d'une valeur pour $T$, deux critères sont pris en compte:
 \begin{enumerate}
- \item La stabilité du streaming. Moins la densité de probabilité de temps de réception de paquet est concentrée sur le voisinage de $T$, moins la solutions sera précise.
+ \item La stabilité du streaming. Moins la densité de probabilité de temps de réception de paquet est concentrée sur le voisinage de $T$, moins la solution sera précise.
  \item Le temps de réaction. Plus $T$ est grand, moins la trajectoire de la Sphero sera fidèle à la trajectoire voulue.
- Nous pouvons compenser ce manque de précision par un vecteur d'entrée plus complexe mais la solution converge alors moins vite et un ensemble d'apprentissage plus conséquent doit être fournis.
+ Nous pouvons compenser ce manque de précision par un vecteur d'entrée plus complexe mais la solution converge alors moins vite et un ensemble d'apprentissage plus conséquent doit être fourni.
 \end{enumerate}
 
 On observe que la stabilité du streaming varie selon la fréquence.

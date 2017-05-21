@@ -3,6 +3,9 @@
 \usepackage[pdftex]{graphicx}
 \usepackage[final]{pdfpages}
 \usepackage[frenchb]{babel}
+\usepackage{xspace}
+\usepackage{lmodern}
+\usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage{cite}
 \usepackage{hyperref}
@@ -62,7 +65,7 @@ Dans ce cas, nous ne pouvons pas utiliser la méthode de l'apprentissage spécia
 De plus, télécommander une Sphero pour suivre une trajectoire est très difficile pour un humain.
 Utiliser un apprentissage par reproduction de contrôleur n'est donc pas envisageable.\\
 Nous pouvons obtenir un maître distant à chaque étape et donc nous n'avons pas besoin de l'architecture de Nguyen et Widrow.\\
-Le problème de convergence vers une solution triviale, impliquée dans le cas d'un apprentissage indirect (section \ref{sec:appindirect}) exclu l'utilisation de cette méthode dans le cadre de ce projet.\\
+Le problème de convergence vers une solution triviale, impliqué dans le cas d'un apprentissage indirect (section \ref{sec:appindirect}) exclu l'utilisation de cette méthode dans le cadre de ce projet.\\
 
 Il nous reste deux méthodes pour lesquelles l'adaptabilité est sacrifiée: l'apprentissage en deux phases et apprentissage utilisant un modèle différentiable.
 Les deux sont envisageables. Les tests seront effectués toujours sur le même sol horizontal.\\
@@ -73,17 +76,17 @@ Nous utiliserons dans un premier temps la méthode en deux phases pour obtenir u
 
 \subsection{Les API}
 Certaines API permettant l'envoi de commande et réception de message provenant de la Sphero sont disponibles.
-Les APIs officiels sont disponibles en: \textbf{Objective-C}, \textbf{Swift}, \textbf{Android}.\cite{SDKofficiels}\\
-Il existe également des APIs créés par la communauté disponibles en:\cite{gosphero} \textbf{C\#}, \textbf{JavaScript}, \textbf{Ruby}, \textbf{Python}\cite{pythonAPI}, \textbf{Arduino}, \textbf{C++}\cite{cppAPI}.\\
+Les APIs officiels sont disponibles en: \textbf{Objective-C}, \textbf{Swift}, \textbf{Android}\cite{SDKofficiels}.\\
+Il existe également des APIs créés par la communauté disponibles en\cite{gosphero}: \textbf{C\#}, \textbf{JavaScript}, \textbf{Ruby}, \textbf{Python}\cite{pythonAPI}, \textbf{Arduino}, \textbf{C++}\cite{cppAPI}.\\
 L'API choisie est l'API \textbf{C++} pour le langage de programmation connu et performant exécutable sur PC.
 
 Le langage \textbf{Qt} sera utilisé pour créer les interfaces graphiques.
-Cela nous permet de créer facilement des interfaces munies de boutons, menus et fenêtre afin de dessiner la trajectoire.
-De plus, l'implémentation du réseau de neurone pourra être directement utilisée dans un script \textbf{Qt}.
+Cela nous permet de créer facilement des interfaces munies de boutons, menus et fenêtre afin de tracer la trajectoire.
+De plus, l'implémentation du réseau de neurones pourra être directement utilisée dans un script \textbf{Qt}.
 
 \subsection{Diagramme de classe}
 Afin d'expliquer la structure de l'implémentation du réseau de neurone, nous allons tout d'abord expliquer pourquoi l'implémentation d'un neurone est indépendant de sa position et du modèle du réseau de neurones.
-Et grâce à cette propriété, nous pouvons donc connecter n'importe quelle couche de neurones avec un autre.
+Et grâce à cette propriété, nous pouvons donc connecter n'importe quelle couche de neurones avec une autre.
 Nous pourrions donc facilement passer à une méthode d'apprentissage par modèle différentiable (Section \ref{sec:appmodele}) si cela s'avère nécessaire.
 De plus, l'implémentation d'un nouveau modèle non récursif comme le \mlp nécésitera juste l'implémentation des nouveaux neurones.
 En résumé, l'implémentation d'un réseau \rbf se fera à partir d'une implémentation de réseau de neurones non récursif modulaire.\\
