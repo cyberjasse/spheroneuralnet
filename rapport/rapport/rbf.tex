@@ -4,11 +4,15 @@ Nous désignerons un réseau de neurones \emph{fonctions à base radiale} par sa
 \ssstitle{Neurone}
 Un neurone \textbf{caché} d'un \rbf n'effectue pas de somme pondérée de ses entrées.
 Il applique directement sa fonction d'activation $\phi$, une gaussienne de dimension $n$, de moyenne $\mu$ (appelé aussi prototype) et d'écart-type $\sigma$.
-\[\phi(x) = e^{-\frac{1}{2}\sum_{k=1}^{n}\frac{(x_k-\mu_{k})^2}{\sigma_{k}^{2}}} \]%\label{eq:cachephi}
+\begin{equation}\label{eq:cachephi}
+ \phi(x) = e^{-\frac{1}{2}\sum_{k=1}^{n}\frac{(x_k-\mu_{k})^2}{\sigma_{k}^{2}}}
+\end{equation}
 %$\phi(x)$ peut se résumer en: \[\phi(x) = e^{-\beta||x-\mu||^2}\]Où $\beta$ est donc un coefficient qui règle la largeur de la courbe en cloche.\\
 
 Un neurone \textbf{de sortie} d'un \rbf n'effectue pas non plus de somme pondérée de ses entrées. Sa fonction d'activation est:
-\[\phi(x) = \frac{\sum_{j=1}^{m}W_{j}x_{j}}{\sum_{j=1}^{m}x_{j}}\]%\label{eq:sortiephi}
+\begin{equation}\label{eq:sortiephi}
+ \phi(x) = \frac{\sum_{j=1}^{m}W_{j}x_{j}}{\sum_{j=1}^{m}x_{j}}
+\end{equation}
 où $m$ est le nombre de dimension de $x$.
 \begin{figure}
  \centering

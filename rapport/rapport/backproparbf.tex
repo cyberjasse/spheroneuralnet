@@ -23,7 +23,7 @@ Par \eqref{eq:sortie1}, on sait que
 Ensuite,
 \begin{equation}\label{eq:poidgrad}
  \begin{split}
-  \partiel{\phi_i}{W_{ij}} & = \partiel{\frac{\sum_{r=1}^{m}W_{ir}x_{j}}{\factnorm}}{W_{ij}}\\
+  \partiel{\phi_i}{W_{ij}} & = \partiel{\frac{\sum_{r=1}^{m}W_{ir}x_{j}}{\factnorm}}{W_{ij}} \text{\hspace{1cm} par \eqref{eq:sortiephi}}\\
   ~ & = \frac{1}{\factnorm} \partiel{\sum_{r=1}^{m}W_{ir}x_{j}}{W_{ij}}\\
   ~ & = \frac{x_j}{\factnorm}
  \end{split}
@@ -36,7 +36,7 @@ Et \eqref{eq:sortiegrad} dans \eqref{eq:modifpoid},
 \[\Delta W_{ij} = -\eta (\phi_i - s_i) \frac{x_j}{\factnorm}\]\\
 
 Déterminons maintenant le facteur $\partiel{Q}{\mu_{ik}}$ dans \eqref{eq:modifmu}. On est dans le cas où $i$ est un neurone caché.
-$Q$ dépend de $\phi_i$ qui lui-même est fonction de $\mu_{ik}$. Par le théorème de dérivée de fonction composés,
+$Q$ dépend de $\phi_i$ qui lui-même est fonction de $\mu_{ik}$ \eqref{eq:cachephi}. Par le théorème de dérivée de fonction composés,
 \begin{equation}\label{eq:composemu}
  \partiel{Q}{\mu_{ik}} = \partiel{Q}{\phi_i} \partiel{\phi_i}{\mu_{ik}}
 \end{equation}
@@ -54,7 +54,7 @@ Pour trouver la valeur de $\partiel{\phi_j}{\phi_i}$, nous aurons besoin de trou
 \begin{equation}\label{eq:1sr}
  \begin{split}
  \partiel{\frac{1}{R}}{x_k} & = \frac{-1}{R^2}\partiel{R}{x_k}\\
- ~ & = \frac{-1}{R^2} 1
+ ~ & = \frac{-1}{R^2}
  \end{split}
 \end{equation}
 Dès lors, utilisons \eqref{eq:1sr} pour simplifier l'équation suivante;

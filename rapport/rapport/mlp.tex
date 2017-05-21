@@ -77,24 +77,18 @@ Nous voulons modifier la valeur des poids pour que la prochaine fois que nous pr
 Pour chaque poids $W_{ij}$, nous allons calculer le gradient $\partiel{Q}{W_{ij}}$ qui, par définition, indique la façon dont $Q$ varie si $W_{ij}$ augmente d'une valeur $\delta W_{ij}$ infiniment petite.
 Ensuite nous \enum{ferons un pas} dans le sens opposé et proportionel au gradient en ajoutant $-\eta\partiel{Q}{W_{ij}}$ à $W_{ij}$ où $\eta$ est une constante appelée \emph{pas du gradient}.
 Donc la modification du poids $W_{ij}$ que nous voulons appliquer vaut
-\begin{equation}%\label{eq:Delta}
- \Delta W_{ij} = -\eta\partiel{Q}{W_{ij}}
-\end{equation}
+\[\Delta W_{ij} = -\eta\partiel{Q}{W_{ij}}\]
 Déterminons à présent la valeur de ce gradient $\partiel{Q}{W_{ij}}$.
 Nous savons que $\phi_i$ est une équation à une variable.
 Mais en entrée de cette variable est donnée la somme pondérée $v_i$ et $W_{ij}$ est un des poids de $v_i$.
 Par le théorème de dérivation des fonctions composées,
-\begin{equation}%\label{eq:gradient}
- \partiel{Q}{W_{ij}} = \partiel{Q}{\phi_i} \partiel{\phi_i}{v_i} \partiel{v_i}{W_{ij}}
-\end{equation}
+\[\partiel{Q}{W_{ij}} = \partiel{Q}{\phi_i} \partiel{\phi_i}{v_i} \partiel{v_i}{W_{ij}}\]
 \begin{thm}[dérivation des fonctions composées]
 Soit $f:A~\rightarrow~B : y~\rightarrow~f(y)$ et $g:B~\rightarrow~C : x~\rightarrow~g(x)$. Alors la dérivée de $f~\circ~g$ en $x$ vaut
 \[\partiel{f~\circ~g}{x} = \partiel{f}{g} \partiel{g}{x}\]
 \end{thm}
 Posons
-\begin{equation}%\label{eq:deltai}
- \delta_i = \partiel{Q}{\phi_i} \partiel{\phi_i}{v_i}
-\end{equation}
+\[\delta_i = \partiel{Q}{\phi_i} \partiel{\phi_i}{v_i}\]
 qui est appelé \emph{contribution à l'erreur} du neurone $i$.
 Nous verrons plus tard qu'elle sera utile pour la rétropropagation de la couche prédédente.
 Le dévellopement de la formule de rétropropagation a été fait en annexe \ref{sec:eqmlp}.
