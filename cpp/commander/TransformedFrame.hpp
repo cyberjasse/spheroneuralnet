@@ -10,6 +10,8 @@ struct TransformedFrame{
 	int currentSpeedx;
 	/** The y composant of the current speed.*/
 	int currentSpeedy;
+	/** The time between this frame and the previous. In microsecond.*/
+	unsigned long time;
 	/** The x coordinate of the position to reach.*/
 	int targetx;
 	/** The y coordinate of the position to reach.*/

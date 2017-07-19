@@ -11,7 +11,7 @@ class TargetOrigin : public Target{
 	
 	public :
 		virtual StreamFrame getTarget(struct StreamFrame *frame);
-		
+		virtual int remaining();
 		/**
 		 * @param limit The number of command to send. Set to 0 if no limit.
 		 */
