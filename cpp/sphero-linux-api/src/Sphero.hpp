@@ -85,7 +85,7 @@ class Sphero
 {
 	public:
 		void notifyStream(struct StreamFrame *frame);
-		void addStreamObserver(StreamObserver &so);
+		void addStreamObserver(StreamObserver *so);
 		void startStream();
 	
 		void setRawMotorValues(int16_t lpower, int16_t rpower, uint8_t lmode=0x01, uint8_t rmode=0x01);
@@ -579,7 +579,7 @@ class Sphero
 
 	private:
 		//-------------------------------------------------- Private attributes
-		std::vector<StreamObserver> streamobservers;
+		std::vector<StreamObserver*> streamobservers;
 		volatile bool collision;
 		
 		spherocoord_t _x, _y;

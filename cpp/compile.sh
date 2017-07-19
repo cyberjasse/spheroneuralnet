@@ -1,5 +1,6 @@
 FILE=$1
 BUILDFOLDER='build/'
+COMMANDERFOLDER='commander/'
 THIS='compile.sh'
 
 #test if api is cloned
@@ -40,8 +41,23 @@ else
 	echo "[${THIS}] The build folder doesn't exist. Creating..."
 	mkdir ${BUILDFOLDER}
 fi
+#test if the commander folder exist
+if [ -d ${BUILDFOLDER}${COMMANDERFOLDER} ]
+then
+	echo "[${THIS}] The commander folder already exist."
+else
+	echo "[${THIS}] The commander folder doesn't exist. Creating..."
+	mkdir ${BUILDFOLDER}${COMMANDERFOLDER}
+fi
+#compile the commander files
+echo "[${THIS}] Compile files in commander folder"
+cd ${COMMANDERFOLDER}
+g++ -std=c++11 -c *.cpp
+cd ..
+mv ${COMMANDERFOLDER}*.o ${BUILDFOLDER}${COMMANDERFOLDER}
 #now compile my files
 echo "[${THIS}]    Compile ${FILE}.cpp ..."
-g++ -std=c++11 -c ${FILE}.cpp -o ${BUILDFOLDER}${FILE}.o && g++ -Lsphero-linux-api/ -o ${FILE} ${BUILDFOLDER}${FILE}.o -lsphero
+g++ -DMAP -std=c++11 -c ${FILE}.cpp -o ${BUILDFOLDER}${FILE}.o
+g++ -Lsphero-linux-api/ -o ${FILE} ${BUILDFOLDER}${FILE}.o ${BUILDFOLDER}${COMMANDERFOLDER}*.o -lsphero
 echo "[${THIS}] define variable LD_LIBRARY_PATH=sphero-linux-api/"
 export LD_LIBRARY_PATH=sphero-linux-api/

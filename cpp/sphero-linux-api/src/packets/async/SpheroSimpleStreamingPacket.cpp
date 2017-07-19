@@ -66,64 +66,39 @@ SpheroSimpleStreamingPacket::~SpheroSimpleStreamingPacket ( )
  */
 bool SpheroSimpleStreamingPacket::extractPacket(int fd,  Sphero* sphero, SpheroPacket**)
 {
-	uint8_t rawdata[PACKET_SIZE+1];
+	const int PS = 23;
+	uint8_t rawdata[PS];
 	uint8_t checksum;
 	int16_t x,y,speedX,speedY,yaw;
-	const int PS = 23;
-	const uint8_t z = 0;
-	for(int i=0 ; i<PS ; i++) rawdata[i]=z;
-	int size = recv(fd, &rawdata, sizeof(uint8_t)*PACKET_SIZE+10 , 0);
+	int size = recv(fd, &rawdata, sizeof(uint8_t)*PS , 0);
 	/*Should return FFh FEH  DLENexpanded id(8bits) data CHK(8bits)
 	  DLEN = size of Data + size of CHK
 	  CHK  = checksum. equal to the sum of the underlined bytes modulo 256 and then bit inverted
 	         underlined bytes is DLEN + Data
-	  So should return FFH FEH DLENexpanded 3 yaw(16bits) X(16bits) Y(16bits) vX(16bits) vY(16bits)
-	  
-	if(size < 0)
-	{
-		cout<<"ha " << "retour=" << size <<endl;
-		return false;	
+	  So should return FFH FEH DLENexpanded 3 yaw(16bits) X(16bits) Y(16bits) vX(16bits) vY(16bits)*/
+	if(rawdata[0] != 3){
+		cerr << "[SpheroSimpleStreamingPacket] rawdata[0]!=3 : not an async packet " << endl;
 	}
-	cout << "size=" << size << " [";
-	for(int i=0 ; i<size ; i++) cout << (int)rawdata[i] << ", ";
-	cout << "]" << endl;
-cout<<"tic-";
-	ChecksumComputer cc;
-#ifdef MAP
-	std::cerr << "Creation d'un simplestreapacket" << std::endl;
-#endif
-
-	if(recv(fd, &buf, sizeof(buf), 0) != sizeof(buf))
-	{
-		return false;	
+	else{
+		uint16_t dlen = get2bytesfromTable(1, rawdata);
+		if(dlen != 11){
+			cerr << "[SpheroSimpleStreamingPacket] dlen!=11 : not enough data received " << endl;
+		}
+		else if(dlen != size-3){
+			cerr << "[SpheroSimpleStreamingPacket] dlen!=size-3 : incorrect packet size " << endl;
+		}
+		// check checksum
+		else{
+			yaw 	= get2bytesfromTable(3, rawdata);
+			x   	= get2bytesfromTable(5, rawdata);
+			y 		= get2bytesfromTable(7, rawdata);
+			speedX 	= get2bytesfromTable(9, rawdata);
+			speedY 	= get2bytesfromTable(11, rawdata);
+			static chrono c = chrono();
+			StreamFrame frame = {yaw, x, y, speedX, speedY, c.top()};
+			sphero->notifyStream(&frame);
+		}
 	}
-cout<<"tac-";
-	cc.addField(buf);
-
-	if(recv(fd, rawdata, sizeof(rawdata), 0) != sizeof(rawdata))
-	{
-		return false;	
-	}
-cout<<"toc-";
-	cc.addField(rawdata, PACKET_SIZE - 1);
-
-	if(cc() !=  rawdata[12]) //FIXME
-	{
-#ifdef MAP
-		std::cerr << "Erreur checksum" << std::endl;
-#endif
-		return false;
-	}
-cout<<"tuc" << endl;*/
-	yaw 	= get2bytesfromTable(1, rawdata);
-	x   	= get2bytesfromTable(3, rawdata);
-	y 		= get2bytesfromTable(5, rawdata);
-	speedX 	= get2bytesfromTable(7, rawdata);
-	speedY 	= get2bytesfromTable(9, rawdata);
-	checksum= rawdata[11];
-	static chrono c = chrono();
-	StreamFrame frame = {yaw, x, y, speedX, speedY, c.top()};
-	sphero->notifyStream(&frame);
 	return false;
 }
 
