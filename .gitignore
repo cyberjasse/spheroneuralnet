@@ -27,15 +27,11 @@ cpp/perf
 cpp/prototype
 cpp/neuronnet/src/testnn
 
-#ignore downloaded APIs
-python/sphero-ros
+abandon/
 doc/
 
 #ignore sphero copied header from c++ API
 cpp/sphero
-
-#ignore the explanation from Gauvain Devillez
-cpp/compileExplain.sh
 
 #ignore the plantUML software
 uml/plantuml.jar
