@@ -1,7 +1,6 @@
 #ifndef STREAMDISPLAYER_HPP
 #define STREAMDISPLAYER_HPP
-#include "StreamObserver.hpp"
-#include "StreamFrame.hpp"
+#include "../sphero/packets/async/StreamObserver.hpp"
 /**
  * Observe received data and display it to the main output
  */

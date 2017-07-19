@@ -6,5 +6,6 @@
  * A target that everytime provide the origin as target
  */
 class TargetOrigin : public Target{
-	public : virtual StreamFrame* getTarget(struct StreamFrame *frame);
-}
+	public : virtual StreamFrame getTarget(struct StreamFrame *frame);
+};
+#endif

@@ -3,18 +3,18 @@
 #include "../sphero/Sphero.hpp"
 #include "Commander.hpp"
 #include "DataAdapter.hpp"
-#include <cstdint>
 #include <fstream>
 #include <iostream>
+#include <cstdint>
 /**
  * A stream observer that send random command to the sphero. Not following the received frame
  */
 class RandomCommander : public Commander{
 	private :
 		int16_t cyaw;
-		uint8_t cv;
+		int cv;
 		Sphero *s;
-		ofstream file:
+		ofstream file;
 	public :
 		/**
 		 * @param sphero A pointer to the sphero object.
@@ -22,6 +22,6 @@ class RandomCommander : public Commander{
 		 */
 		RandomCommander(Sphero *sphero, std::string filename);
 		virtual ~RandomCommander();
-		virtual void notify(struct TransformedFrame *frame);
+		virtual Command getCommand(struct TransformedFrame *frame)=0;
 };
 #endif

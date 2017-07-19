@@ -10,6 +10,6 @@ class Target{
 	 * Get a frame that represent the state to reach
 	 * @param frame The current state. Or NULL if its finished.
 	 */
-	public : virtual StreamFrame* getTarget(struct StreamFrame *frame)=0;
+	public : virtual StreamFrame getTarget(struct StreamFrame *frame)=0;
 };
 #endif
