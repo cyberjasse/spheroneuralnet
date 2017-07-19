@@ -1,5 +1,6 @@
 #include "RandomCommander.hpp"
 #include "TransformedFrame.hpp"
+#include "DataAdapter.hpp"
 #include <unistd.h>
 #include <stdlib.h>
 Command RandomCommander::getCommand(struct TransformedFrame *frame){
@@ -12,7 +13,7 @@ Command RandomCommander::getCommand(struct TransformedFrame *frame){
 	else if(cv < 0){
 		cv = 0;}
 	int16_t ny = (int16_t)(rand()%(2*maxdeltahead)) - maxdeltahead;
-	cyaw = correctAngle(cyaw+ny);
+	cyaw = DataAdapter::correctAngle(cyaw+ny);
 	struct Command command = { (uint8_t)(cv) , cyaw };
 	//Saving in file
 	file << frame->currentSpeedx <<" "<< frame->currentSpeedy <<" "
@@ -22,11 +23,10 @@ Command RandomCommander::getCommand(struct TransformedFrame *frame){
 	return command;
 }
 
-RandomCommander::RandomCommander(Sphero *sphero, std::string filename){
+RandomCommander::RandomCommander(std::string filename){
 	srand(4000);
 	cyaw = 0;
 	cv = 0;
-	s = sphero;
 	file.open(filename);
 	file << "#yaw is the orientation of the Sphero.\n"
 	     << "#time is the duration between this data frame and the previous. In micro seconds.\n"

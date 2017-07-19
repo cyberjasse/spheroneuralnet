@@ -13,15 +13,14 @@ class RandomCommander : public Commander{
 	private :
 		int16_t cyaw;
 		int cv;
-		Sphero *s;
 		ofstream file;
 	public :
 		/**
 		 * @param sphero A pointer to the sphero object.
 		 * @param filename The name of the file to write data collected and command. Set to NULL for no recording.
 		 */
-		RandomCommander(Sphero *sphero, std::string filename);
+		RandomCommander(std::string filename);
 		virtual ~RandomCommander();
-		virtual Command getCommand(struct TransformedFrame *frame)=0;
+		virtual Command getCommand(struct TransformedFrame *frame);
 };
 #endif
