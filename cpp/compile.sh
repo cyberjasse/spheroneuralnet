@@ -56,13 +56,12 @@ g++ -std=c++11 -c *.cpp
 cd ..
 mv ${COMMANDERFOLDER}*.o ${BUILDFOLDER}${COMMANDERFOLDER}
 #now compile my files
-if FILE==""
+if [ -n "$1" ]
 then
-	echo "[${THIS}] No file entered in parameter. Only package are compiled."
-else
 	echo "[${THIS}]    Compile ${FILE}.cpp ..."
-	g++ -DMAP -std=c++11 -c ${FILE}.cpp -o ${BUILDFOLDER}${FILE}.o
-	g++ -Lsphero-linux-api/ -o ${FILE} ${BUILDFOLDER}${FILE}.o ${BUILDFOLDER}${COMMANDERFOLDER}*.o -lsphero
+	g++ -DMAP -std=c++11 -c ${FILE}.cpp -o ${BUILDFOLDER}${FILE}.o && g++ -Lsphero-linux-api/ -o ${FILE} ${BUILDFOLDER}${FILE}.o ${BUILDFOLDER}${COMMANDERFOLDER}*.o -lsphero
+else
+	echo "[${THIS}] No file entered in parameter. Only package are compiled."	
 fi
 #Defile a variable. Else the executable will not find the sphero api
 echo "[${THIS}] define variable LD_LIBRARY_PATH=sphero-linux-api/"
