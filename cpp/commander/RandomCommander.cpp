@@ -1,6 +1,5 @@
 #include "RandomCommander.hpp"
-#include "TransformedFrame.hpp"
-#include "DataAdapter.hpp"
+#include "DataAdapter.hpp" //For its static functions
 #include <unistd.h>
 #include <stdlib.h>
 Command RandomCommander::getCommand(struct TransformedFrame *frame){
@@ -15,26 +14,11 @@ Command RandomCommander::getCommand(struct TransformedFrame *frame){
 	int16_t ny = (int16_t)(rand()%(2*maxdeltahead)) - maxdeltahead;
 	cyaw = DataAdapter::correctAngle(cyaw+ny);
 	struct Command command = { (uint8_t)(cv) , cyaw };
-	//Saving in file
-	file << frame->currentSpeedx <<" "<< frame->currentSpeedy <<" "
-	     << frame->time <<" "
-	     << frame->targetx <<" "<< frame->targety <<" "
-	     << frame->targetSpeedx <<" "<< frame->targetSpeedy<<" "
-	     << cv <<" "<< cyaw << std::endl;
 	return command;
 }
 
-RandomCommander::RandomCommander(std::string filename){
+RandomCommander::RandomCommander(){
 	srand(4000);
 	cyaw = 0;
 	cv = 0;
-	file.open(filename);
-	file << "#time is the duration between this data frame and the previous. In micro seconds.\n"
-	     << "#orderedSpeed is the speed ordered by the commander after receiving this frame.\n"
-	     << "#orderedHead is the orientation ordered by the commander after receiving this frame. between -179 and 180.\n"
-	     << "currentSpeedx currentSpeedy time targetx targety targetSpeedx targetSpeedy orderedSpeed orderedHead\n";
-}
-
-RandomCommander::~RandomCommander(){
-	file.close();
 }

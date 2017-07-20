@@ -14,9 +14,6 @@
  */
 class DataAdapter : public StreamObserver{
 	public :
-		DataAdapter();
-		DataAdapter(Sphero *sphero, Commander *commander, Target *target);
-		
 		/**
 		 * Aply a rotation to a point around (0,0)
 		 * @param x The x coordinate of the point

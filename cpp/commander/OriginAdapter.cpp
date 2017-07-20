@@ -2,10 +2,24 @@
 #include "Command.hpp"
 #include <cstdint>
 
-OriginAdapter::OriginAdapter(Sphero *sphero, Commander *commander, Target *target){
+OriginAdapter::OriginAdapter(Sphero *sphero, Commander *commander, Target *target, std::string filename){
 	sph = sphero;
 	cmdr = commander;
 	tar = target;
+	if(filename != ""){
+		file.open(filename);
+		file<< "#yaw is the current direction of the sphero.\n"
+			<< "x,y is the current position.\n"
+			<< "#currentSpeedx,currentSpeedy is the current speed vector of the sphero.\n"
+			<< "#time is the duration between this data frame and the previous. In micro seconds.\n"
+			<< "#orderedSpeed is the speed ordered by the commander after receiving this frame.\n"
+			<< "#orderedHead is the orientation ordered by the commander after receiving this frame. between -179 and 180.\n"
+			<< "yaw x y currentSpeedx currentSpeedy time orderedSpeed orderedHead\n";
+		isFileOpened = true;
+	}
+	else{
+		isFileOpened = false;
+	}
 }
 
 void OriginAdapter::notify(struct StreamFrame *frame){
@@ -29,9 +43,17 @@ void OriginAdapter::notify(struct StreamFrame *frame){
 		// transform the command
 		int16_t yaw = DataAdapter::correctAngle( frame->yaw + command.yaw );
 		if(yaw < 0){
-			yaw += 360; // To have yaw between 0 and 359.
+			yaw += 360; // To have yaw between 0 and 359. See the doc: received yaw is >-179& <180 while yaw to send is >0 & <359.
 		}
-		sph->roll(command.speed , yaw);
+		sph->roll(command.speed , yaw); // send the command to the sphero
+		// write
+		if(isFileOpened){
+			file<< frame->yaw <<" "
+				<< frame->x <<" "<< frame->y <<" "
+				<< frame->speedx <<" "<< frame->speedy <<" "
+				<< frame->chrono <<" "
+				<< command.speed <<" "<< command.yaw << std::endl;
+		}
 	}
 	else{
 		sph->disconnect();
