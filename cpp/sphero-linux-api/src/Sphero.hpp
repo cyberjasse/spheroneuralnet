@@ -19,6 +19,7 @@
 #include <semaphore.h>
 
 //-------------------------------------------------------------- Local includes
+#include "Streamer.hpp"
 #include "bluetooth/bluetooth_connector.h"
 #include "packets/ClientCommandPacket.hpp"
 #include "ActionHandler.hpp"
@@ -29,8 +30,6 @@
 
 #include "packets/answer/ColorStruct.hpp"
 #include "packets/answer/BTInfoStruct.hpp"
-#include "packets/async/StreamFrame.hpp"
-#include "packets/async/StreamObserver.hpp"
 
 //------------------------------------------------------------------- Constants
 
@@ -81,12 +80,10 @@ typedef dataHandler_t::listener_t callback_data_t;
 
 //------------------------------------------------------------ Class definition
 
-class Sphero
+class Sphero : public Streamer
 {
 	public:
-		void notifyStream(struct StreamFrame *frame);
-		void addStreamObserver(StreamObserver *so);
-		void startStream();
+		virtual void startStream();
 	
 		void setRawMotorValues(int16_t lpower, int16_t rpower, uint8_t lmode=0x01, uint8_t rmode=0x01);
 		//----------------------------------------------------------- Operators
@@ -579,7 +576,6 @@ class Sphero
 
 	private:
 		//-------------------------------------------------- Private attributes
-		std::vector<StreamObserver*> streamobservers;
 		volatile bool collision;
 		
 		spherocoord_t _x, _y;
