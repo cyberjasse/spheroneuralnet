@@ -52,7 +52,7 @@ void OriginAdapter::notify(struct StreamFrame *frame){
 				<< frame->x <<" "<< frame->y <<" "
 				<< frame->speedx <<" "<< frame->speedy <<" "
 				<< frame->chrono <<" "
-				<< command.speed <<" "<< command.yaw << std::endl;
+				<< static_cast<unsigned>(command.speed) <<" "<< command.yaw << std::endl;
 		}
 	}
 	else{
