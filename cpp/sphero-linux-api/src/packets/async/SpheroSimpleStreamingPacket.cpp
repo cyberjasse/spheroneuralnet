@@ -66,9 +66,9 @@ SpheroSimpleStreamingPacket::~SpheroSimpleStreamingPacket ( )
  */
 bool SpheroSimpleStreamingPacket::extractPacket(int fd,  Sphero* sphero, SpheroPacket**)
 {
+	ChecksumComputer cc;
 	const int PS = 23;
 	uint8_t rawdata[PS];
-	uint8_t checksum;
 	int16_t x,y,speedX,speedY,yaw;
 	int size = recv(fd, &rawdata, sizeof(uint8_t)*PS , 0);
 	/*Should return FFh FEH  DLENexpanded id(8bits) data CHK(8bits)
@@ -87,16 +87,21 @@ bool SpheroSimpleStreamingPacket::extractPacket(int fd,  Sphero* sphero, SpheroP
 		else if(dlen != size-3){
 			cerr << "[SpheroSimpleStreamingPacket] dlen!=size-3 : incorrect packet size " << endl;
 		}
-		// check checksum
 		else{
-			yaw 	= get2bytesfromTable(3, rawdata);
-			x   	= get2bytesfromTable(5, rawdata);
-			y 		= get2bytesfromTable(7, rawdata);
-			speedX 	= get2bytesfromTable(9, rawdata);
-			speedY 	= get2bytesfromTable(11, rawdata);
-			static chrono c = chrono();
-			StreamFrame frame = {yaw, x, y, speedX, speedY, c.top()};
-			sphero->notifyStream(&frame);
+			cc.addField(rawdata, size-1);
+			if(cc() != rawdata[size-1]){
+				cerr << "[SpheroSimpleStreamingPacket] incorrect checksum " << endl;
+			}
+			else{
+				yaw 	= get2bytesfromTable(3, rawdata);
+				x   	= get2bytesfromTable(5, rawdata);
+				y 		= get2bytesfromTable(7, rawdata);
+				speedX 	= get2bytesfromTable(9, rawdata);
+				speedY 	= get2bytesfromTable(11, rawdata);
+				static chrono c = chrono();
+				StreamFrame frame = {yaw, x, y, speedX, speedY, c.top()};
+				sphero->notifyStream(&frame);
+			}
 		}
 	}
 	return false;
