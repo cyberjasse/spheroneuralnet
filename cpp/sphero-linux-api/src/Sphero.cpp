@@ -238,8 +238,8 @@ bool Sphero::connect()
 	return false;
 }//END connect
 
-void Sphero::startStream(){
-	setDataStreaming(60, 1,
+void Sphero::startStream(uint16_t freq){
+	setDataStreaming(freq, 1,
 				mask::FILTERED_YAW_IMU, 
 				0,
 				mask2::ODOMETER_X | mask2::ODOMETER_Y | mask2::VELOCITY_X | mask2::VELOCITY_Y);

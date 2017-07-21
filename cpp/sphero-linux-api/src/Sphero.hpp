@@ -86,7 +86,7 @@ class Sphero
 	public:
 		void notifyStream(struct StreamFrame *frame);
 		void addStreamObserver(StreamObserver *so);
-		void startStream();
+		void startStream(uint16_t freq);
 	
 		void setRawMotorValues(int16_t lpower, int16_t rpower, uint8_t lmode=0x01, uint8_t rmode=0x01);
 		//----------------------------------------------------------- Operators
