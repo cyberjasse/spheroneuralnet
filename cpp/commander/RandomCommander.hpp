@@ -14,12 +14,7 @@ class RandomCommander : public Commander{
 		int16_t cyaw;
 		int cv;
 	public :
-		/**
-		 * @param sphero A pointer to the sphero object.
-		 * @param filename The name of the file to write data collected and command. Set to NULL for no recording.
-		 */
 		RandomCommander();
-		virtual ~RandomCommander();
 		virtual Command getCommand(struct TransformedFrame *frame);
 };
 #endif
