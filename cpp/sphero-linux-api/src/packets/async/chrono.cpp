@@ -12,8 +12,11 @@ void chrono::start(){
 }
 
 unsigned long chrono::minus(struct timeval t1, struct timeval t2){
+	// (Ak+b) - (Ck+d) = Ak+b-Ck-d = Ak-Ck+b-d = k*(A-C)+b-d
 	unsigned long us = (t1.tv_sec - t2.tv_sec) * 1000000;
-	us += (t1.tv_usec - t2.tv_usec);
+	// b-d can be <0 . And b ,d are unsigned. So dont do us += b-d;
+	us += t1.tv_usec;
+	us -= t2.tv_usec;
 	return us;
 }
 
