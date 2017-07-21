@@ -570,7 +570,7 @@ class Sphero
 
 	protected:
 		//--------------------------------------------------- Protected methods
-		static void monitorStream(void* sphero_ptr);
+		void monitorStream(void* sphero_ptr);
 
 		void sendAcknowledgedPacket(ClientCommandPacket& packet, uint8_t seqToWait);
 

@@ -25,26 +25,26 @@ using namespace std;
 #include "packets/answer/AskedCommandCode.hpp"
 
 //-------------------------------------------------------- Private methods
-
+#include "packets/async/chrono.hpp"
 void Sphero::monitorStream(void* sphero_ptr)
 {
 	Sphero* sphero = (Sphero*) sphero_ptr;
 	int _bt_sock = sphero->_bt_socket;
-	uint8_t buf;
 	SpheroPacket* packet_ptr;
-	for(;;)
+	/* |||||||||||||||||||||||||||||||||||||||||| debug zone
+	int size;
+	const int ps = 30;
+	uint8_t data[ps];
+	chrono c = chrono();
+	while(true){
+		size = recv(_bt_sock, data, sizeof(data), 0);
+		unsigned long t = c.top();
+		std::cout << "size= " << size << " time= " << t << std::endl;
+	}*/
+	while(_connected)
 	{
-		if(recv(_bt_sock, &buf, sizeof(buf), MSG_PEEK) <= 0)
-		{
-			sphero->disconnect();
-		}
-		else
-		{
-			if(SpheroPacket::extractPacket(_bt_sock, sphero, &packet_ptr))
-			{
-				packet_ptr->packetAction();
-			}
-		}
+		if(SpheroPacket::extractPacket(_bt_sock, sphero, &packet_ptr))
+			packet_ptr->packetAction();
 	}
 }
 //END monitorStream
@@ -240,7 +240,7 @@ bool Sphero::connect()
 
 void Sphero::startStream(uint16_t freq){
 	setDataStreaming(freq, 1,
-				mask::FILTERED_YAW_IMU, 
+				mask::FILTERED_YAW_IMU,
 				0,
 				mask2::ODOMETER_X | mask2::ODOMETER_Y | mask2::VELOCITY_X | mask2::VELOCITY_Y);
 	monitorStream(this);
