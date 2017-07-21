@@ -101,6 +101,7 @@ Sphero::Sphero(char const* const btaddr, bluetooth_connector* btcon):
 	_syncMRSPCode = new uint8_t[256];
 	_syncPacketParameters = new void* [256];
 	_syncTodo = new pendingCommandType[256];
+	streamobservers = std::vector<StreamObserver*>();
 
 	for(size_t i = 0 ; i < 256 ; i++)	
 	{
@@ -243,6 +244,14 @@ void Sphero::startStream(){
 				0,
 				mask2::ODOMETER_X | mask2::ODOMETER_Y | mask2::VELOCITY_X | mask2::VELOCITY_Y);
 	monitorStream(this);
+}
+void Sphero::notifyStream(struct StreamFrame *frame){
+	for(StreamObserver *so : streamobservers){
+		so->notify(frame);
+	}
+}
+void Sphero::addStreamObserver(StreamObserver *so){
+	streamobservers.push_back(so);
 }
 
 void Sphero::notifyPacket(uint8_t seqNum, uint8_t mrsp, void* pointer)
