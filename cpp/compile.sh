@@ -3,14 +3,6 @@ BUILDFOLDER='build/'
 COMMANDERFOLDER='commander/'
 THIS='compile.sh'
 
-#test if api is cloned
-if [ -d sphero-linux-api/ ]
-then
-	echo "[${THIS}] API sphero-linux-api/ already exist."
-else
-	echo "[${THIS}] API sphero-linux-api/ doesn't exist. Git clone..."
-	git clone https://github.com/slock83/sphero-linux-api
-fi
 #test if the .so library is compiled
 if [ -f sphero-linux-api/libsphero.so ]
 then
