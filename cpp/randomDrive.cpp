@@ -52,8 +52,8 @@ int main(int argc, char* argv[]){
 	
 	//Instanciate commander objects
 	TargetOrigin *target = new TargetOrigin(40);
-	RandomCommander *commander = new RandomCommander(filename);
-	OriginAdapter *adapter = new OriginAdapter(sph, commander, target);
+	RandomCommander *commander = new RandomCommander();
+	OriginAdapter *adapter = new OriginAdapter(sph, commander, target, filename);
 	
 	//Start the streaming
 	sph->addStreamObserver(adapter);
