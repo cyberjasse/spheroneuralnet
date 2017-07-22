@@ -1,13 +1,7 @@
 #ifndef DATAADAPTER_HPP
 #define DATAADAPTER_HPP
-#include "../sphero/Sphero.hpp"
 #include "../sphero/packets/async/StreamObserver.hpp"
-#include "TransformedFrame.hpp"
-#include "Commander.hpp"
-#include "Target.hpp"
 #include <cstdint>
-#include <math.h>
-
 /**
  * An interface class for StreamObserver that will transform received data to send to an commander.
  * It also transform commands from the commander following the transformation.

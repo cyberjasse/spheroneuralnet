@@ -1,4 +1,5 @@
 #include "DataAdapter.hpp"
+#include <math.h>
 
 void DataAdapter::rotation(int16_t *x, int16_t *y, int16_t angle){
 	double c = cos(angle);
@@ -18,4 +19,5 @@ int16_t DataAdapter::correctAngle(int16_t angle){
 		return angle+360;
 	else if(angle > 180)
 		return angle-360;
+	return angle;
 }
