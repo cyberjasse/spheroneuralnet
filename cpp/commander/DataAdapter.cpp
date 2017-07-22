@@ -1,7 +1,7 @@
 #include "DataAdapter.hpp"
 #include <math.h>
 
-void DataAdapter::rotation(int16_t *x, int16_t *y, int16_t angle){
+void DataAdapter::rotation(int16_t *x, int16_t *y, double angle){
 	double c = cos(angle);
 	double s = sin(angle);
 	double xprime = (*x) * c + (*y) * c;

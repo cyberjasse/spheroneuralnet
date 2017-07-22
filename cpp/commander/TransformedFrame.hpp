@@ -3,7 +3,7 @@
 /**
  * A data frame that summarize the current state and the state to reach.
  * Thus the current position is (0,0).
- * The current orientation is the x axis.
+ * And the current orientation is 0.
  */
 struct TransformedFrame{
 	/** The x composant of the current speed.*/
