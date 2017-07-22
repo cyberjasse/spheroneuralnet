@@ -11,8 +11,6 @@
 #include <vector>
 #include "sphero/bluetooth/bluez_adaptor.h"
 #include "sphero/Sphero.hpp"
-#include "commander/TargetOrigin.hpp"
-#include "commander/OriginAdapter.hpp"
 #include "commander/RandomCommander.hpp"
 
 string DEFAULT_ADDRESS = "68:86:E7:00:58:83";
@@ -50,13 +48,23 @@ int main(int argc, char* argv[]){
 		return 1;
 	}
 	
+	/* ################################
+	   ##Define other parameters here##
+	   ################################*/
+	
+	const short frequency  = 5;
+	const int   squareSize = 60;//cm
+	const int   maxSampling= 1000;
+	
+	//Create the map
+	int halfsize = squareSize/2;
+	struct Bounds bounds = {-halfsize,halfsize,halfsize,-halfsize};
+	
 	//Instanciate commander objects
-	TargetOrigin *target = new TargetOrigin(1000);
-	RandomCommander *commander = new RandomCommander();
-	OriginAdapter *adapter = new OriginAdapter(sph, commander, target, filename);
+	RandomCommander *commander = new RandomCommander(sph, filename, &bounds);
 	
 	//Start the streaming
-	sph->addStreamObserver(adapter);
-	sph->startStream(20);
+	sph->addStreamObserver(commander);
+	sph->startStream(frequency);
 	return 0;
 }
