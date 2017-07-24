@@ -1,5 +1,6 @@
 #include "LearningCommander.hpp"
 #include <iostream>
+#include <fstream>
 
 LearningCommander::LearningCommander(Sphero *sph, DataAdapter *dadapter, Net *lm){
 	sphero = sph;
@@ -37,15 +38,15 @@ void LearningCommander::notify(struct StreamFrame *frame){
 
 void LearningCommander::learnFromList(std::vector<InputOutput> l, int niteration){
 	const int ratioTest = 3; //take 1 sample on 3 for the test
-	double errorsum; //Sum of quadratic errors
-	double testsum; //Sum of test errors
+	double errormean; //Mean of quadratic errors
+	double testmean; //Mean of test errors
 	int listsize = l.size();
 	double speed, head;
 	double expected[2];
 	double contribution[6];
 	for(int iteration=0 ; iteration<niteration ; iteration++){
-		errorsum = 0;
-		testsum = 0;
+		errormean = 0;
+		testmean = 0;
 		for(int i=0 ; i<listsize-1 ; i++){
 			int ip1 = i+1;
 			struct TransformedFrame tframe = adapter->normalizeFrame( l[i].frame, l[ip1].frame);
@@ -56,14 +57,44 @@ void LearningCommander::learnFromList(std::vector<InputOutput> l, int niteration
 				//take the sample for the test
 				int deltas = speed-expected[0];
 				int deltah = head -expected[1];
-				testsum += deltas*deltas + deltah*deltah;
+				testmean += (deltas*deltas + deltah*deltah)/ (2 * (listsize/3));
 			}
 			else{
 				//take the sample for the training
-				errorsum += learningmachine->backpropagation(expected, contribution);
+				//std::cout <<"[DEBUG LearningCommander.cpp]"<< "expected "<<expected[0]<<" "<<expected[1] << ". got "<<speed<<" "<<head << std::endl;
+				errormean += learningmachine->backpropagation(expected, contribution) / listsize;
 			}
 		}
-		std::cout << errorsum << " " << testsum;
+		std::cout << errormean << " " << testmean << std::endl;
 	}
 }
-				
+
+void LearningCommander::learnFromFile(std::string filename, int niteration){
+	std::vector<struct InputOutput> l = std::vector<struct InputOutput>();
+	ifstream file;
+	file.open(filename);
+	const int linesize = 8;
+	std::string garb;
+	// read the first line containing column names
+	for(int i=0 ; i<linesize ; i++){
+		file >> garb;
+	}
+	// read line by line
+	int speed;
+	int head;
+	bool still = true;
+	while(still){
+		struct StreamFrame frame;
+		if(file >> frame.yaw){
+			file >> frame.x >> frame.y >> frame.speedx >> frame.speedy >> frame.chrono;
+			file >> speed >> head;
+			//std::cout<<"[DEBUG LearningCommander.cpp]"<<frame.x<<" "<<frame.y<<" "<<frame.speedx<<" "<<frame.speedy<<" "<<frame.chrono<<" "<<speed<<" "<<head<< std::endl;
+			struct InputOutput io = {frame,(uint8_t)(speed),(int16_t)(head)};
+			l.push_back(io);
+		}
+		else{
+			break;
+		}
+	}
+	learnFromList(l, niteration);
+}

@@ -50,6 +50,11 @@ class LearningCommander : public StreamObserver{
 		 */
 		void learnFromList(std::vector<InputOutput> l, int niteration);
 		
+		/**
+		 * Same that learnFromList but providing a filename
+		 */
+		void learnFromFile(std::string filename, int niteration);
+		
 		virtual void notify(struct StreamFrame *frame);
 };
 
