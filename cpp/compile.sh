@@ -1,6 +1,7 @@
 FILE=$1
 BUILDFOLDER='build/'
 COMMANDERFOLDER='commander/'
+NEURONNETFOLDER='neuronnet/'
 THIS='compile.sh'
 
 #test if the .so library is compiled
@@ -36,9 +37,9 @@ fi
 #test if the commander folder exist
 if [ -d ${BUILDFOLDER}${COMMANDERFOLDER} ]
 then
-	echo "[${THIS}] The commander folder already exist."
+	echo "[${THIS}] The commander build folder already exist."
 else
-	echo "[${THIS}] The commander folder doesn't exist. Creating..."
+	echo "[${THIS}] The commander build folder doesn't exist. Creating..."
 	mkdir ${BUILDFOLDER}${COMMANDERFOLDER}
 fi
 #compile the commander files
@@ -47,11 +48,26 @@ cd ${COMMANDERFOLDER}
 g++ -std=c++11 -c *.cpp
 cd ..
 mv ${COMMANDERFOLDER}*.o ${BUILDFOLDER}${COMMANDERFOLDER}
+#test if the neuronnet folder exist
+if [ -d ${BUILDFOLDER}${NEURONNETFOLDER} ]
+then
+	echo "[${THIS}] The neuronnet build folder already exist."
+else
+	echo "[${THIS}] The neuronnet build folder doesn't exist. Creating..."
+	mkdir ${BUILDFOLDER}${NEURONNETFOLDER}
+fi
+#compile the neuronnet files
+echo "[${THIS}] Compile files in neuronnet folder"
+NEURONNETPATH='neuronnet/src/'
+cd ${NEURONNETPATH}
+g++ -c *.cpp
+cd ../..
+mv ${NEURONNETPATH}*.o ${BUILDFOLDER}${NEURONNETFOLDER}
 #now compile my files
 if [ -n "$1" ]
 then
 	echo "[${THIS}]    Compile ${FILE}.cpp ..."
-	g++ -DMAP -std=c++11 -c ${FILE}.cpp -o ${BUILDFOLDER}${FILE}.o && g++ -Lsphero-linux-api/ -o ${FILE} ${BUILDFOLDER}${FILE}.o ${BUILDFOLDER}${COMMANDERFOLDER}*.o -lsphero
+	g++ -DMAP -std=c++11 -c ${FILE}.cpp -o ${BUILDFOLDER}${FILE}.o && g++ -Lsphero-linux-api/ -o ${FILE} ${BUILDFOLDER}${FILE}.o ${BUILDFOLDER}${COMMANDERFOLDER}*.o ${BUILDFOLDER}${NEURONNETFOLDER}*.o -lsphero
 else
 	echo "[${THIS}] No file entered in parameter. Only package are compiled."	
 fi
