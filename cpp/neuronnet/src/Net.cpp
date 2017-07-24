@@ -27,7 +27,7 @@ double Net::backpropagation(double expected[], double thisContributions[]){
 	for(int i=0 ; i<errorSize ; i++){
 		double delta = lastOutput[i]-expected[i];
 		layerIn[i] = delta;//for the dQ/df[i] where i is an exit neuron
-		error += delta*delta;//fot Q
+		error += delta*delta;//for Q
 	}
 	//backpropagation
 	double* layerOut;

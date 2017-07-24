@@ -31,7 +31,7 @@ double RBFexitNeuron::compute(double input[]){
 		lastSum += input[j];
 		lastWeightedSum += input[j]*ws[j];
 	}
-	if(lastSum == 0.0){
+	if(lastSum<0.00001){
 		std::cerr << "Exit neuron : lastSum=0.0" << std::endl;
 	}
 	double result = lastWeightedSum/lastSum;

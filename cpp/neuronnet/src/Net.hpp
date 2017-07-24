@@ -32,9 +32,10 @@ class Net{
 		/**
 		 * @brief Perform the backpropagation
 		 * @param expected The output expected from the last solution
-		 * @param thisContributions The error contributions of the first layer
+		 * @param thisContributions Not a parameter to set but. Enter a table to get informations:
+		 *  The error contributions of the first layer
 		 *  Let Q the quadratic error, Let x[i] the ith element of the input.
-		 *  thisContributions[i] = the parital derivate dQ/dx[i]
+		 *  thisContributions[i] = the partial derivate dQ/dx[i]
 		 * @return The quadratic error Q
 		 */
 		virtual double backpropagation(double expected[], double thisContributions[]);
