@@ -29,23 +29,25 @@ int main(int argc, char* argv[]){
 	}
 	//Create a LearningCOmmander
 	SimpleAdapter *adapter = new SimpleAdapter();
-	RBFnet *net = new RBFnet(6,2, 20, 250, -0.4);
+	RBFnet *net = new RBFnet(4,2, 25, 250, -0.4);
 	LearningCommander *commander = new LearningCommander(sph, adapter, net);
 	//start training
 	commander->learnFromFile(filename, niteration);
 	//if target file, drive
-	std::string targetname = argv[3];
-	PointlistTarget *target = new PointlistTarget(targetname);
-	commander->setTarget(target);
-	if(sph->connect()){
-		std::cerr << " >connect() == true< " << std::endl;
+	if(argc>3){
+		std::string targetname = argv[3];
+		PointlistTarget *target = new PointlistTarget(targetname);
+		commander->setTarget(target);
+		if(sph->connect()){
+			std::cerr << " >connect() == true< " << std::endl;
+		}
+		else{
+			std::cerr << " >connection failed< " << std::endl;
+			delete sph;
+			return 1;
+		}
+		const short frequency  = 5;
+		sph->addStreamObserver(commander);
+		sph->startStream(frequency);
 	}
-	else{
-		std::cerr << " >connection failed< " << std::endl;
-		delete sph;
-		return 1;
-	}
-	const short frequency  = 5;
-	sph->addStreamObserver(commander);
-	sph->startStream(frequency);
 }

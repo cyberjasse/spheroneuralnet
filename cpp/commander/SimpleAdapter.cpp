@@ -33,10 +33,11 @@ uint8_t SimpleAdapter::denormalizeSpeed(int speed){
 }
 		
 int16_t SimpleAdapter::denormalizeHead(int head){
-	// return an angle between -180 and 179 degree
-	if(head < 0)
+	// return an angle between 0 and 359 degree
+	// from an angle between -180 and 179
+	if(head < -180)
 		head += 360;
-	else if(head > 359)
+	else if(head > 179)
 		head -= 360;
 	return head+180;
 }
