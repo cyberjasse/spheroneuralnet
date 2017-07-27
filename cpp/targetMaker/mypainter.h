@@ -9,6 +9,7 @@
 #include <QMouseEvent>
 #include <QPaintEvent>
 #include <QTimer>
+#include <QString>
 
 // code from https://stackoverflow.com/questions/11683976/qt-4-7-drawing-a-2-point-line-with-dynamic-feedback-using-paintevent
 class MyPainter : public QWidget{
@@ -26,6 +27,7 @@ public :
     MyPainter(QWidget *parent);
 public slots :
     void createLine();
+    void save(QString filename);
 };
 
 #endif // MYPAINTER

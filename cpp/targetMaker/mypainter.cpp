@@ -1,4 +1,6 @@
 #include "mypainter.h"
+#include <QFile>
+#include <QTextStream>
 
 MyPainter::MyPainter(QWidget *parent) : QWidget(parent){
     setMouseTracking(true);
@@ -38,4 +40,17 @@ void MyPainter::createLine(){
     lines.append(line);
     startpoint = endpoint;
     update();
+}
+
+void MyPainter::save(QString filename){
+    QFile file( filename );
+    if ( file.open(QIODevice::WriteOnly) ){
+        QTextStream stream( &file );
+        for(QLine line : lines){
+            stream << line.p1().x() <<" "<< line.p1().y() << endl;
+        }
+        QLine last = lines[lines.size()-1];
+        stream << last.p2().x() <<" "<< last.p2().y() << endl;
+        file.close();
+    }
 }
