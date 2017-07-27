@@ -18,7 +18,7 @@ int main(int argc, char* argv[]){
 	int niteration = atoi( argv[2]);
 	//Create a LearningCOmmander
 	SimpleAdapter *adapter = new SimpleAdapter();
-	RBFnet *net = new RBFnet(6,2, 30, 250, -0.4);
+	RBFnet *net = new RBFnet(6,2, 20, 250, -0.4);
 	LearningCommander commander = LearningCommander(NULL, adapter, net);
 	//start training
 	commander.learnFromFile(filename, niteration);

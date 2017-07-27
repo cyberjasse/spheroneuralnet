@@ -16,12 +16,25 @@ struct Bounds{
 };
 
 /**
+ * The status of the sphero
+ */
+enum Status{
+	IN, // in the map
+	LEFT, // out of the map, on the left
+	RIGHT, // out of the map, on the right
+	TOP, // out of the map, on the top
+	BOTTOM, // out of the map, on the bottom
+};
+
+/**
  * A stream observer that send random command to the sphero. Not following the received frame.
  */
 class RandomCommander : public StreamObserver{
 	private :
 		/** The current speed ordered */
 		int cv;
+		/** The current head ordered */
+		int chead;
 		/** The bounds of the map */
 		struct Bounds *bds;
 		
@@ -29,6 +42,14 @@ class RandomCommander : public StreamObserver{
 		ofstream file;
 		/** A pointer to the sphero to command */
 		Sphero *sph;
+		
+		/** The status of the sphero */
+		char status;
+		
+		/**
+		 * get a value R such as |x-R| < epsilon
+		 */
+		int getnear(int x, int epsilon);
 		
 	public :
 		/**
