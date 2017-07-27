@@ -1,6 +1,5 @@
 #include "mypainter.h"
 #include <QFile>
-#include <QTextStream>
 
 MyPainter::MyPainter(QWidget *parent) : QWidget(parent){
     setMouseTracking(true);
@@ -11,7 +10,7 @@ MyPainter::MyPainter(QWidget *parent) : QWidget(parent){
 void MyPainter::mousePressEvent(QMouseEvent *event){
     startpoint = event->pos();
     endpoint = startpoint;
-    timer->start(1000);
+    timer->start(200);
 }
 
 void MyPainter::mouseReleaseEvent(QMouseEvent *event){
@@ -42,15 +41,27 @@ void MyPainter::createLine(){
     update();
 }
 
+void MyPainter::writePoint(QTextStream &stream, QPoint *point, QPoint *firstpoint){
+    stream << point->x()-firstpoint->x();
+    stream << " ";
+    stream << point->y()-firstpoint->y();
+    stream << endl;
+}
 void MyPainter::save(QString filename){
+    if(lines.size() < 1)
+        return;
     QFile file( filename );
     if ( file.open(QIODevice::WriteOnly) ){
+        QPoint first = lines[0].p1();
         QTextStream stream( &file );
-        for(QLine line : lines){
-            stream << line.p1().x() <<" "<< line.p1().y() << endl;
+        for(int i=0 ; i<lines.size() ; i++){
+            QPoint p = lines[i].p1();
+            writePoint(stream, &p, &first);
         }
-        QLine last = lines[lines.size()-1];
-        stream << last.p2().x() <<" "<< last.p2().y() << endl;
+        QPoint p = lines[lines.size()-1].p2();
+        writePoint(stream, &p, &first);
         file.close();
     }
+    lines.clear();
+    update();
 }

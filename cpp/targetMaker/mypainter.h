@@ -10,6 +10,7 @@
 #include <QPaintEvent>
 #include <QTimer>
 #include <QString>
+#include <QTextStream>
 
 // code from https://stackoverflow.com/questions/11683976/qt-4-7-drawing-a-2-point-line-with-dynamic-feedback-using-paintevent
 class MyPainter : public QWidget{
@@ -19,6 +20,7 @@ private :
     QPoint endpoint;
     QVector<QLine> lines;
     QTimer *timer;
+    void writePoint(QTextStream &stream, QPoint *point, QPoint *firstpoint);
 public :
     virtual void mousePressEvent(QMouseEvent *event);
     virtual void mouseReleaseEvent(QMouseEvent *event);

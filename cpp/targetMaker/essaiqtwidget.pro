@@ -8,12 +8,14 @@ QT       += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = essaiqtwidget
+TARGET = targetMaker
 TEMPLATE = app
 
 
 SOURCES += main.cpp \
-    mypainter.cpp
+    mypainter.cpp \
+    savepanel.cpp
 
 HEADERS  += \
-    mypainter.h
+    mypainter.h \
+    savepanel.h
