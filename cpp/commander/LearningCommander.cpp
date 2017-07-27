@@ -71,7 +71,7 @@ void LearningCommander::learnFromList(std::vector<InputOutput> l, int niteration
 
 void LearningCommander::learnFromFile(std::string filename, int niteration){
 	std::vector<struct InputOutput> l = std::vector<struct InputOutput>();
-	ifstream file;
+	std::ifstream file;
 	file.open(filename);
 	const int linesize = 8;
 	std::string garb;
