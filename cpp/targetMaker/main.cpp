@@ -4,14 +4,17 @@
 
 int main(int argc, char *argv[])
 {
+    const int windowHeight = 400;
+    const int windowWidth  = 300;
+
     QApplication app(argc, argv);
     // create window
     QWidget fenetre;
-    fenetre.setFixedSize(300,150);
+    fenetre.setFixedSize(windowHeight,windowWidth);
     fenetre.move(100,100);
-    // create message displayer
+
     MyPainter myp(&fenetre);
-    myp.setFixedSize(280,130);
+    myp.setFixedSize(windowHeight-5,windowWidth-5);
     fenetre.show();
 
     return app.exec();
