@@ -4,8 +4,8 @@
 void DataAdapter::rotation(int16_t *x, int16_t *y, double angle){
 	double c = cos(angle);
 	double s = sin(angle);
-	double xprime = (*x) * c + (*y) * c;
-	double yprime = (*y) * c - (*x) * s;
+	double xprime = (*x) * c - (*y) * s;
+	double yprime = (*y) * c + (*x) * s;
 	*x = (int)(round(xprime));
 	*y = (int)(round(yprime));
 }
