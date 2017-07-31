@@ -1,4 +1,5 @@
 #include "RandomCommander.hpp"
+#include "DataAdapter.hpp"
 #include <unistd.h>
 #include <stdlib.h>
 
@@ -11,11 +12,11 @@ void RandomCommander::notify(struct StreamFrame *frame){
 
 	// CONSTANTS HERE
 	const int maxspeed = 70;
-	const int maxspeedIfOut = 45;//maximum speed if out of the map
-	const int minspeed = 17;
-	const int maxdeltaspeed = 10;
-	const int maxdeltahead = 10;
-	const int maxdeltaAboutTurn = 60;
+	const int maxspeedIfOut = 50;//maximum speed if out of the map
+	const int minspeed = 20;
+	const int maxdeltaspeed = 5;
+	const int maxdeltahead = 5;
+	const int maxdeltaAboutTurn = 70;
 	
 	// Test if we exiting the map. If yes, about-turn
 	int maxs = maxspeedIfOut; //redefinition of max speed to decrease it if we exit the map
@@ -56,12 +57,13 @@ void RandomCommander::notify(struct StreamFrame *frame){
 	// if no, choose another one
 		status = IN;
 		maxs = maxspeed;
-		nyaw = getnear(frame->yaw, maxdeltahead) + 180; //+180 to have between 0 and 259
+		nyaw = getnear(frame->yaw, maxdeltahead);
 	}
 	// correct the neaw head
-	if(nyaw < 0) nyaw += 360;
-	else if(nyaw > 360) nyaw -= 360;
-	
+	if(nyaw < 0)
+		nyaw += 360;
+	else if(nyaw > 259)
+		nyaw -= 360;
 	// Choose a new speed
 	cv = getnear(cv, maxdeltaspeed);
 	if(cv > maxs){
@@ -74,7 +76,6 @@ void RandomCommander::notify(struct StreamFrame *frame){
 	// Send command
 	chead = nyaw;
 	sph->roll( (uint8_t)(cv) , (int16_t)(nyaw) );
-	
 	// Save data in file
 	file<< frame->yaw <<" "
 		<< frame->x <<" "<< frame->y <<" "
