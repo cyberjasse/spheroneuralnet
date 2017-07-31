@@ -37,6 +37,21 @@ RBFnet::RBFnet(unsigned int inputSize, unsigned int outputSize, unsigned int hid
 	init(inputSize, outputSize, hiddenSize, sd, step, prototypes, weights);
 }
 
+RBFnet::RBFnet(unsigned int inputSize, unsigned int outputSize, unsigned int hiddenSize, double sd, double step, double **prototypes)
+	: Net(NULL, 2)
+{
+	//create weights
+	const double MAXDELTA = 10;
+	double** weights = new double*[outputSize];
+	for(int i=0 ; i<outputSize ; i++){
+		weights[i] = new double[hiddenSize];
+		for(int j=0 ; j<hiddenSize ; j++){
+			weights[i][j] = (rand() / (double)RAND_MAX)*2*MAXDELTA -MAXDELTA;
+		}
+	}
+	init(inputSize, outputSize, hiddenSize, sd, step, prototypes, weights);
+}
+
 RBFnet::RBFnet(unsigned int inputSize, unsigned int outputSize, unsigned int hiddenSize, double sd, double step)
     : Net(NULL, 2)
 {

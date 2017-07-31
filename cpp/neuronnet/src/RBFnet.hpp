@@ -15,7 +15,7 @@ class RBFnet : public Net{
 		 * @param step The negative of the gradient step (-eta) for all neurons
 		 * @param sd The initial standard deviation for all hidden neurons
 		 */
-		RBFnet(unsigned int inputSize, unsigned int outputSize, unsigned int hiddenSize, double sd=5.0, double step=0.5);
+		RBFnet(unsigned int inputSize, unsigned int outputSize, unsigned int hiddenSize, double sd, double step);
 
 		/**
 		 * Create a RBF net providing prototypes and weights
@@ -28,6 +28,7 @@ class RBFnet : public Net{
 		 * @param weights Initial weights
 		 */
 		RBFnet(unsigned int inputSize, unsigned int outputSize, unsigned int hiddenSize, double sd, double step, double **prototypes, double **weights);
+		RBFnet(unsigned int inputSize, unsigned int outputSize, unsigned int hiddenSize, double sd, double step, double **prototypes);
 
 	private:
 		/**
