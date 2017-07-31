@@ -15,9 +15,13 @@ double DataAdapter::degreeToRadian(int16_t angle){
 }
 
 int16_t DataAdapter::correctAngle(int16_t angle){
-	if(angle < -179)
-		return angle+360;
-	else if(angle > 180)
-		return angle-360;
+	return getAngleBetween(angle, -179,180);
+}
+
+int DataAdapter::getAngleBetween(int angle, int min, int max){
+	if(angle < min)
+		return getAngleBetween(angle+360, min, max);
+	if(angle > max)
+		return getAngleBetween(angle-360, min, max);
 	return angle;
 }

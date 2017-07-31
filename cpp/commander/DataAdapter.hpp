@@ -56,5 +56,11 @@ class DataAdapter{
  		* If the angle is <-179 or >180, it returns an angle between -179 and 180.
  		*/
 		static int16_t correctAngle(int16_t angle);
+		
+		/**
+		 * Get an angle between min and max.
+		 * If min=0 and max=159 and angle = -20, it returns 340
+		 */
+		static int getAngleBetween(int angle, int min, int max);
 };
 #endif
