@@ -25,13 +25,15 @@ class LearningCommander : public StreamObserver{
 		DataAdapter *adapter;
 		Sphero *sphero;
 		Target *target;
+		const int INPUTSIZE = 4;
+		const int OUTPUTSIZE = 1;
 		
 		/**
 		 * Call to learningmachine.compute() but providing a TransformedFrame as input
 		 * @param speed The speed returned by the learning machine output
 		 * @param head The head returned by the learning machine output
 		 */
-		void compute(struct TransformedFrame tframe, double *speed, double *head );
+		void compute(struct TransformedFrame tframe, double *speed, double *head, bool print=true );
 	
 	public :
 		LearningCommander(Sphero *sph, DataAdapter *dadapter, Net *lm);
@@ -51,9 +53,12 @@ class LearningCommander : public StreamObserver{
 		void learnFromList(std::vector<InputOutput> l, int niteration);
 		
 		/**
-		 * Same that learnFromList but providing a filename
+		 * Same that learnFromList but providing a filename.
+		 * With parameters to filter frames by the chrono value.
+		 * @param timemin The minimum time between a frame and the previous to keep a frame
+		 * @param timemax The maximum time between a frame and the next to keep a frame
 		 */
-		void learnFromFile(std::string filename, int niteration);
+		void learnFromFile(std::string filename, int niteration,  int timemin=0, int timemax=2000000);
 		
 		virtual void notify(struct StreamFrame *frame);
 };
