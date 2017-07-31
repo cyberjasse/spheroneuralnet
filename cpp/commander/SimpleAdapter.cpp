@@ -23,9 +23,9 @@ int SimpleAdapter::normalizeSpeed(uint8_t speed){
 }
 		
 int SimpleAdapter::normalizeHead(int16_t head){
-	// return an angle between -180 and 179 degree
+	// return an angle between -180 and 179 degree then apply last rotation
 	// from an angle between 0 and 359
-	return head-180;
+	return getAngleBetween(head + lastangle, -195,194);
 }
 		
 uint8_t SimpleAdapter::denormalizeSpeed(int speed){
@@ -33,11 +33,7 @@ uint8_t SimpleAdapter::denormalizeSpeed(int speed){
 }
 		
 int16_t SimpleAdapter::denormalizeHead(int head){
-	// return an angle between 0 and 359 degree
+	// return an angle between 0 and 359 degree then apply inverse last rotation
 	// from an angle between -180 and 179
-	if(head < -180)
-		head += 360;
-	else if(head > 179)
-		head -= 360;
-	return head+180;
+	return DataAdapter::getAngleBetween(head - lastangle, 0,359);
 }
