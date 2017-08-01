@@ -80,6 +80,7 @@ void RandomCommander::notify(struct StreamFrame *frame){
 	file<< frame->yaw <<" "
 		<< frame->x <<" "<< frame->y <<" "
 		<< frame->speedx <<" "<< frame->speedy <<" "
+		<< frame->ax <<" "<< frame->ay <<" "
 		<< frame->chrono <<" "
 		<< cv <<" "<< nyaw << std::endl;
 }
@@ -89,7 +90,7 @@ RandomCommander::RandomCommander(Sphero *sphero, std::string filename, struct Bo
 	cv = 0;
 	sph = sphero;
 	file.open(filename);
-	file << "yaw x y currentSpeedx currentSpeedy time orderedSpeed orderedHead\n";
+	file << "yaw x y speedx speedy accelx accely time orderedSpeed orderedHead\n";
 	if(bounds == NULL){
 		struct Bounds b = {-6000,6000,6000,-6000};
 		bds = &b;
