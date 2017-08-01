@@ -21,6 +21,12 @@ struct StreamFrame{
 	int16_t speedy;
 
 	/** The time in micro second between this frame and the previous frame */
-	unsigned long chrono;	
+	unsigned long chrono;
+	
+	/** The x accelerometer value **/
+	int16_t ax;
+	
+	/** The y accelerometer value **/
+	int16_t ay;
 };
 #endif
