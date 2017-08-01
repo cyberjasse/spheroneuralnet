@@ -10,7 +10,7 @@ PointlistTarget::PointlistTarget(std::string filename){
 	int16_t y;
 	while(file >> x){
 		file >> y;
-		struct StreamFrame sf = {0,x,y,0,0,0};
+		struct StreamFrame sf = {0,x,y,0,0,0,0,0};
 		list.push_back(sf);
 	}
 	file.close();

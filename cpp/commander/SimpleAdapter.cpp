@@ -8,13 +8,16 @@ TransformedFrame SimpleAdapter::normalizeFrame(struct StreamFrame currentstate, 
 	int16_t targetspeedy = targetstate.speedy;
 	int16_t currentspeedx = currentstate.speedx;
 	int16_t currentspeedy = currentstate.speedy;
+	int16_t currentaccelx = currentstate.ax;
+	int16_t currentaccely = currentstate.ay;
 	// rotation
 	lastangle = -currentstate.yaw; //rotation to apply
 	double radangle = DataAdapter::degreeToRadian( lastangle );
 	DataAdapter::rotation(&targetx, &targety, radangle);
 	DataAdapter::rotation(&targetspeedx, &targetspeedy, radangle);
 	DataAdapter::rotation(&currentspeedx, &currentspeedy, radangle);
-	struct TransformedFrame tf = {currentspeedx,currentspeedy, currentstate.chrono, targetx,targety, targetspeedx,targetspeedy};
+	DataAdapter::rotation(&currentaccelx, &currentaccely, radangle);
+	struct TransformedFrame tf = {currentspeedx,currentspeedy, currentstate.chrono, targetx,targety, targetspeedx,targetspeedy, currentaccelx,currentaccely};
 	return tf;
 }
 		

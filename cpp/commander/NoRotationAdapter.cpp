@@ -9,6 +9,8 @@ TransformedFrame NoRotationAdapter::normalizeFrame(struct StreamFrame currentsta
 	tf.time = targetstate.chrono;
 	tf.targetSpeedx = targetstate.speedx;
 	tf.targetSpeedy = targetstate.speedy;
+	tf.currentAccelx = targetstate.ax;
+	tf.currentAccely = targetstate.ay;
 	return tf;
 }
 

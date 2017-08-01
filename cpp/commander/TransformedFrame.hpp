@@ -20,5 +20,9 @@ struct TransformedFrame{
 	int targetSpeedx;
 	/** The y composant of the targeted speed.*/
 	int targetSpeedy;
+	/** The x composant of the current acceleration. In 4mG*/
+	int currentAccelx;
+	/** The y composant of the current acceleration. In 4mG*/
+	int currentAccely;
 };
 #endif
