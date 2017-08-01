@@ -1,15 +1,15 @@
-#include <sys/time.h>
+#include <time.h>
 
 #ifndef CHRONO_HPP
 #define CHRONO_HPP
 class chrono{
 	public:
-		struct timeval lasttime;
+		struct timespec lasttime;
 		bool started;
 		chrono();
 		void start();
 		unsigned long top();
 	private:
-		unsigned long minus(struct timeval t1, struct timeval t2);
+		unsigned long minus(struct timespec t1, struct timespec t2);
 };
 #endif
