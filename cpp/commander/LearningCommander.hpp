@@ -25,7 +25,7 @@ class LearningCommander : public StreamObserver{
 		DataAdapter *adapter;
 		Sphero *sphero;
 		Target *target;
-		const int INPUTSIZE = 4;
+		const int INPUTSIZE = 6;
 		const int OUTPUTSIZE = 1;
 		
 		/**

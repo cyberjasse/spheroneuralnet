@@ -27,14 +27,21 @@ int main(int argc, char* argv[]){
 	else{
 		sph = NULL;
 	}
+	//Create prototypes
+	const unsigned int HIDDENSIZE = 70;
+	const unsigned int INPUTSIZE  = 6;
+	const unsigned int OUTPUTSIZE = 1;
+	double** prototypes = new double*[HIDDENSIZE];
+	
 	//Create a LearningCOmmander
 	SimpleAdapter *adapter = new SimpleAdapter();
-	RBFnet *net = new RBFnet(4,2, 25, 250, -0.4);
+	RBFnet *net = new RBFnet(INPUTSIZE,OUTPUTSIZE,HIDDENSIZE , 200, -0.4);
 	LearningCommander *commander = new LearningCommander(sph, adapter, net);
 	//start training
-	commander->learnFromFile(filename, niteration);
+	commander->learnFromFile(filename, niteration,  0,1000000);
 	//if target file, drive
 	if(argc>3){
+		std::cerr << "training finished. Driving...\n";
 		std::string targetname = argv[3];
 		PointlistTarget *target = new PointlistTarget(targetname);
 		commander->setTarget(target);

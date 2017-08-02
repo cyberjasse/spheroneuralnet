@@ -18,7 +18,9 @@ void LearningCommander::compute(struct TransformedFrame transformed, double *spe
 	double input[INPUTSIZE] = { (double)(transformed.currentSpeedx),
 						(double)(transformed.currentSpeedy),
 						(double)(transformed.targetx),
-						(double)(transformed.targety)};/*,
+						(double)(transformed.targety),
+						(double)(transformed.currentAccelx),
+						(double)(transformed.currentAccely)};/*,
 						(double)(transformed.targetSpeedx),
 						(double)(transformed.targetSpeedy)};*/
 	
@@ -92,7 +94,7 @@ void LearningCommander::learnFromFile(std::string filename, int niteration, int 
 	std::vector<struct InputOutput> l = std::vector<struct InputOutput>();
 	std::ifstream file;
 	file.open(filename);
-	const int linesize = 8;
+	const int linesize = 10;
 	std::string garb;
 	// read the first line containing column names
 	for(int i=0 ; i<linesize ; i++){
@@ -105,7 +107,7 @@ void LearningCommander::learnFromFile(std::string filename, int niteration, int 
 	while(still){
 		struct StreamFrame frame;
 		if(file >> frame.yaw){
-			file >> frame.x >> frame.y >> frame.speedx >> frame.speedy >> frame.chrono;
+			file >> frame.x >> frame.y >> frame.speedx >> frame.speedy >> frame.ax >>frame.ay >> frame.chrono;
 			file >> speed >> head;
 			//std::cout<<"[DEBUG LearningCommander.cpp]"<<frame.x<<" "<<frame.y<<" "<<frame.speedx<<" "<<frame.speedy<<" "<<frame.chrono<<" "<<speed<<" "<<head<< std::endl;
 			if(frame.chrono>=timemin && frame.chrono<=timemax){
