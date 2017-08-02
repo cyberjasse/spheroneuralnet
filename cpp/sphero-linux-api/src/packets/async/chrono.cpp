@@ -2,7 +2,7 @@
 #include "chrono.hpp"
 #include <sys/time.h>
 #include <iostream>
-#define GETTIME
+#define GETPERIOD
 
 chrono::chrono(){
 	start();

@@ -93,13 +93,13 @@ bool SpheroSimpleStreamingPacket::extractPacket(int fd,  Sphero* sphero, SpheroP
 				cerr << "[SpheroSimpleStreamingPacket] incorrect checksum " << endl;
 			}
 			else{
-				yaw 	= get2bytesfromTable(3, rawdata);
-				x   	= get2bytesfromTable(5, rawdata);
-				y 		= get2bytesfromTable(7, rawdata);
-				speedX 	= get2bytesfromTable(9, rawdata);
-				speedY 	= get2bytesfromTable(11, rawdata);
-				accelX  = get2bytesfromTable(13, rawdata);
-				accelY  = get2bytesfromTable(15, rawdata);
+				accelX 	= get2bytesfromTable(3, rawdata);
+				accelY	= get2bytesfromTable(5, rawdata);
+				yaw 	= get2bytesfromTable(7, rawdata);
+				x   	= get2bytesfromTable(9, rawdata);
+				y   	= get2bytesfromTable(11, rawdata);
+				speedX  = get2bytesfromTable(13, rawdata);
+				speedY  = get2bytesfromTable(15, rawdata);
 				static chrono c = chrono();
 				StreamFrame frame = {yaw, x, y, speedX, speedY, c.top(), accelX, accelY};
 				sphero->notifyStream(&frame);
