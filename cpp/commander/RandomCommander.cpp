@@ -2,91 +2,134 @@
 #include "DataAdapter.hpp"
 #include <unistd.h>
 #include <stdlib.h>
+#include <time.h>
 
 int RandomCommander::getnear(int x, int epsilon){
 	int R = ( rand()%(2*epsilon) ) - epsilon;
 	return x+R;
 }
 
+void RandomCommander::setYawTarget(int target, int currentYaw, int minNsteps, int maxNsteps){
+	targetYaw = target;
+	yawNsteps = rand()%(maxNsteps-minNsteps) + minNsteps;
+	// find the rotation to do to each step
+	//firstly, find the direction
+	int antihorlogicDelta;
+	int horlogicDelta;
+	if(currentYaw < target){
+		antihorlogicDelta = target-currentYaw;
+		horlogicDelta = currentYaw+360-target;
+	}
+	else{
+		antihorlogicDelta = target+360-currentYaw;
+		horlogicDelta = currentYaw-target;
+	}
+	if(antihorlogicDelta < horlogicDelta)
+		yawstep = antihorlogicDelta/yawNsteps;
+	else
+		yawstep = -horlogicDelta/yawNsteps;
+}
+
+void RandomCommander::setSpeedTarget(int target, int currentSpeed, int minNsteps, int maxNsteps){
+	targetSpeed = target;
+	speedNsteps = rand()%(maxNsteps-minNsteps) + minNsteps;
+	speedstep = (target-currentSpeed)/speedNsteps;
+}
+
 void RandomCommander::notify(struct StreamFrame *frame){
 
 	// CONSTANTS HERE
-	const int maxspeed = 70;
-	const int maxspeedIfOut = 50;//maximum speed if out of the map
-	const int minspeed = 20;
-	const int maxdeltaspeed = 5;
-	const int maxdeltahead = 5;
-	const int maxdeltaAboutTurn = 70;
+	const int maxspeed = 50;
+	const int minspeed = 15;
+	const int maxdeltaAboutTurn = 50;
+	const int minNsteps = 3;
+	const int maxNsteps = 8;
+	const int minNstepsAboutTurn = 1; //minimum number of steps to do a about-turn
+	const int maxNstepsAboutTurn = 4; //maximum number of steps to do a about-turn
+	const int chanceSetNewTarget = 3;
 	
 	// Test if we exiting the map. If yes, about-turn
-	int maxs = maxspeedIfOut; //redefinition of max speed to decrease it if we exit the map
-	int nyaw; // the new yaw
-	if(frame->x < bds->left){
-		if(status != LEFT){
-			std::cerr << "on left border\n";
-			nyaw = getnear(90, maxdeltaAboutTurn);
-			status = LEFT;
-		}
-		else nyaw = chead;
+	int nyaw;
+	if(frame->x < bds->left && status != LEFT){ //test if we are out of the map, on the left. Then, test if we didn't already set a yaw target to do about-turn
+		std::cerr << "on left border\n";
+		nyaw = getnear(90, maxdeltaAboutTurn);
+		status = LEFT;
+		setYawTarget(nyaw, frame->yaw, minNstepsAboutTurn, maxNstepsAboutTurn);
 	}
-	else if(frame->x > bds->right){
-		if(status != RIGHT){
-			std::cerr << "on right border\n";
-			nyaw = getnear(270, maxdeltaAboutTurn);
-			status = RIGHT;
-		}
-		else nyaw = chead;
+	else if(frame->x > bds->right && status != RIGHT){
+		std::cerr << "on right border\n";
+		nyaw = getnear(270, maxdeltaAboutTurn);
+		status = RIGHT;
+		setYawTarget(nyaw, frame->yaw, minNstepsAboutTurn, maxNstepsAboutTurn);
 	}
-	else if(frame->y < bds->bottom){
-		if(status != BOTTOM){
-			std::cerr << "on bottom border\n";
-			nyaw = getnear(0, maxdeltaAboutTurn);
-			status = BOTTOM;
-		}
-		else nyaw = chead;
+	else if(frame->y < bds->bottom && status != BOTTOM){
+		std::cerr << "on bottom border\n";
+		nyaw = getnear(0, maxdeltaAboutTurn);
+		status = BOTTOM;
+		setYawTarget(nyaw, frame->yaw, minNstepsAboutTurn, maxNstepsAboutTurn);
 	}
-	else if(frame->y > bds->top){
-		if(status != TOP){
-			std::cerr << "on top border\n";
-			nyaw = getnear(180, maxdeltaAboutTurn);
-			status = TOP;
-		}
-		else nyaw = chead;
+	else if(frame->y > bds->top && status != TOP){
+		std::cerr << "on top border\n";
+		nyaw = getnear(180, maxdeltaAboutTurn);
+		status = TOP;
+		setYawTarget(nyaw, frame->yaw, minNstepsAboutTurn, maxNstepsAboutTurn);
 	}
 	else{
-	// if no, choose another one
-		status = IN;
-		maxs = maxspeed;
-		nyaw = getnear(frame->yaw, maxdeltahead);
+	// if no, perhaps choose a new yaw if the targeted yaw is reached.
+		if(yawNsteps == 0){
+			// probability to set a new target
+			if(rand()%chanceSetNewTarget==0){//then set a new target yaw
+				nyaw = rand()%360;
+				setYawTarget(nyaw, frame->yaw, minNsteps, maxNsteps);
+			}
+		}
 	}
-	// correct the neaw head
-	if(nyaw < 0)
-		nyaw += 360;
-	else if(nyaw > 259)
-		nyaw -= 360;
-	// Choose a new speed
-	cv = getnear(cv, maxdeltaspeed);
-	if(cv > maxs){
-		cv = maxs;
+	// perhaps choose a new speed if the targeted speed is reached.
+	if(rand()%chanceSetNewTarget==0){//then set a new target speed
+		int nspeed = rand()%(maxspeed-minspeed) + minspeed;
+		setSpeedTarget(nspeed, cv, minNsteps, maxNsteps);
 	}
-	else if(cv < minspeed){
-		cv = minspeed;
-	}
-	
 	// Send command
-	chead = nyaw;
-	sph->roll( (uint8_t)(cv) , (int16_t)(nyaw) );
+	roll();
 	// Save data in file
 	file<< frame->yaw <<" "
 		<< frame->x <<" "<< frame->y <<" "
 		<< frame->speedx <<" "<< frame->speedy <<" "
 		<< frame->ax <<" "<< frame->ay <<" "
 		<< frame->chrono <<" "
-		<< cv <<" "<< nyaw << std::endl;
+		<< cv <<" "<< chead << std::endl;
+}
+
+void RandomCommander::roll(){
+	// compute new head
+	if(yawNsteps <= 1){
+		chead = targetYaw;
+		yawNsteps = 0;
+	}
+	else{
+		chead += yawstep;
+		yawNsteps--;
+	}
+	//compute new speed
+	if(speedNsteps <= 1){
+		cv = targetSpeed;
+		speedNsteps = 0;
+	}
+	else{
+		cv += speedstep;
+		speedNsteps--;
+	}
+	// correct the neaw head
+	if(chead < 0)
+		chead += 360;
+	else if(chead > 259)
+		chead -= 360;
+	// send command
+	sph->roll( (uint8_t)(cv) , (int16_t)(chead) );
 }
 
 RandomCommander::RandomCommander(Sphero *sphero, std::string filename, struct Bounds *bounds){
-	srand(4000);
+	srand (time(NULL));
 	cv = 0;
 	sph = sphero;
 	file.open(filename);
@@ -99,5 +142,11 @@ RandomCommander::RandomCommander(Sphero *sphero, std::string filename, struct Bo
 		bds = bounds;
 	}
 	status = IN;
+	yawNsteps = 0;
+	speedNsteps = 0;
+	chead = 0;
+	cv = 0;
+	targetYaw = chead;
+	targetSpeed = cv;
 }
 
