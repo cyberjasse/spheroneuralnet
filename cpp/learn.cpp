@@ -28,14 +28,14 @@ int main(int argc, char* argv[]){
 		sph = NULL;
 	}
 	//Create prototypes
-	const unsigned int HIDDENSIZE = 70;
+	const unsigned int HIDDENSIZE = 10;
 	const unsigned int INPUTSIZE  = 6;
 	const unsigned int OUTPUTSIZE = 1;
 	double** prototypes = new double*[HIDDENSIZE];
 	
 	//Create a LearningCOmmander
 	SimpleAdapter *adapter = new SimpleAdapter();
-	RBFnet *net = new RBFnet(INPUTSIZE,OUTPUTSIZE,HIDDENSIZE , 200, -0.4);
+	RBFnet *net = new RBFnet(INPUTSIZE,OUTPUTSIZE,HIDDENSIZE , 200, -0.3);
 	LearningCommander *commander = new LearningCommander(sph, adapter, net);
 	//start training
 	commander->learnFromFile(filename, niteration,  0,1000000);

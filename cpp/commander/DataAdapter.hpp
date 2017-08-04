@@ -62,5 +62,12 @@ class DataAdapter{
 		 * If min=0 and max=159 and angle = -20, it returns 340
 		 */
 		static int getAngleBetween(int angle, int min, int max);
+		
+		/**
+		 * Get the minimum difference between two angles
+		 * So the angle between 2 direction less than 180 degrees
+		 * @return the negative difference if angle1 -> angle2 is clockwise. Else it is positive
+		 */
+		static int getAngleDiff(int angle1, int angle2);
 };
 #endif

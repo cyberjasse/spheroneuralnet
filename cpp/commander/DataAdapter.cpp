@@ -25,3 +25,20 @@ int DataAdapter::getAngleBetween(int angle, int min, int max){
 		return getAngleBetween(angle-360, min, max);
 	return angle;
 }
+
+int DataAdapter::getAngleDiff(int angle1, int angle2){
+	int counterClockwiseDelta;
+	int clockwiseDelta;
+	if(angle1 < angle2){
+		counterClockwiseDelta = angle2-angle1;
+		clockwiseDelta = angle1+360-angle2;
+	}
+	else{
+		counterClockwiseDelta = angle2+360-angle1;
+		clockwiseDelta = angle1-angle2;
+	}
+	if(counterClockwiseDelta < clockwiseDelta)
+		return counterClockwiseDelta;
+	else
+		return -clockwiseDelta;
+}

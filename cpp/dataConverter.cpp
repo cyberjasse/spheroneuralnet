@@ -57,6 +57,7 @@ int main(int argc, char *argv[]){
 	output << "@attribute accelx numeric\n";
 	output << "@attribute accely numeric\n";
 	output << "@attribute speed numeric\n";
+	output << "@attribute head numeric\n";
 	output << "@data\n";
 	for(int i=0 ; i<l.size()-1 ; i++){
 		struct TransformedFrame tframe = adapter->normalizeFrame( l[i].frame, l[i+1].frame);
@@ -64,7 +65,7 @@ int main(int argc, char *argv[]){
 		head = adapter->normalizeHead( l[i].headCommand);
 		// WRITE HERE
 		output << tframe.currentSpeedx <<","<< tframe.currentSpeedy <<","<< tframe.targetx <<","<< tframe.targety <<","<< tframe.currentAccelx <<","<< tframe.currentAccely<<","
-		<< speed <<std::endl;
+		<< speed <<","<< head << std::endl;
 	}
 	output.close();
 }

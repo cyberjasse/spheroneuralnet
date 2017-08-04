@@ -11,11 +11,24 @@
 #include <vector>
 #include "sphero/bluetooth/bluez_adaptor.h"
 #include "sphero/Sphero.hpp"
+#include "sphero/Streamer.hpp"
 #include "commander/RandomCommander.hpp"
+#include "commander/VirtualSphero.hpp"
+
+#define VIRTUAL
 
 string DEFAULT_ADDRESS = "68:86:E7:00:58:83";
 using namespace std;
 int main(int argc, char* argv[]){
+
+	/* ################################
+	   ##Define other parameters here##
+	   ################################*/
+	const short frequency  = 5;
+	const int   squareSize = 1000000;//cm
+	const int   maxSampling= 5000;
+
+	Streamer *sph;
 	//Check if there is a filename
 	string filename;
 	if(argc<2){
@@ -25,7 +38,7 @@ int main(int argc, char* argv[]){
 	else{
 		filename = argv[1];
 	}
-	
+	#ifdef REAL
 	//load the adress
 	string address;
 	if(argc<3){
@@ -35,9 +48,8 @@ int main(int argc, char* argv[]){
 	else{
 		address = argv[2];
 	}
-	
 	//create the Sphero object
-	Sphero *sph = new Sphero(address.c_str(), new bluez_adaptor());
+	sph = new Sphero(address.c_str(), new bluez_adaptor());
 	//connection
 	if(sph->connect()){
 		cout << " >connect() == true< " << endl;
@@ -47,14 +59,10 @@ int main(int argc, char* argv[]){
 		delete sph;
 		return 1;
 	}
-	
-	/* ################################
-	   ##Define other parameters here##
-	   ################################*/
-	
-	const short frequency  = 5;
-	const int   squareSize = 150;//cm
-	const int   maxSampling= 5000;
+	#endif
+	#ifdef VIRTUAL
+	sph = new VirtualSphero(10000);
+	#endif
 	
 	//Create the map
 	int halfsize = squareSize/2;

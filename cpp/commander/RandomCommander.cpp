@@ -12,22 +12,7 @@ int RandomCommander::getnear(int x, int epsilon){
 void RandomCommander::setYawTarget(int target, int currentYaw, int minNsteps, int maxNsteps){
 	targetYaw = target;
 	yawNsteps = rand()%(maxNsteps-minNsteps) + minNsteps;
-	// find the rotation to do to each step
-	//firstly, find the direction
-	int antihorlogicDelta;
-	int horlogicDelta;
-	if(currentYaw < target){
-		antihorlogicDelta = target-currentYaw;
-		horlogicDelta = currentYaw+360-target;
-	}
-	else{
-		antihorlogicDelta = target+360-currentYaw;
-		horlogicDelta = currentYaw-target;
-	}
-	if(antihorlogicDelta < horlogicDelta)
-		yawstep = antihorlogicDelta/yawNsteps;
-	else
-		yawstep = -horlogicDelta/yawNsteps;
+	yawstep = DataAdapter::getAngleDiff(currentYaw,targetYaw)/yawNsteps;
 }
 
 void RandomCommander::setSpeedTarget(int target, int currentSpeed, int minNsteps, int maxNsteps){
@@ -39,9 +24,9 @@ void RandomCommander::setSpeedTarget(int target, int currentSpeed, int minNsteps
 void RandomCommander::notify(struct StreamFrame *frame){
 
 	// CONSTANTS HERE
-	const int maxspeed = 50;
-	const int minspeed = 15;
-	const int maxdeltaAboutTurn = 50;
+	const int maxspeed = 170;
+	const int minspeed = 20;
+	const int maxdeltaAboutTurn = 60;
 	const int minNsteps = 3;
 	const int maxNsteps = 8;
 	const int minNstepsAboutTurn = 1; //minimum number of steps to do a about-turn
@@ -128,7 +113,7 @@ void RandomCommander::roll(){
 	sph->roll( (uint8_t)(cv) , (int16_t)(chead) );
 }
 
-RandomCommander::RandomCommander(Sphero *sphero, std::string filename, struct Bounds *bounds){
+RandomCommander::RandomCommander(Streamer *sphero, std::string filename, struct Bounds *bounds){
 	srand (time(NULL));
 	cv = 0;
 	sph = sphero;

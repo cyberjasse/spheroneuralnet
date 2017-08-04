@@ -1,6 +1,6 @@
 #ifndef RANDOMCOMMANDER_HPP
 #define RANDOMCOMMANDER_HPP
-#include "../sphero/Sphero.hpp"
+#include "../sphero/Streamer.hpp"
 #include "../sphero/packets/async/StreamObserver.hpp"
 #include <cstdint>
 #include <fstream>
@@ -51,9 +51,9 @@ class RandomCommander : public StreamObserver{
 		struct Bounds *bds;
 		
 		/** The file to write the input-output */
-		ofstream file;
+		std::ofstream file;
 		/** A pointer to the sphero to command */
-		Sphero *sph;
+		Streamer *sph;
 		
 		/** The status of the sphero */
 		char status;
@@ -90,7 +90,7 @@ class RandomCommander : public StreamObserver{
 		/**
 		 * @param bounds The bounds of the map. Set it to NULL for an infinite map.
 		 */
-		RandomCommander(Sphero *sphero, std::string filename, struct Bounds *bounds = NULL);
+		RandomCommander(Streamer *sphero, std::string filename, struct Bounds *bounds = NULL);
 		
 		virtual void notify(struct StreamFrame *frame);
 };

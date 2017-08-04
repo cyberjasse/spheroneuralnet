@@ -29,8 +29,7 @@
 
 #include "packets/answer/ColorStruct.hpp"
 #include "packets/answer/BTInfoStruct.hpp"
-#include "packets/async/StreamFrame.hpp"
-#include "packets/async/StreamObserver.hpp"
+#include "Streamer.hpp"
 
 //------------------------------------------------------------------- Constants
 
@@ -81,12 +80,13 @@ typedef dataHandler_t::listener_t callback_data_t;
 
 //------------------------------------------------------------ Class definition
 
-class Sphero
+class Sphero : public Streamer
 {
 	public:
-		void notifyStream(struct StreamFrame *frame);
-		void addStreamObserver(StreamObserver *so);
-		void startStream(uint16_t freq);
+		// override
+		virtual void notifyStream(struct StreamFrame *frame);
+		virtual void addStreamObserver(StreamObserver *so);
+		virtual void startStream(uint16_t freq);
 	
 		void setRawMotorValues(int16_t lpower, int16_t rpower, uint8_t lmode=0x01, uint8_t rmode=0x01);
 		//----------------------------------------------------------- Operators

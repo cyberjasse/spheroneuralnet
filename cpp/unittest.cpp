@@ -64,3 +64,10 @@ TEST_CASE("Testing DataAdapter normalize frame"){
 	CHECK(tf.targetSpeedx == 0);
 	CHECK(tf.targetSpeedy == round(60. / sqrt(2.)));
 }
+
+TEST_CASE("Testing diff between angles"){
+	CHECK(DataAdapter::getAngleDiff(40,80) == 40);
+	CHECK(DataAdapter::getAngleDiff(10,350) == -20);
+	CHECK(DataAdapter::getAngleDiff(80,40) == -40);
+	CHECK(DataAdapter::getAngleDiff(350,10) == 20);
+}
