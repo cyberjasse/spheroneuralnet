@@ -5,6 +5,7 @@
 #include <iostream>
 #include <fstream>
 #include "commander/SimpleAdapter.hpp"
+#include "commander/NoRotationAdapter.hpp"
 
 int main(int argc, char *argv[]){
 	DataAdapter *adapter = new SimpleAdapter;
@@ -49,7 +50,7 @@ int main(int argc, char *argv[]){
 		}
 	}
 	input.close();
-	output << "@relation streaming\n";
+	/*output << "@relation streaming\n";
 	output << "@attribute currentSpeedx numeric\n";
 	output << "@attribute currentSpeedy numeric\n";
 	output << "@attribute targetx numeric\n";
@@ -58,14 +59,24 @@ int main(int argc, char *argv[]){
 	output << "@attribute accely numeric\n";
 	output << "@attribute speed numeric\n";
 	output << "@attribute head numeric\n";
-	output << "@data\n";
+	output << "@data\n";*/
+	output << "currentSpeedx currentSpeedy targetx targety accelx accely OrderedSpeed OrderedHead\n";
+	std::string s = " ";
 	for(int i=0 ; i<l.size()-1 ; i++){
+		// test
+		if(l[i].frame.yaw < -179) std::cout << "WARNING a frame.yaw < -179\n";
+		else if(l[i].frame.yaw > 180) std::cout << "WARNING a frame.yaw > 180\n";
+		if(l[i].headCommand < 0) std::cout << "WARNING a headCommand < 0\n";
+		else if(l[i].headCommand > 359) std::cout << "WARNING a headCommand > 359\n";
+		if(l[i].speedCommand < 0) std::cout << "WARNING a speedCommand < 0\n";
+		else if(l[i].speedCommand > 255) std::cout << "WARNING a speedCommand > 255\n";
+		
 		struct TransformedFrame tframe = adapter->normalizeFrame( l[i].frame, l[i+1].frame);
 		speed = adapter->normalizeSpeed(l[i].speedCommand);
 		head = adapter->normalizeHead( l[i].headCommand);
 		// WRITE HERE
-		output << tframe.currentSpeedx <<","<< tframe.currentSpeedy <<","<< tframe.targetx <<","<< tframe.targety <<","<< tframe.currentAccelx <<","<< tframe.currentAccely<<","
-		<< speed <<","<< head << std::endl;
+		output << tframe.currentSpeedx <<s<< tframe.currentSpeedy <<s<< tframe.targetx <<s<< tframe.targety <<s<< tframe.currentAccelx <<s<< tframe.currentAccely<<s
+		<< speed <<s<< head << std::endl;
 	}
 	output.close();
 }

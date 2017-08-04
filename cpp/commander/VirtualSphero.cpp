@@ -8,7 +8,7 @@ void VirtualSphero::roll(uint8_t speed, uint16_t heading, uint8_t state){
 	const double maxSpeed = 147.0; // maximum speed
 	const double m = 3.2; // target speed will be m*speed
 	const double a = 1.5; // acceleration will be a*(target speed - current speed)
-	const double angularSpeed = 170.0; // angular speed
+	const double angularSpeed = 450.0; // angular speed
 	const double minSpeed = 1.5; // if current speed is < minSpeed and acceleration<0 then speed become 0
 	// Compute the new state about speed
 	double targetSpeed = m*speed;
@@ -17,7 +17,7 @@ void VirtualSphero::roll(uint8_t speed, uint16_t heading, uint8_t state){
 	if(currentSpeed<minSpeed && acceleration<0.0)
 		newSpeed = 0.0;
 	else
-		newSpeed = acceleration*streamingT;
+		newSpeed = currentSpeed + acceleration*streamingT;
 	// Compute the new state about angle
 	int deltaAngle = DataAdapter::getAngleDiff(orientation,heading);
 	double maxDeltaAngular = angularSpeed*streamingT;
@@ -34,6 +34,11 @@ void VirtualSphero::roll(uint8_t speed, uint16_t heading, uint8_t state){
 		else
 			newOrientation = orientation-maxDeltaAngular;
 	}
+	// correct angle
+	if(newOrientation > 359)
+		newOrientation -= 360;
+	else if(newOrientation < 0)
+		newOrientation += 360;
 	// Compute the new state about position
 	double radangle = DataAdapter::degreeToRadian(newOrientation);
 	speedx = newSpeed*cos(radangle);
@@ -48,8 +53,7 @@ void VirtualSphero::roll(uint8_t speed, uint16_t heading, uint8_t state){
 void VirtualSphero::notifyStream(){
 	struct StreamFrame sf;
 	int yaw = round(orientation);
-	DataAdapter::correctAngle(yaw);
-	sf.yaw = 
+	sf.yaw = DataAdapter::correctAngle(yaw);
 	sf.x = round(x);
 	sf.y = round(y);
 	sf.speedx = round(speedx);

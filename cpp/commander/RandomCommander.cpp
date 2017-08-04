@@ -27,10 +27,12 @@ void RandomCommander::notify(struct StreamFrame *frame){
 	const int maxspeed = 170;
 	const int minspeed = 20;
 	const int maxdeltaAboutTurn = 60;
-	const int minNsteps = 3;
-	const int maxNsteps = 8;
-	const int minNstepsAboutTurn = 1; //minimum number of steps to do a about-turn
-	const int maxNstepsAboutTurn = 4; //maximum number of steps to do a about-turn
+	const int minNstepsSpeed = 3;
+	const int maxNstepsSpeed = 8;
+	const int minNstepsYaw = 4;
+	const int maxNstepsYaw = 10;
+	const int minNstepsAboutTurn = 3; //minimum number of steps to do a about-turn
+	const int maxNstepsAboutTurn = 6; //maximum number of steps to do a about-turn
 	const int chanceSetNewTarget = 3;
 	
 	// Test if we exiting the map. If yes, about-turn
@@ -65,14 +67,14 @@ void RandomCommander::notify(struct StreamFrame *frame){
 			// probability to set a new target
 			if(rand()%chanceSetNewTarget==0){//then set a new target yaw
 				nyaw = rand()%360;
-				setYawTarget(nyaw, frame->yaw, minNsteps, maxNsteps);
+				setYawTarget(nyaw, frame->yaw, minNstepsYaw, maxNstepsYaw);
 			}
 		}
 	}
 	// perhaps choose a new speed if the targeted speed is reached.
 	if(rand()%chanceSetNewTarget==0){//then set a new target speed
 		int nspeed = rand()%(maxspeed-minspeed) + minspeed;
-		setSpeedTarget(nspeed, cv, minNsteps, maxNsteps);
+		setSpeedTarget(nspeed, cv, minNstepsSpeed, maxNstepsSpeed);
 	}
 	// Send command
 	roll();
@@ -107,7 +109,7 @@ void RandomCommander::roll(){
 	// correct the neaw head
 	if(chead < 0)
 		chead += 360;
-	else if(chead > 259)
+	else if(chead > 359)
 		chead -= 360;
 	// send command
 	sph->roll( (uint8_t)(cv) , (int16_t)(chead) );

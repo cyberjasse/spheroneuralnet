@@ -26,8 +26,8 @@ void LearningCommander::compute(struct TransformedFrame transformed, double *spe
 	
 	double output[OUTPUTSIZE];
 	learningmachine->compute(input, output);
-	*speed = output[0];
-	//*head = output[1];
+	//*speed = output[0];
+	*head = output[0];
 	if(print){
 		std::cout << "[input] ";
 		for(int i=0 ; i<INPUTSIZE ; i++)
@@ -72,7 +72,7 @@ void LearningCommander::learnFromList(std::vector<InputOutput> l, int niteration
 			int ip1 = i+1;
 			struct TransformedFrame tframe = adapter->normalizeFrame( l[i].frame, l[ip1].frame);
 			compute(tframe, &speed, &head,last);
-			expected[0] = adapter->normalizeSpeed(l[i].speedCommand);
+			expected[0] = adapter->normalizeHead(l[i].headCommand);
 			//expected[1] = adapter->normalizeHead( l[i].headCommand);
 			if( false){//(ip1)%3 == 0){
 				//take the sample for the test
