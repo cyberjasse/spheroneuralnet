@@ -53,7 +53,7 @@ int main(int argc, char* argv[]){
 	   ################################*/
 	
 	const short frequency  = 5;
-	const int   squareSize = 150;//cm
+	const int   squareSize = 60;//cm
 	const int   maxSampling= 5000;
 	
 	//Create the map

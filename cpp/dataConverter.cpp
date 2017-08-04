@@ -56,14 +56,38 @@ int main(int argc, char *argv[]){
 	output << "@attribute targety numeric\n";
 	output << "@attribute accelx numeric\n";
 	output << "@attribute accely numeric\n";
+	
+	output << "@attribute past1Speedx numeric\n";
+	output << "@attribute past1Speedy numeric\n";
+	output << "@attribute past1Targetx numeric\n";
+	output << "@attribute past1Targety numeric\n";
+	output << "@attribute past1Accelx numeric\n";
+	output << "@attribute past1Accely numeric\n";
+	
+	output << "@attribute past2Speedx numeric\n";
+	output << "@attribute past2Speedy numeric\n";
+	output << "@attribute past2Targetx numeric\n";
+	output << "@attribute past2Targety numeric\n";
+	output << "@attribute past2Accelx numeric\n";
+	output << "@attribute past2Accely numeric\n";
+	
+	output << "@attribute past3Speedx numeric\n";
+	output << "@attribute past3Speedy numeric\n";
+	output << "@attribute past3Targetx numeric\n";
+	output << "@attribute past3Targety numeric\n";
+	output << "@attribute past3Accelx numeric\n";
+	output << "@attribute past3Accely numeric\n";
+	
 	output << "@attribute speed numeric\n";
 	output << "@data\n";
+	std::string s=","; // separator
 	for(int i=0 ; i<l.size()-1 ; i++){
 		struct TransformedFrame tframe = adapter->normalizeFrame( l[i].frame, l[i+1].frame);
 		speed = adapter->normalizeSpeed(l[i].speedCommand);
 		head = adapter->normalizeHead( l[i].headCommand);
 		// WRITE HERE
-		output << tframe.currentSpeedx <<","<< tframe.currentSpeedy <<","<< tframe.targetx <<","<< tframe.targety <<","<< tframe.currentAccelx <<","<< tframe.currentAccely<<","
+		output << tframe.currentSpeedx <<s<< tframe.currentSpeedy <<s<< tframe.targetx <<s<< tframe.targety <<s<< tframe.currentAccelx <<s<< tframe.currentAccely<<s   
+		<< tframe.currentSpeedx <<s<< tframe.currentSpeedy <<s<< tframe.targetx <<s<< tframe.targety <<s<< tframe.currentAccelx <<s<< tframe.currentAccely<<s   
 		<< speed <<std::endl;
 	}
 	output.close();

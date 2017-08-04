@@ -1,4 +1,5 @@
 #include "RBFnet.hpp"
+#include "MLPnet.hpp"
 #include "Net.hpp"
 #include <cstdlib>
 #include <time.h>
@@ -28,34 +29,34 @@ double fRand(double fMin, double fMax)
 }
 
 int main(int argc, char* argv[]){
+	srand(time(NULL));//init seed
 	/*double **prototypes;
 	matrix(2,1, 0.0, prototypes);
 	std::cout << "prot:" << prototypes[0][0] << " , " << prototypes[1][0] << std::endl;
 	double **weights;
 	matrix(1,2, 0.5, weights);
 	std::cout << "ws:" << weights[0][0] << " , " << weights[0][1] << std::endl;*/
-	RBFnet net = RBFnet(2, 1, 20, 200.0, -0.5);
+	Net *net = new MLPnet(2, 1, 50, -0.2);
 	int i;
 	double input[2];
 	double output[1];
 	double backpropa[1];
-	srand(time(NULL));//init seed
 	double min = -100.0;
 	double max = 100.0;
 	//Practice time
-	for(i=0 ; i<500000 ; i++){
+	for(i=0 ; i<100000 ; i++){
 		input[0] = fRand(min,max);
 		input[1] = fRand(min,max);
-		net.compute(input, output);
+		net->compute(input, output);
 		double *expected = new double[1];
 		expected[0] = input[0] + input[1];
-		net.backpropagation(expected , backpropa);
+		net->backpropagation(expected , backpropa);
 	}
 	//Test time
 	for(i=0 ; i<20 ; i++){
 		input[0] = fRand(min,max);
 		input[1] = fRand(min,max);
-		net.compute(input, output);
+		net->compute(input, output);
 		double *expected = new double[1];
 		expected[0] = input[0] + input[1];
 		std::cout << "Got "<< output[0] << "  expected "<< expected[0] << std::endl;
@@ -65,6 +66,8 @@ int main(int argc, char* argv[]){
 	#endif
 }
 /*
+for the RBF
+
 With 1 input, 1 hidden neuron, 1 exit neuron, sd=5, mu=0, weight=0.5
 If input= 3 and expected output=3
 hidden neuron output=0.8352702114
