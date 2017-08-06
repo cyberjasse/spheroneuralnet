@@ -35,7 +35,7 @@ int main(int argc, char* argv[]){
 	
 	//Create a LearningCOmmander
 	SimpleAdapter *adapter = new SimpleAdapter();
-	RBFnet *net = new RBFnet(INPUTSIZE,OUTPUTSIZE,HIDDENSIZE , 200, -0.3);
+	RBFnet *net = new RBFnet(INPUTSIZE,OUTPUTSIZE,HIDDENSIZE , 250, -0.3);
 	LearningCommander *commander = new LearningCommander(sph, adapter, net);
 	//start training
 	commander->learnFromFile(filename, niteration,  0,1000000);

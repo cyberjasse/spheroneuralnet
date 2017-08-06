@@ -72,8 +72,8 @@ void LearningCommander::learnFromList(std::vector<InputOutput> l, int niteration
 			int ip1 = i+1;
 			struct TransformedFrame tframe = adapter->normalizeFrame( l[i].frame, l[ip1].frame);
 			compute(tframe, &speed, &head,last);
-			expected[0] = adapter->normalizeHead(l[i].headCommand);
-			//expected[1] = adapter->normalizeHead( l[i].headCommand);
+			//expected[0] = adapter->normalizeSpeed(l[i].speedCommand);
+			expected[0] = adapter->normalizeHead( l[i].headCommand);
 			if( false){//(ip1)%3 == 0){
 				//take the sample for the test
 				int deltas = round(speed)-expected[0];
@@ -82,11 +82,11 @@ void LearningCommander::learnFromList(std::vector<InputOutput> l, int niteration
 			}
 			else{
 				//take the sample for the training
-				if(last)std::cout <<"[expected] "<<expected[0] << std::endl;
+				if(last)std::cout <<"[expected] "<<expected[0]<< std::endl;
 				errormean += learningmachine->backpropagation(expected, contribution) / listsize;
 			}
 		}
-		//std::cout << errormean << " " << testmean << std::endl;
+		std::cout << errormean << " " << testmean << std::endl;
 	}
 }
 

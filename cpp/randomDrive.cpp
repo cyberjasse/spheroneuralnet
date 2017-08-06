@@ -15,7 +15,7 @@
 #include "commander/RandomCommander.hpp"
 #include "commander/VirtualSphero.hpp"
 
-#define VIRTUAL
+#define REAL
 
 string DEFAULT_ADDRESS = "68:86:E7:00:58:83";
 using namespace std;
@@ -25,10 +25,9 @@ int main(int argc, char* argv[]){
 	   ##Define other parameters here##
 	   ################################*/
 	const short frequency  = 5;
-	const int   squareSize = 1000000;//cm
+	const int   squareSize = 50;//cm
 	const int   maxSampling= 5000;
 
-	Streamer *sph;
 	//Check if there is a filename
 	string filename;
 	if(argc<2){
@@ -39,6 +38,7 @@ int main(int argc, char* argv[]){
 		filename = argv[1];
 	}
 	#ifdef REAL
+	Sphero *sph;
 	//load the adress
 	string address;
 	if(argc<3){
@@ -61,6 +61,7 @@ int main(int argc, char* argv[]){
 	}
 	#endif
 	#ifdef VIRTUAL
+	Streamer *sph;
 	sph = new VirtualSphero(10000);
 	#endif
 	
