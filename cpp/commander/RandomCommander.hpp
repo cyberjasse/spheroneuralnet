@@ -24,6 +24,10 @@ enum Status{
 	RIGHT, // out of the map, on the right
 	TOP, // out of the map, on the top
 	BOTTOM, // out of the map, on the bottom
+	LEFTTOP,
+	LEFTBOTTOM,
+	RIGHTTOP,
+	RIGHTBOTTOM
 };
 
 /**
@@ -80,6 +84,14 @@ class RandomCommander : public StreamObserver{
 		 * @param maxNsteps The maximal number of steps to reach the targeted speed
 		 */
 		void setSpeedTarget(int target, int currentSpeed, int minNsteps, int maxNsteps);
+		
+		/**
+		 * Perform a about-turn
+		 * @param angle The yaw to set to perform the about-turn
+		 * @param The current yaw
+		 * @return The target yaw chosen
+		 */
+		int aboutTurn(int angle, int currentYaw);
 		
 		/**
 		 * With all those private arguments, generate command and send it

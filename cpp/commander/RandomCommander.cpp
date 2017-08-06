@@ -21,48 +21,95 @@ void RandomCommander::setSpeedTarget(int target, int currentSpeed, int minNsteps
 	speedstep = (target-currentSpeed)/speedNsteps;
 }
 
+int RandomCommander::aboutTurn(int angle, int currentYaw){
+
+	const int maxdeltaAboutTurn = 70; //less than 90
+	const int minNstepsAboutTurn = 2; //minimum number of steps to do a about-turn
+	const int maxNstepsAboutTurn = 5; //maximum number of steps to do a about-turn
+	
+	int nyaw = getnear(angle, maxdeltaAboutTurn);
+	setYawTarget(nyaw, currentYaw, minNstepsAboutTurn, maxNstepsAboutTurn);
+	return nyaw;
+}
+
 void RandomCommander::notify(struct StreamFrame *frame){
 
 	// CONSTANTS HERE
-	const int maxspeed = 170;
-	const int minspeed = 20;
-	const int maxdeltaAboutTurn = 60;
+	const int maxspeed = 70; //less than 255
+	const int minspeed = 20; //less than 255
 	const int minNstepsSpeed = 3;
 	const int maxNstepsSpeed = 8;
-	const int minNstepsYaw = 4;
+	const int minNstepsYaw = 3;
 	const int maxNstepsYaw = 10;
-	const int minNstepsAboutTurn = 3; //minimum number of steps to do a about-turn
-	const int maxNstepsAboutTurn = 6; //maximum number of steps to do a about-turn
 	const int chanceSetNewTarget = 3;
 	
 	// Test if we exiting the map. If yes, about-turn
 	int nyaw;
-	if(frame->x < bds->left && status != LEFT){ //test if we are out of the map, on the left. Then, test if we didn't already set a yaw target to do about-turn
-		std::cerr << "on left border\n";
-		nyaw = getnear(90, maxdeltaAboutTurn);
-		status = LEFT;
-		setYawTarget(nyaw, frame->yaw, minNstepsAboutTurn, maxNstepsAboutTurn);
+	// convert frame->yaw
+	frame->yaw = -frame->yaw; //because when we drive to 90, yaw become -90
+	frame->yaw = DataAdapter::getAngleBetween(frame->yaw, 0, 359);
+	if(frame->x < bds->left){//test if we are out of the map, on the left
+		if(frame->y < bds->bottom){
+			if(status != LEFTBOTTOM){
+				std::cerr << "on left-bottom corner\n";
+				status = LEFTBOTTOM;
+				nyaw = aboutTurn(45, frame->yaw);
+			}
+		}
+		else if(frame->y > bds->top){
+			if(status != LEFTTOP){
+				std::cerr << "on left-top corner\n";
+				status = LEFTTOP;
+				nyaw = aboutTurn(135, frame->yaw);
+			}
+		}
+		else if(status != LEFT){//test if we didn't already set a yaw target to do about-turn 
+			std::cerr << "on left border\n";
+			nyaw = aboutTurn(90, frame->yaw);
+			status = LEFT;
+		}
 	}
-	else if(frame->x > bds->right && status != RIGHT){
-		std::cerr << "on right border\n";
-		nyaw = getnear(270, maxdeltaAboutTurn);
-		status = RIGHT;
-		setYawTarget(nyaw, frame->yaw, minNstepsAboutTurn, maxNstepsAboutTurn);
+	if(frame->x > bds->right){
+		if(frame->y < bds->bottom){
+			if(status != RIGHTBOTTOM){
+				std::cerr << "on right-bottom corner\n";
+				status = RIGHTBOTTOM;
+				nyaw = aboutTurn(315, frame->yaw);
+			}
+		}
+		else if(frame->y > bds->top){
+			if(status != RIGHTTOP){
+				std::cerr << "on right-top corner\n";
+				status = RIGHTTOP;
+				nyaw = aboutTurn(225, frame->yaw);
+			}
+		}
+		else if(status != RIGHT){//test if we didn't already set a yaw target to do about-turn 
+			std::cerr << "on right border\n";
+			nyaw = aboutTurn(270, frame->yaw);
+			status = RIGHT;
+		}
 	}
-	else if(frame->y < bds->bottom && status != BOTTOM){
-		std::cerr << "on bottom border\n";
-		nyaw = getnear(0, maxdeltaAboutTurn);
-		status = BOTTOM;
-		setYawTarget(nyaw, frame->yaw, minNstepsAboutTurn, maxNstepsAboutTurn);
+	else if(frame->y < bds->bottom){
+		if(status != BOTTOM){
+			std::cerr << "on bottom border\n";
+			status = BOTTOM;
+			nyaw = aboutTurn(0, frame->yaw);
+		}
 	}
-	else if(frame->y > bds->top && status != TOP){
-		std::cerr << "on top border\n";
-		nyaw = getnear(180, maxdeltaAboutTurn);
-		status = TOP;
-		setYawTarget(nyaw, frame->yaw, minNstepsAboutTurn, maxNstepsAboutTurn);
+	else if(frame->y > bds->top){
+		if(status != TOP){
+			std::cerr << "on top border\n";
+			status = TOP;
+			nyaw = aboutTurn(180, frame->yaw);
+		}
 	}
 	else{
 	// if no, perhaps choose a new yaw if the targeted yaw is reached.
+		if(status != IN){
+			status = IN;
+			std::cerr << "IN the map\n";
+		}
 		if(yawNsteps == 0){
 			// probability to set a new target
 			if(rand()%chanceSetNewTarget==0){//then set a new target yaw
@@ -85,6 +132,7 @@ void RandomCommander::notify(struct StreamFrame *frame){
 		<< frame->ax <<" "<< frame->ay <<" "
 		<< frame->chrono <<" "
 		<< cv <<" "<< chead << std::endl;
+	std::cout << "x="<<frame->x<<" y="<<frame->y<<" yaw="<<frame->yaw<<" chead="<<chead<<" target="<<targetYaw<<std::endl;
 }
 
 void RandomCommander::roll(){
