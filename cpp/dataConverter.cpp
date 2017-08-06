@@ -6,9 +6,10 @@
 #include <fstream>
 #include "commander/SimpleAdapter.hpp"
 #include "commander/NoRotationAdapter.hpp"
+#include "commander/MirrorAdapter.hpp"
 
 int main(int argc, char *argv[]){
-	DataAdapter *adapter = new SimpleAdapter;
+	DataAdapter *adapter = new MirrorAdapter;
 
 	//test if parameters are here
 	if(argc<3){
@@ -50,7 +51,7 @@ int main(int argc, char *argv[]){
 		}
 	}
 	input.close();
-	/*output << "@relation streaming\n";
+	output << "@relation streaming\n";
 	output << "@attribute currentSpeedx numeric\n";
 	output << "@attribute currentSpeedy numeric\n";
 	output << "@attribute targetx numeric\n";
@@ -59,9 +60,9 @@ int main(int argc, char *argv[]){
 	output << "@attribute accely numeric\n";
 	output << "@attribute speed numeric\n";
 	output << "@attribute head numeric\n";
-	output << "@data\n";*/
-	output << "currentSpeedx currentSpeedy targetx targety accelx accely OrderedSpeed OrderedHead\n";
-	std::string s = " ";
+	output << "@data\n";/*
+	output << "currentSpeedx currentSpeedy targetx targety accelx accely OrderedSpeed OrderedHead\n";*/
+	std::string s = ",";
 	for(int i=0 ; i<l.size()-1 ; i++){
 		// test
 		if(l[i].frame.yaw < -179) std::cout << "WARNING a frame.yaw < -179\n";
