@@ -31,8 +31,17 @@ double Sigmoid::f(double x){
 }
 
 double Sigmoid::df(double x){
+if(x > 100000 || x < -100000){
+	std::cerr << "[Sigmoid.cpp] in df, x = "<<x<<std::endl;
+	exit (EXIT_FAILURE);
+}
 	double ex = exp(-l*x);
 	double den = 1+ex;
 	den = den*den;
-	return l*ex/den;
+	double toreturn =  l*ex/den;
+if(toreturn > 100000 || toreturn < -100000){
+	std::cerr << "[Sigmoid.cpp] in df, toreturn = "<<x<<std::endl;
+	exit (EXIT_FAILURE);
+}
+	return toreturn;
 }

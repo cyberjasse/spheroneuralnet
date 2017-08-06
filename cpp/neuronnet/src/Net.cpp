@@ -1,4 +1,6 @@
 #include "Net.hpp"
+#include <iostream>
+#include <stdlib.h>
 Net::Net(Layer **layers, unsigned int size){
 	ls = layers;
 	nLayers = size;
@@ -27,6 +29,10 @@ double Net::backpropagation(double expected[], double thisContributions[]){
 	for(int i=0 ; i<errorSize ; i++){
 		double delta = lastOutput[i]-expected[i];
 		layerIn[i] = delta;//for the dQ/df[i] where i is an exit neuron
+if(layerIn[i] < -100000 || layerIn[i] > 100000){
+	std::cerr << "[Net] layerIn[i] = "<<layerIn[i]<<std::endl;
+	exit (EXIT_FAILURE);
+}
 		error += delta*delta;//for Q
 	}
 	//backpropagation
@@ -38,6 +44,14 @@ double Net::backpropagation(double expected[], double thisContributions[]){
 	}
 	thisContributions = layerIn;
 	return error/2;
+}
+
+neuronSize_t Net::getInputSize(){
+	return ls[0]->ns[0]->N;
+}
+
+layerSize_t Net::getOutputSize(){
+	return ls[nLayers-1]->size;
 }
 
 #ifdef NEUROPRINT

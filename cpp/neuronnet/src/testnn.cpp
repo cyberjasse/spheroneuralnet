@@ -36,13 +36,13 @@ int main(int argc, char* argv[]){
 	double **weights;
 	matrix(1,2, 0.5, weights);
 	std::cout << "ws:" << weights[0][0] << " , " << weights[0][1] << std::endl;*/
-	Net *net = new MLPnet(2, 1, 50, -0.2);
+	Net *net = new MLPnet(2, 1, 15, -0.2);
 	int i;
 	double input[2];
 	double output[1];
 	double backpropa[1];
-	double min = -100.0;
-	double max = 100.0;
+	double min = -1.0;
+	double max = 1.0;
 	//Practice time
 	for(i=0 ; i<100000 ; i++){
 		input[0] = fRand(min,max);
@@ -51,6 +51,7 @@ int main(int argc, char* argv[]){
 		double *expected = new double[1];
 		expected[0] = input[0] + input[1];
 		net->backpropagation(expected , backpropa);
+		std::cout << "[testnn] iteration "<< i <<" : O="<<output[0]<<" E="<<expected[0]<<std::endl;
 	}
 	//Test time
 	for(i=0 ; i<20 ; i++){
@@ -59,7 +60,7 @@ int main(int argc, char* argv[]){
 		net->compute(input, output);
 		double *expected = new double[1];
 		expected[0] = input[0] + input[1];
-		std::cout << "Got "<< output[0] << "  expected "<< expected[0] << std::endl;
+		std::cout << "Got "<< output[0] << "  expected "<<input[0]<<"+"<<input[1]<<"= "<< expected[0] << std::endl;
 	}
 	#ifdef NEUROPRINT
 	net.neuroprint();

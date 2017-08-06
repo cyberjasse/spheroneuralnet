@@ -40,6 +40,10 @@ class Net{
 		 */
 		virtual double backpropagation(double expected[], double thisContributions[]);
 		
+		virtual neuronSize_t getInputSize();
+		
+		virtual layerSize_t getOutputSize();
+		
 		#ifdef NEUROPRINT
 		/**
 		 * @brief print current neuron parameters
