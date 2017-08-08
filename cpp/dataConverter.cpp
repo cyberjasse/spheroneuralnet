@@ -9,7 +9,7 @@
 #include "commander/MirrorAdapter.hpp"
 
 int main(int argc, char *argv[]){
-	DataAdapter *adapter = new MirrorAdapter;
+	DataAdapter *adapter = new SimpleAdapter;
 
 	//test if parameters are here
 	if(argc<3){
