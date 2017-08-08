@@ -10,6 +10,7 @@
 \usepackage{cite}
 \usepackage{hyperref}
 \usepackage{amsmath}
+\usepackage{amssymb}
 \usepackage{amsthm}
 \usepackage{booktabs}% http://ctan.org/pkg/booktabs
 \newcommand{\tabitem}{~~\llap{\textbullet}~~}
@@ -84,7 +85,7 @@ Le langage \textbf{Qt} sera utilisé pour créer les interfaces graphiques.
 Cela nous permet de créer facilement des interfaces munies de boutons, menus et fenêtre afin de tracer la trajectoire.
 De plus, l'implémentation du réseau de neurones pourra être directement utilisée dans un script \textbf{Qt}.
 
-\subsection{Diagramme de classe}
+\subsection{Implémentation d'un réseau de neurones}
 Afin d'expliquer la structure de l'implémentation du réseau de neurone, nous allons tout d'abord expliquer pourquoi l'implémentation d'un neurone est indépendant de sa position et du modèle du réseau de neurones.
 Et grâce à cette propriété, nous pouvons donc connecter n'importe quelle couche de neurones avec une autre.
 Nous pourrions donc facilement passer à une méthode d'apprentissage par modèle différentiable (Section \ref{sec:appmodele}) si cela s'avère nécessaire.
@@ -122,8 +123,9 @@ Le tableau retourné est stocké dans \texttt{thisContribution}.
 Pour chaque entrée $x_j$ du neurone $i$, la $j$\textsuperscript{ième} valeur du tableau retourné est $\partiel{Q}{f_i}\partiel{f_i}{x_j}$.
 Ces valeurs sont utilisées pour effectuer la rétropropagation de la couche précédente.
 
-%\newpage
-%\section{Validation}
+\input{command}
+
+\input{experimentation}
 
 \subsection*{Remerciements}
 \noindent Je remercie Monsieur Pierre \textsc{Hauweele} de m'avoir proposé un projet qui est exactement dans le domaine que je voulais, de son aide et de la direction de mon projet.\\

@@ -1,0 +1,56 @@
+\subsection{Expérimentation}
+Observons ensuite le résultat de l'apprentissage des réseaux de neurones sur les données issues de la commande aléatoire.
+
+\newcommand{\actu}[1]{#1_{\text{actuelle}}}
+\newcommand{\target}[1]{#1_{\text{target}}}
+\newcommand{\xactu}{\actu{X}}
+\newcommand{\yactu}{\actu{Y}}
+\newcommand{\vactu}{\actu{V}}
+\newcommand{\vtarget}{\target{V}}
+\newcommand{\oactu}{\actu{O}}
+\newcommand{\otarget}{\target{O}}
+\subsubsection{Test du réseau de neurones}
+Afin de vérifier si le réseau de neurones implémenté ne contient pas d'erreur, il sera d'abord utilisé pour une Sphero virtuelle.
+Un modèle très simple de Sphéro a été implémenté. Ce modèle ne simule pas la vitesse et l'inertie angulaire.
+Le modèle est le suivant: Soit
+\begin{itemize}
+ \item $(\xactu, \yactu)$ la position actuelle en cm,
+ \item $\vactu$ la vitesse actuelle en cm/s
+ \item $\vtarget$ la vitesse commandée d'unité inconnue,
+ \item $\oactu$ l'orientation en degrés,
+ \item $\otarget$ l'orientation commandée en degrés,
+ \item $T$ la période de streaming.
+\end{itemize}
+\[ \text{acceleration} = a(\vtarget - \vactu)\]
+Où $a \in \mathbb{R}^{+}$ est un paramètre.
+\[ \text{Nouvelle vitesse} = \vactu + \text{acceleration} T \]
+Posons $d$ la différence entre $\otarget$ et $\oactu$, négatif si le sens de $\oactu \rightarrow \otarget$ est horlogique.
+Alors
+\[ \text{Nouvelle orientation} = \oactu + d \]
+Nouvelle vitesse et Nouvelle orientation sont limitée selon un paramètre.
+\begin{center}
+ \begin{tabular}{ll}
+  Nouvelle position = & $(\xactu + (\text{Nouvelle vitesse})\cos(\text{Nouvelle orientation})$,\\
+   & $\yactu + \text{Nouvelle vitesse}\sin(\text{Nouvelle orientation}))$
+ \end{tabular}
+\end{center}
+
+\subsubsection{Observation des données réelles}
+Observons les données fournies par la commande aléatoire sur la véritable Sphero.
+Dans la figure ? chaque point représente la position que doit atteindre la Sphero 200ms plus tard.
+Pour chaque point, la Sphero est en (0,0) et est dirigée vers la droite, parallèle à l'axe x.
+On pourrait s'attendre à ce que plus le point est vers le haut, plus la valeur de head est grande, comme on peut l'observer sur les données de commande aléatoire sur la Sphero virtuelle TODO.
+Mais ce n'est pas le cas, on observe un nuage de points aléatoires.
+Pour chaque attribut qu'on peut prendre 2 à 2, on n'observe pas de pattern.
+Il nous faudrait pouvoir voir en plus que 3 dimensions pour, peut-être observer un pattern.
+Mais en tout cas, il y en a un.
+C'est ce que nous allons voir dans l'expérimentation sur les données réelles.
+
+\subsubsection{Expérimentation sur données réelles}
+TODO\\
+\ssstitle{Avec données relatives à la position et l'orientation}
+\ssstitle{Avec données relatives à la position et l'orientation et ordered speed en attribut}
+\ssstitle{Avec données relatives à la position et l'orientation, ordered speed en attribut et en mirroir sur l'axe x}
+\ssstitle{Avec données relatives à la position et l'orientation, ordered speed en attribut et output non normalisé}
+\ssstitle{Avec données relatives à la position et l'orientation, ordered speed en attribut et input non normalisé}
+\ssstitle{Avec données relatives à la position et l'orientation, ordered speed en attribut, input et output non normalisés}
