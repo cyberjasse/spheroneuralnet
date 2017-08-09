@@ -1,0 +1,136 @@
+MultilayerPerceptron -L 0.3 -M 0.2 -N 1500 -V 0 -S 0 -E 20 -H 20
+=== 10fold Cross-validation ===
+=== Summary ===
+
+Correlation coefficient                  0.6944
+Mean absolute error                     23.305 
+Root mean squared error                 30.3125
+Relative absolute error                 76.6892 %
+Root relative squared error             75.0038 %
+Total Number of Instances             3411  
+
+with ordered speed as atribute
+MultilayerPerceptron -L 0.3 -M 0.2 -N 1500 -V 0 -S 0 -E 20 -H 20
+
+=== 10fold Cross-validation ===
+=== Summary ===
+
+Correlation coefficient                  0.717 
+Mean absolute error                     22.9292
+Root mean squared error                 29.5997
+Relative absolute error                 75.4526 %
+Root relative squared error             73.24   %
+Total Number of Instances             3411
+
+Without the current y speed
+CfsSubsetEval Best first
+=== Attribute selection 10 fold cross-validation seed: 1 ===
+
+number of folds (%)  attribute
+           3( 30 %)    1 currentSpeedx
+           0(  0 %)    2 currentSpeedy
+           7( 70 %)    3 targetx
+           9( 90 %)    4 targety
+           3( 30 %)    5 accelx
+          10(100 %)    6 accely
+          
+Without the current y speed
+MultilayerPerceptron -L 0.3 -M 0.2 -N 1500 -V 0 -S 0 -E 20 -H 20
+=== Cross-validation ===
+=== Summary ===
+
+Correlation coefficient                  0.5321
+Mean absolute error                     28.406 
+Root mean squared error                 36.5678
+Relative absolute error                 93.4748 %
+Root relative squared error             90.4816 %
+Total Number of Instances             3411  
+           6( 60 %)    7 speed
+
+With current y speed, with ordered speed, in MIRROR
+MultilayerPerceptron -L 0.3 -M 0.2 -N 1500 -V 0 -S 0 -E 20 -H 20
+=== Cross-validation ===
+=== Summary ===
+
+Correlation coefficient                  0.6374
+Mean absolute error                     23.1956
+Root mean squared error                 31.3031
+Relative absolute error                 78.9438 %
+Root relative squared error             79.0231 %
+Total Number of Instances             2562 
+
+with ordered speed, not in mirror but output non normalized
+=== Cross-validation ===
+=== Summary ===
+
+Correlation coefficient                  0.0429
+Mean absolute error                     54.2931
+Root mean squared error                 73.5398
+Relative absolute error                178.6611 %
+Root relative squared error            181.9634 %
+Total Number of Instances             3411
+
+with ordered speed, input non normalized
+=== Cross-validation ===
+=== Summary ===
+
+Correlation coefficient                  0.0147
+Mean absolute error                    143.7387
+Root mean squared error                182.9671
+Relative absolute error                472.9975 %
+Root relative squared error            452.7252 %
+Total Number of Instances             3411 
+
+with ordered speed, input and output non normalized
+=== Cross-validation ===
+=== Summary ===
+
+Correlation coefficient                 -0.0034
+Mean absolute error                    185.5248
+Root mean squared error                265.6863
+Relative absolute error                610.502  %
+Root relative squared error            657.4016 %
+Total Number of Instances             3411   
+
+With ordered speed, data normalized, but test12 and test13 as training set and test14 as test set
+MultilayerPerceptron -L 0.3 -M 0.2 -N 500 -V 0 -S 0 -E 20 -H 10
+=== Summary ===
+
+Correlation coefficient                  0.6175
+Mean absolute error                     30.8132
+Root mean squared error                 38.5678
+Relative absolute error                109.0188 %
+Root relative squared error            100.5365 %
+Total Number of Instances              804 
+
+With ordered speed, IB1 with test12 and test13 as training set and test14 as test set
+=== Summary ===
+
+Correlation coefficient                  0.2591
+Mean absolute error                     35.4316
+Root mean squared error                 46.9615
+Relative absolute error                125.3591 %
+Root relative squared error            122.4167 %
+
+with ordered speed, IB1, all data (12,13,14) as training set but 10fold validation
+=== Cross-validation ===
+=== Summary ===
+
+Correlation coefficient                  0.9985
+Mean absolute error                      0.1627
+Root mean squared error                  2.225 
+Relative absolute error                  0.5354 %
+Root relative squared error              5.5055 %
+Total Number of Instances             3411 
+
+with ordered speed, IB1, test14, 10fold validation
+=== Cross-validation ===
+=== Summary ===
+
+Correlation coefficient                  0.2684
+Mean absolute error                     32.5485
+Root mean squared error                 44.1206
+Relative absolute error                114.755  %
+Root relative squared error            115.1811 %
+Total Number of Instances              804 
+Total Number of Instances              804 

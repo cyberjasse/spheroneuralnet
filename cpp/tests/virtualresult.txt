@@ -1,0 +1,22 @@
+Head:
+=== Cross-validation ===
+=== Summary ===
+
+Correlation coefficient                  0.9988
+Mean absolute error                      0.57  
+Root mean squared error                  0.7508
+Relative absolute error                  5.1436 %
+Root relative squared error              4.9998 %
+Total Number of Instances             9999    
+
+
+Speed:
+=== Cross-validation ===
+=== Summary ===
+
+Correlation coefficient                  0.9938
+Mean absolute error                      2.9404
+Root mean squared error                  3.7157
+Relative absolute error                 11.3753 %
+Root relative squared error             11.7364 %
+Total Number of Instances             9999  
