@@ -26,6 +26,13 @@ cpp/sleep
 cpp/perf
 cpp/prototype
 cpp/neuronnet/src/testnn
+cpp/neuronnet/testnn
+cpp/randomDrive
+cpp/dataConverter
+cpp/aheadDrive
+cpp/unittest
+cpp/learn
+cpp/libcaffe.so*
 
 abandon/
 doc/
