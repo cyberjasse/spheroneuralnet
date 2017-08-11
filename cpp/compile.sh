@@ -3,6 +3,7 @@ BUILDFOLDER='build/'
 COMMANDERFOLDER='commander/'
 NEURONNETFOLDER='neuronnet/'
 THIS='compile.sh'
+CAFFEINCLUDES='-Icommander/caffe-master/include -Icommander/caffe-master/build/src'
 
 #test if the .so library is compiled
 if [ -f sphero-linux-api/libsphero.so ]
@@ -45,7 +46,7 @@ fi
 #compile the commander files
 echo "[${THIS}] Compile files in commander folder"
 cd ${COMMANDERFOLDER}
-g++ -std=c++11 -c *.cpp
+g++ -std=c++11 -c -Icaffe-master/include -Icaffe-master/build/src *.cpp
 cd ..
 mv ${COMMANDERFOLDER}*.o ${BUILDFOLDER}${COMMANDERFOLDER}
 #test if the neuronnet folder exist
@@ -57,17 +58,18 @@ else
 	mkdir ${BUILDFOLDER}${NEURONNETFOLDER}
 fi
 #compile the neuronnet files
-echo "[${THIS}] Compile files in neuronnet folder"
-NEURONNETPATH='neuronnet/src/'
-cd ${NEURONNETPATH}
-g++ -c *.cpp
-cd ../..
-mv ${NEURONNETPATH}*.o ${BUILDFOLDER}${NEURONNETFOLDER}
+#echo "[${THIS}] Compile files in neuronnet folder"
+#NEURONNETPATH='neuronnet/src/'
+#cd ${NEURONNETPATH}
+#g++ -c *.cpp
+#cd ../..
+#mv ${NEURONNETPATH}*.o ${BUILDFOLDER}${NEURONNETFOLDER}
 #now compile my files
 if [ -n "$1" ]
 then
 	echo "[${THIS}]    Compile ${FILE}.cpp ..."
-	g++ -DMAP -std=c++11 -c ${FILE}.cpp -o ${BUILDFOLDER}${FILE}.o && g++ -Lsphero-linux-api/ -o ${FILE} ${BUILDFOLDER}${FILE}.o ${BUILDFOLDER}${COMMANDERFOLDER}*.o ${BUILDFOLDER}${NEURONNETFOLDER}*.o -lsphero
+	g++ -std=c++11 -c ${CAFFEINCLUDES} ${FILE}.cpp -o ${BUILDFOLDER}${FILE}.o && \
+	g++ -Lsphero-linux-api/ -Lcommander/caffe-master/build/lib -L/usr/lib/x86_64-gnu/ -o ${FILE} ${BUILDFOLDER}${FILE}.o ${BUILDFOLDER}${COMMANDERFOLDER}*.o ${BUILDFOLDER}${NEURONNETFOLDER}*.o -lsphero -lcaffe -lglog -lboost_system
 else
 	echo "[${THIS}] No file entered in parameter. Only package are compiled."	
 fi

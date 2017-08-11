@@ -4,11 +4,11 @@
 #include "DataAdapter.hpp"
 #include "Target.hpp"
 #include "../sphero/Sphero.hpp"
-#include "../neuronnet/src/Net.hpp"
 #include <vector>
 
 #define INPUTSIZE 6
 #define OUTPUTSIZE 2
+#define OSIZE 1
 
 /**
  * A struct containing a StreamFrame and commands
@@ -24,7 +24,6 @@ struct InputOutput{
  */
 class LearningCommander : public StreamObserver{
 	private :
-		Net *learningmachine;
 		DataAdapter *adapter;
 		Sphero *sphero;
 		Target *target;
@@ -38,20 +37,8 @@ class LearningCommander : public StreamObserver{
 		/** standard deviation of outputs */
 		double outputSd[OUTPUTSIZE];
 		
-		/**
-		 * Call to learningmachine.compute() but providing a TransformedFrame as input and apply normalization before
-		 * @param speed The speed returned by the learning machine output
-		 * @param head The head returned by the learning machine output
-		 */
-		void compute(struct TransformedFrame tframe, double *speed, double *head, bool normalize, bool print);
-		
-		/**
-		 * Call to learningmachone.backpropagation() but apply normalization before
-		 */
-		double backpropagation(double *expected, bool normalize, bool print);
-	
 	public :
-		LearningCommander(Sphero *sph, DataAdapter *dadapter, Net *lm);
+		LearningCommander(Sphero *sph, DataAdapter *dadapter);
 		
 		/**
 		 * Set a Target object.
@@ -66,7 +53,7 @@ class LearningCommander : public StreamObserver{
 		 * @param niteration The number of times the commander will perform a learning from the list
 		 * @param normalize Set to true to normalize data
 		 */
-		void learnFromList(std::vector<InputOutput> l, int niteration, bool normalize=true);
+		void learnFromList(std::vector<InputOutput> l, bool normalize=true);
 		
 		/**
 		 * Same that learnFromList but providing a filename.
@@ -74,7 +61,7 @@ class LearningCommander : public StreamObserver{
 		 * @param timemin The minimum time between a frame and the previous to keep a frame
 		 * @param timemax The maximum time between a frame and the next to keep a frame
 		 */
-		void learnFromFile(std::string filename, int niteration,  int timemin=0, int timemax=2000000);
+		void learnFromFile(std::string filename, int timemin=0, int timemax=2000000);
 		
 		virtual void notify(struct StreamFrame *frame);
 };

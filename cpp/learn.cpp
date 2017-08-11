@@ -4,7 +4,6 @@
 #include "commander/LearningCommander.hpp"
 #include "commander/SimpleAdapter.hpp"
 #include "commander/PointlistTarget.hpp"
-#include "neuronnet/src/RBFnet.hpp"
 #include <iostream>
 #include <stdlib.h>
 #include "sphero/bluetooth/bluez_adaptor.h"
@@ -27,16 +26,12 @@ int main(int argc, char* argv[]){
 	else{
 		sph = NULL;
 	}
-	//Create prototypes
-	const unsigned int HIDDENSIZE = 30;
-	double** prototypes = new double*[HIDDENSIZE];
 	
 	//Create a LearningCOmmander
 	SimpleAdapter *adapter = new SimpleAdapter();
-	RBFnet *net = new RBFnet(INPUTSIZE,1,HIDDENSIZE , 3.0, -0.5);
-	LearningCommander *commander = new LearningCommander(sph, adapter, net);
+	LearningCommander *commander = new LearningCommander(sph, adapter);
 	//start training
-	commander->learnFromFile(filename, niteration,  0,1000000);
+	commander->learnFromFile(filename, 0,1000000);
 	//if target file, drive
 	if(argc>3){
 		std::cerr << "training finished. Driving...\n";

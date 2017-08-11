@@ -1,12 +1,15 @@
+#define CPU_ONLY
+#include <caffe/caffe.hpp>
+#include <memory>
+#include "caffe/layers/memory_data_layer.hpp"
 #include "LearningCommander.hpp"
 #include <iostream>
 #include <fstream>
 #include <math.h>
 
-LearningCommander::LearningCommander(Sphero *sph, DataAdapter *dadapter, Net *lm){
+LearningCommander::LearningCommander(Sphero *sph, DataAdapter *dadapter){
 	sphero = sph;
 	adapter = dadapter;
-	learningmachine = lm;
 	target = NULL;
 }
 
@@ -14,49 +17,8 @@ void LearningCommander::setTarget(Target *tar){
 	target = tar;
 }
 
-void LearningCommander::compute(struct TransformedFrame transformed, double *speed, double *head, bool normalize, bool print ){
-	double input[INPUTSIZE] = { (double)(transformed.currentSpeedx),
-						(double)(transformed.currentSpeedy),
-						(double)(transformed.targetx),
-						(double)(transformed.targety),
-						(double)(transformed.currentAccelx),
-						(double)(transformed.currentAccely)};/*,
-						(double)(transformed.targetSpeedx),
-						(double)(transformed.targetSpeedy)};*/
-	//apply normalization
-	if(normalize){
-		for(int i=0 ; i<INPUTSIZE ; i++){
-			input[i] = (input[i]-inputMeans[i]) / inputSd[i];
-		}
-	}
-	const int osize = 1;
-	double output[osize];
-	learningmachine->compute(input, output);
-	//*speed = output[0];
-	*head = output[0];
-	if(print){
-		std::cout << "[input] ";
-		for(int i=0 ; i<INPUTSIZE ; i++)
-			std::cout << input[i] <<" ";
-		std::cout << "[output] ";
-		for(int i=0 ; i<osize ; i++)
-			std::cout << output[i] <<" ";
-	}
-}
-
-double LearningCommander::backpropagation(double *expected, bool normalize, bool print){
-	double contribution[INPUTSIZE];
-	if(normalize){
-		expected[0] = (expected[0]-outputMeans[1]) / outputSd[1];
-	}
-	learningmachine->backpropagation(expected, contribution);
-	if(print){
-		std::cout <<"[expected] "<<expected[0]<< std::endl;
-	}
-}
-
 void LearningCommander::notify(struct StreamFrame *frame){
-	if(target != NULL){
+	/*if(target != NULL){
 		if(target->remaining() > 0){
 			// prepare input
 			struct StreamFrame targetstate = target->getTarget(frame);
@@ -70,10 +32,10 @@ void LearningCommander::notify(struct StreamFrame *frame){
 		else{
 			sphero->disconnect();
 		}
-	}
+	}*/
 }
 
-void LearningCommander::learnFromList(std::vector<InputOutput> l, int niteration, bool normalize){
+void LearningCommander::learnFromList(std::vector<InputOutput> l, bool normalize){
 	const int ratioTest = 3; //take 1 sample on 3 for the test
 	double errormean; //Mean of quadratic errors
 	double testmean; //Mean of test errors
@@ -90,7 +52,9 @@ void LearningCommander::learnFromList(std::vector<InputOutput> l, int niteration
 		speedlist[i] = adapter->normalizeSpeed(l[i].speedCommand);
 		headlist[i] = adapter->normalizeHead( l[i].headCommand);
 	}
-	// normalize data
+	
+	// normalize data ------------
+	
 	if(normalize){
 		for(int i=0 ; i<INPUTSIZE ; i++){
 			inputMeans[i] = 0.0;
@@ -143,24 +107,86 @@ void LearningCommander::learnFromList(std::vector<InputOutput> l, int niteration
 			outputSd[i] = sqrt(outputSd[i]);
 		}
 	}
-	//perform learning		
-	for(int iteration=0 ; iteration<niteration ; iteration++){
-		bool last = iteration==niteration-1;
-		errormean = 0.0;
-		for(int i=0 ; i<tflistSize ; i++){
-			compute(tflist[i], &speed, &head, normalize, last);
-			//take the sample for the training
-			expected[0] = headlist[i];
-			errormean += backpropagation(expected, normalize, last);
+	
+	// Convert data to MemoryDataLayer
+	
+	// memory allocation
+	const int BATCHSIZE = 100;
+	const int N = tflistSize/BATCHSIZE;
+	double *data = new double[BATCHSIZE*(INPUTSIZE+OSIZE)*N];//FIXME really *(inputsize+outputsize) ?
+	double *label = new double[BATCHSIZE*OSIZE*N];
+	// fill
+	int layersize = N*BATCHSIZE;
+	int index = -1;
+	for(int i=0; i<layersize ; i++){
+		index++ ; data[index] = (double)(tflist[i].currentSpeedx);
+		index++ ; data[index] = (double)(tflist[i].currentSpeedy);
+		index++ ; data[index] = (double)(tflist[i].targetx);
+		index++ ; data[index] = (double)(tflist[i].targety);
+		index++ ; data[index] = (double)(tflist[i].currentAccelx);
+		index++ ; data[index] = (double)(tflist[i].currentAccely);
+	}
+	index = -1;
+	for(int i=0; i<layersize ; i++){
+		index++ ; data[index] = (double)(headlist[i]);
+	}
+	//perform normalization
+	if(normalize){
+		//normalize inputs
+		index = -1;
+		for(int i=0 ; i<layersize ; i++){
+			for(int j=0 ; i<INPUTSIZE ; i++){
+				index ++;
+				data[index] = (data[index]-inputMeans[j]) / inputSd[j];
+			}
 		}
-		errormean /= tflistSize;
-		if(iteration%10==0){
-			std::cout << " errormean = " << errormean << std::endl;
+		//normalize labels (outputs)
+		index = -1;
+		for(int i=0 ; i<layersize ; i++){
+			for(int j=0 ; i<OSIZE ; i++){
+				index ++;
+				label[index] = (label[index]-outputMeans[j]) / outputSd[j];
+			}
 		}
 	}
+	
+	// perform training.  //inspired by https://medium.com/@shiyan/caffe-c-helloworld-example-with-memorydata-input-20c692a82a22
+	
+	// load solver parameters . solver = neural network. parameters = epochs, batch size, learning rate... It also load the net architecture.
+	caffe::SolverParameter solver_param;
+    caffe::ReadSolverParamsFromTextFileOrDie("./solver.prototxt", &solver_param);
+    // create the solver with loaded parameters
+    boost::shared_ptr<caffe::Solver<double> > solver(caffe::SolverRegistry<double>::CreateSolver(solver_param));
+    caffe::MemoryDataLayer<double> *dataLayer_trainnet = (caffe::MemoryDataLayer<double> *) (solver->net()->layer_by_name("inputdata").get());
+    	caffe::MemoryDataLayer<double> *dataLayer_testnet_ = (caffe::MemoryDataLayer<double> *) (solver->test_nets()[0]->layer_by_name("test_inputdata").get());
+	// provide data and label
+	dataLayer_testnet_->Reset(data, label, layersize);
+	dataLayer_trainnet->Reset(data, label, layersize);
+	// train the solver
+	solver->Solve();
+	
+	// test
+	
+	std::shared_ptr<caffe::Net<double> > testnet;
+	testnet.reset(new caffe::Net<double>("./model.prototxt", caffe::TEST));
+	testnet->ShareTrainedLayersWith(solver->net().get());
+	caffe::MemoryDataLayer<double> *dataLayer_testnet = (caffe::MemoryDataLayer<double> *) (testnet->layer_by_name("test_inputdata").get());
+	dataLayer_testnet_->Reset(data, label, layersize);
+	testnet->Forward();
+    boost::shared_ptr<caffe::Blob<double> > output_layer = testnet->blob_by_name("output");
+    const double* begin = output_layer->cpu_data();
+    const double* end = begin + layersize;
+    std::vector<float> result(begin, end);
+    index = -1;
+    for(int i=0 ; i<result.size() ; i++){
+    	index++;
+    	std::cout << " Got " << result[i] << "   expected " << label[index] << std::endl;
+    }
+    free(data);
+    free(label);
 }
 
-void LearningCommander::learnFromFile(std::string filename, int niteration, int timemin, int timemax){
+void LearningCommander::learnFromFile(std::string filename, int timemin, int timemax){
 	std::vector<struct InputOutput> l = std::vector<struct InputOutput>();
 	std::ifstream file;
 	file.open(filename);
@@ -189,5 +215,5 @@ void LearningCommander::learnFromFile(std::string filename, int niteration, int 
 			break;
 		}
 	}
-	learnFromList(l, niteration);
+	learnFromList(l);
 }
