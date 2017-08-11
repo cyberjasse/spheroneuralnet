@@ -2,18 +2,38 @@
 Passons maintenant à la descriptions des différentes classes et interfaces du système de commande.
 
 \newcommand{\classname}[1]{\textbf{\texttt{#1}}}
-\subsubsection{Diagramme}
-TODO INSERER DIAGRAMME
+\subsubsection{Structure}
+\begin{figure}
+ \centering
+ \includegraphics[width=0.8\textwidth]{../figures/commander.jpg}
+ \caption{Structure du système de commande}
+ \label{fig:commander}
+\end{figure}
+\begin{figure}
+ \centering
+ \includegraphics[width=\textwidth]{../../uml/commanderdiag.png}
+ \caption{Diagramme de classe dy système de commande.\footnotesize Généré par \href{http://plantuml.com/class-diagram}{plantUML}}
+ \label{fig:commanderdiag}
+\end{figure}
+
+En résumé, on inscrit le commander par machine learning à un Streamer.
+Ensuite on démare le streaming en donnant la fréquence $f$ au Streamer.
+Le Streamer va périodiquement notifier le commander d'une nouvelle frame de données issues du streaming.
+Le commander va demander au Target l'état cible à atteindre dans $\frac{1}{f}$ secondes d'après l'état actuel du Streamer.
+Le commander Passe ensuite l'état actuel et l'état à atteindre dans un DataAdapter qui a pour but de résumer les données et les fournir comme input au réseau de neurones.
+Ce DataAdapter se charge aussi de réduire le domaine d'entrée pour avoir une convergence plus rapide.
+Le commander récupère le output du réseau de neurones et le passe au DataAdapter qui éffectuera une transformation afin d'obtenir les commandes à envoyer directement au Streamer.
+Cette procédure est illustré dans la Figure \ref{fig:commander} est reprend les éléments suivants:
 \begin{itemize}
  \item \classname{StreamFrame}: Une structure contenant les données brutes du streaming.
   C'est à dire l'orientation de la Sphero, sa position, son vecteur vitesse et son vecteur d'accélération mais aussi le temps entre la récéption de cette frame et la précédente.
  \item \classname{StreamObserver}: Un objet qui pourra être notifié par un Streamer chaque fois que une \texttt{StreamFrame} est reçue.
-  LearningCommander mais aussi le commander par commandes aléatoires sont des StreamObservers.
+  LearningCommander mais aussi le commander par commandes aléatoires sont des StreamObservers. (Figure \ref{fig:commanderdiag})
  \item \classname{Streamer}: Un objet capable de fournir des données issues d'un streaming et les envoyer au StreamObserver qui lui est abonné.
-  La Sphero et VirtualSphero sont des streamers.
+  La Sphero et VirtualSphero sont des streamers. (Figure \ref{fig:commanderdiag})
  \item \classname{Target}: Fourni un état à atteindre d'après l'état actuelle de la Sphero.
  \item \classname{LearningCommander}: Il essaie d'atteindre l'état demandé par Target
- \item \classname{DataAdapter}: Transforme les données de streaming et de l'était à atteindre afin de réduire le domaine d'entrée des données à fournir au réseau de neurones.
+ \item \classname{DataAdapter}: Transforme les données de streaming et de l'état à atteindre afin de réduire le domaine d'entrée des données à fournir au réseau de neurones.
   Permet la transformation inverse.
  \item \classname{TransformedFrame}: Une structure contenant les données de streaming mais relatif à la position actuelle de la Sphero et relatif à son orientation,
   avec les données nécessaires sur l'état à atteindre.
@@ -71,5 +91,10 @@ Dans ce cas, la position de la Sphero risque d'être plus proche d'un autre poin
 %\ssstitle{Limitation}
 %\ssstitle{Solution à la limitation} TODO
 \subsubsection{Éditeur de trajectoire}
-Un interface graphique a été implémentée en Qt afin de tracer les trajectoires à la souris.
-TODO IMAGE ICI
+\begin{figure}
+ \centering
+ \includegraphics[scale=0.6]{../figures/targettrajectory.png}
+ \caption{Éditeur de trajectoire}
+ \label{fig:targettrajectory}
+\end{figure}
+Un interface graphique a été implémentée en Qt afin de tracer les trajectoires à la souris. (Figure \ref{fig:targettrajectory})
