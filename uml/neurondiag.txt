@@ -32,6 +32,9 @@ class Net {
 	+ void compute(double[] input, double[] output)
 	+ void backpropagation(double[] expected, double[] thisContribution)
 }
+class Sigmoid
+class Identity
+
 MLPneuron o-- "1" Function
 Neuron <|-- MLPneuron
 Neuron <|-- RBFneuron
@@ -39,4 +42,6 @@ Neuron <|-- RBFexitNeuron
 Layer *-- "1-*" Neuron
 Net *-- "1-*" Layer
 Net <|-- class RBFnet
+Function <|-- Sigmoid
+Function <|-- Identity
 @enduml

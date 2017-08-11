@@ -1,0 +1,63 @@
+@startuml
+
+interface Streamer{
+	+ void addStreamObserver(StreamObserver so)
+	+ void startStream(int frequency)
+	+ void roll(int speed, int head)
+}
+
+interface StreamObserver{
+	+ void notify(StreamFrame frame)
+}
+
+class Sphero{
+	+ void connect()
+	+ void disconnect()
+}
+
+class VirtualSphero
+
+class RandomCommander
+
+class LearningCommander
+
+interface DataAdapter{
+	+ TransformedFrame normalizeFrame(StreamFrame frame)
+	+ int normalizeSpeed(int speed)
+	+ int normalizeHead(int head)
+	+ int denormalizeSpeed(int transformedSpeed)
+	+ int denormalizeHead(int transformedHead)
+}
+
+class SimpleAdapter
+
+class MirrorAdapter
+
+interface Target{
+	+ StreamFrame getTargetState(StreamFrame currentState)
+}
+
+class FromPointlistTarget
+
+class Net
+
+class RBF
+
+class MLP
+
+Streamer <|-- Sphero
+Streamer <|-- VirtualSphero
+Streamer *-- "*" StreamObserver
+StreamObserver <|-- RandomCommander
+StreamObserver <|-- LearningCommander
+DataAdapter <|-- SimpleAdapter
+DataAdapter <|-- MirrorAdapter
+Target <|-- FromPointlistTarget
+LearningCommander o-- "1" DataAdapter
+LearningCommander o-- "1" Streamer
+LearningCommander o-- "1" Target
+LearningCommander o-- "1" Net
+Net <|-- RBF
+Net <|-- MLP
+
+@enduml
