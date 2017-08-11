@@ -61,7 +61,7 @@ class LearningCommander : public StreamObserver{
 		 * @param timemin The minimum time between a frame and the previous to keep a frame
 		 * @param timemax The maximum time between a frame and the next to keep a frame
 		 */
-		void learnFromFile(std::string filename, int timemin=0, int timemax=2000000);
+		void learnFromFiles(std::vector<std::string> filenames, int timemin=0, int timemax=2000000);
 		
 		virtual void notify(struct StreamFrame *frame);
 };

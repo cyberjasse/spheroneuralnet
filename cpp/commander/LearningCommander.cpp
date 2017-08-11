@@ -186,33 +186,35 @@ void LearningCommander::learnFromList(std::vector<InputOutput> l, bool normalize
     free(label);
 }
 
-void LearningCommander::learnFromFile(std::string filename, int timemin, int timemax){
+void LearningCommander::learnFromFiles(std::vector<std::string> filenames, int timemin, int timemax){
 	std::vector<struct InputOutput> l = std::vector<struct InputOutput>();
 	std::ifstream file;
-	file.open(filename);
 	const int linesize = 10;
 	std::string garb;
-	// read the first line containing column names
-	for(int i=0 ; i<linesize ; i++){
-		file >> garb;
-	}
-	// read line by line
-	int speed;
-	int head;
-	bool still = true;
-	while(still){
-		struct StreamFrame frame;
-		if(file >> frame.yaw){
-			file >> frame.x >> frame.y >> frame.speedx >> frame.speedy >> frame.ax >>frame.ay >> frame.chrono;
-			file >> speed >> head;
-			//std::cout<<"[DEBUG LearningCommander.cpp]"<<frame.x<<" "<<frame.y<<" "<<frame.speedx<<" "<<frame.speedy<<" "<<frame.chrono<<" "<<speed<<" "<<head<< std::endl;
-			if(frame.chrono>=timemin && frame.chrono<=timemax){
-				struct InputOutput io = {frame,(uint8_t)(speed),(int16_t)(head)};
-				l.push_back(io);
-			}
+	for(std::string filename : filenames){
+		file.open(filename);
+		// read the first line containing column names
+		for(int i=0 ; i<linesize ; i++){
+			file >> garb;
 		}
-		else{
-			break;
+		// read line by line
+		int speed;
+		int head;
+		bool still = true;
+		while(still){
+			struct StreamFrame frame;
+			if(file >> frame.yaw){
+				file >> frame.x >> frame.y >> frame.speedx >> frame.speedy >> frame.ax >>frame.ay >> frame.chrono;
+				file >> speed >> head;
+				//std::cout<<"[DEBUG LearningCommander.cpp]"<<frame.x<<" "<<frame.y<<" "<<frame.speedx<<" "<<frame.speedy<<" "<<frame.chrono<<" "<<speed<<" "<<head<< std::endl;
+				if(frame.chrono>=timemin && frame.chrono<=timemax){
+					struct InputOutput io = {frame,(uint8_t)(speed),(int16_t)(head)};
+					l.push_back(io);
+				}
+			}
+			else{
+				break;
+			}
 		}
 	}
 	learnFromList(l);
