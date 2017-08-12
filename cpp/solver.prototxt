@@ -1,0 +1,12 @@
+net: "model.prototxt"
+base_lr: 0.02
+lr_policy: "step"
+gamma: 0.5
+stepsize: 10000
+display: 1000
+max_iter: 100000
+snapshot: 100000
+snapshot_prefix: "SPHERO"
+solver_mode: CPU
+test_iter: 1
+test_interval: 200

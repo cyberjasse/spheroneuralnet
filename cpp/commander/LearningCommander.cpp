@@ -156,14 +156,7 @@ void LearningCommander::learnFromList(std::vector<InputOutput> l, bool tonormali
     caffe::MemoryDataLayer<float> *dataLayer_trainnet = (caffe::MemoryDataLayer<float> *) (solver->net()->layer_by_name("inputdata").get());
     caffe::MemoryDataLayer<float> *dataLayer_testnet_ = (caffe::MemoryDataLayer<float> *) (solver->test_nets()[0]->layer_by_name("test_inputdata").get());
 
-	float testab[] = {
-		0, 0, 0, 0, 0, 0,
-		1, 0, 0, 0, 0, 0,
-		0, 1, 0, 0, 0, 0,
-		1, 1, 0, 0, 0, 0};
-    float testc[] = {0, 1, 1, 0};
-
-    dataLayer_testnet_->Reset(testab, testc, 4);
+    dataLayer_testnet_->Reset(data, label, layersize);
 
     dataLayer_trainnet->Reset(data, label, layersize);
 
@@ -178,20 +171,21 @@ void LearningCommander::learnFromList(std::vector<InputOutput> l, bool tonormali
 
     caffe::MemoryDataLayer<float> *dataLayer_testnet = (caffe::MemoryDataLayer<float> *) (testnet->layer_by_name("test_inputdata").get());
 
-    dataLayer_testnet->Reset(testab, testc, 4);
+    dataLayer_testnet->Reset(data, label, layersize);
 
     testnet->Forward();
 
     boost::shared_ptr<caffe::Blob<float> > output_layer = testnet->blob_by_name("output");
 
     const float* begin = output_layer->cpu_data();
-    const float* end = begin + 4;
+    const float* end = begin + layersize;
     
     std::vector<float> result(begin, end);
 
-    for(int i = 0; i< result.size(); ++i)
-    {
-    	printf("input: %d xor %d,  truth: %f result by nn: %f\n", (int)testab[i*6 + 0], (int)testab[i*6+1], testc[i], result[i]);
+	index = -1;
+    for(int i = 0; i< result.size(); ++i){
+    	index++;
+    	std::cout << "  Got "<<result[i]<<"   expected "<<label[index]<<std::endl;
     }
 }
 
