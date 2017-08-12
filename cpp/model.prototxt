@@ -37,7 +37,7 @@ layer {
   bottom: "fulldata"
   top: "fc6"
   inner_product_param {
-    num_output: 10
+    num_output: 20
     weight_filler {
       type: "xavier"
     }
@@ -69,8 +69,8 @@ layer {
       type: "constant"
     }
   }
-
 }
+
 layer {
   name: "output"
   bottom: "fc7"
