@@ -36,7 +36,19 @@ void LearningCommander::notify(struct StreamFrame *frame){
 	}*/
 }
 
-void LearningCommander::learnFromList(std::vector<InputOutput> l, bool normalize){
+double LearningCommander::normalize(double value, double min, double max){
+	if(max==min)
+		max = min+1;
+	return (value - min) / (max - min);
+}
+
+double LearningCommander::denormalize(double value, double min, double max){
+	if(max==min)
+		max = min+1;
+	return (value * (max - min) + min);
+}
+
+void LearningCommander::learnFromList(std::vector<InputOutput> l, bool tonormalize){
 	const int ratioTest = 3; //take 1 sample on 3 for the test
 	float errormean; //Mean of quadratic errors
 	float testmean; //Mean of test errors
@@ -54,60 +66,44 @@ void LearningCommander::learnFromList(std::vector<InputOutput> l, bool normalize
 		headlist[i] = adapter->normalizeHead( l[i].headCommand);
 	}
 	
-	// normalize data ------------
+	// find minimums and maximums to normalize data ------------
 	
-	if(normalize){
-		for(int i=0 ; i<INPUTSIZE ; i++){
-			inputMeans[i] = 0.0;
-			inputSd[i] = 0.0;
-		}
-		for(int i=0 ; i<OUTPUTSIZE ; i++){
-			outputMeans[i] = 0.0;
-			outputSd[i] = 0.0;
-		}
-		//compute input means
-		for(int i=0 ; i<tflistSize ; i++){
-			inputMeans[0] += (float)(tflist[i].currentSpeedx);
-			inputMeans[1] += (float)(tflist[i].currentSpeedy);
-			inputMeans[2] += (float)(tflist[i].targetx);
-			inputMeans[3] += (float)(tflist[i].targety);
-			inputMeans[4] += (float)(tflist[i].currentAccelx);
-			inputMeans[5] += (float)(tflist[i].currentAccely);
-		}
-		for(int i=0 ; i<INPUTSIZE ; i++){
-			inputMeans[i] /= tflistSize;
-		}
-		//compute output means
-		for(int i=0 ; i<tflistSize ; i++){
-			outputMeans[0] += (float)speedlist[i];
-			outputMeans[1] += (float)headlist[i];
-		}
-		for(int i=0 ; i<OUTPUTSIZE ; i++){
-			outputMeans[i] /= tflistSize;
-		}
-		//compute input sd
-		for(int i=0 ; i<tflistSize ; i++){
-			inputSd[0] += pow( (float)(tflist[i].currentSpeedx)-inputMeans[0] , 2);
-			inputSd[1] += pow( (float)(tflist[i].currentSpeedy)-inputMeans[1] , 2);
-			inputSd[2] += pow( (float)(tflist[i].targetx)-inputMeans[2] , 2);
-			inputSd[3] += pow( (float)(tflist[i].targety)-inputMeans[3] , 2);
-			inputSd[4] += pow( (float)(tflist[i].currentAccelx)-inputMeans[4] , 2);
-			inputSd[5] += pow( (float)(tflist[i].currentAccely)-inputMeans[5] , 2);
-		}
-		for(int i=0 ; i<INPUTSIZE ; i++){
-			inputSd[i] /= tflistSize;
-			inputSd[i] = sqrt(inputSd[i]);
-			if(inputSd[i] == 0.0)
-				inputSd[i] = 1.0;
-		}
-		//compute output sd
-		for(int i=0 ; i<tflistSize ; i++){
-			outputSd[0] += pow( (float)speedlist[i]-outputMeans[0] , 2);
-			outputSd[1] += pow( (float)headlist[i]-outputMeans[1] , 2);
-		}
-		for(int i=0 ; i<OUTPUTSIZE ; i++){
-			outputSd[i] /= tflistSize;
-			outputSd[i] = sqrt(outputSd[i]);
+	if(tonormalize){
+		//initial values
+		inputMins[0] = (float)(tflist[0].currentSpeedx);
+		inputMins[1] = (float)(tflist[0].currentSpeedy);
+		inputMins[2] = (float)(tflist[0].targetx);
+		inputMins[3] = (float)(tflist[0].targety);
+		inputMins[4] = (float)(tflist[0].currentAccelx);
+		inputMins[5] = (float)(tflist[0].currentAccely);
+		for(int i=0; i<INPUTSIZE; i++)
+			inputMaxs[i] = inputMins[i];
+		outputMins[0] = (float)(speedlist[0]);
+		outputMins[1] = (float)(headlist[0]);
+		for(int i=0; i<OUTPUTSIZE; i++)
+			outputMaxs[i] = outputMins[i];
+		//search mins and maxs
+		for(int i=0; i<tflistSize; i++){
+			//input min
+			inputMins[0] = min((float)(tflist[i].currentSpeedx) , inputMins[0]);
+			inputMins[1] = min((float)(tflist[i].currentSpeedy) , inputMins[1]);
+			inputMins[2] = min((float)(tflist[i].targetx) , inputMins[2]);
+			inputMins[3] = min((float)(tflist[i].targety) , inputMins[3]);
+			inputMins[4] = min((float)(tflist[i].currentAccelx) , inputMins[4]);
+			inputMins[5] = min((float)(tflist[i].currentAccely) , inputMins[5]);
+			//output min
+			outputMins[0] = min((float)(speedlist[0]) , outputMins[0]);
+			outputMins[1] = min((float)(headlist[0]), outputMins[1]);
+			//input max
+			inputMaxs[0] = max((float)(tflist[i].currentSpeedx) , inputMaxs[0]);
+			inputMaxs[1] = max((float)(tflist[i].currentSpeedy) , inputMaxs[1]);
+			inputMaxs[2] = max((float)(tflist[i].targetx) , inputMaxs[2]);
+			inputMaxs[3] = max((float)(tflist[i].targety) , inputMaxs[3]);
+			inputMaxs[4] = max((float)(tflist[i].currentAccelx) , inputMaxs[4]);
+			inputMaxs[5] = max((float)(tflist[i].currentAccely) , inputMaxs[5]);
+			//output max
+			outputMaxs[0] = max((float)(speedlist[0]) , outputMaxs[0]);
+			outputMaxs[1] = max((float)(headlist[0]), outputMaxs[1]);
 		}
 	}
 	
@@ -134,45 +130,20 @@ void LearningCommander::learnFromList(std::vector<InputOutput> l, bool normalize
 		index++ ; label[index] = (float)(headlist[i]);
 	}
 	//perform normalization
-	if(normalize){
-		float inputmin = 1000000.0;
-		float outputmin = 1000000.0;
-		float inputmax = -1000000.0;
-		float outputmax = -1000000.0;
+	if(tonormalize){
 		//normalize inputs
 		index = -1;
 		for(int i=0 ; i<layersize ; i++){
 			for(int j=0 ; j<INPUTSIZE ; j++){
 				index ++;
-				data[index] = (data[index]-inputMeans[j]) / (inputSd[j]);
-				/*if(!(0.0 < inputSd[j] && inputSd[j] < 500.0)){
-					std::cout << "inputSd["<<j<<"] = "<<inputSd[j]<<std::endl;
-					sleep(1);
-				}
-				if(!(-1.0 < data[index] && data[index] < 1.0))
-					std::cout << "data["<<index<<"] = "<<data[index]<<std::endl;*/
-				if(data[index] < inputmin)
-					inputmin = data[index];
-				else if(data[index] > inputmax)
-					inputmax = data[index];
+				data[index] = normalize(data[index], inputMins[j], inputMaxs[j]);
 			}
 		}
 		//normalize labels (outputs)
 		index = -1;
 		for(int i=0 ; i<layersize ; i++){
-			label[i] = (label[i]-outputMeans[1]) / (outputSd[1]);
-			/*if(!(0.0 < outputSd[1] && outputSd[1] < 500.0)){
-				std::cout << "outputSd[1] = "<<outputSd[1]<<std::endl;
-				sleep(1);
-			}
-			if(!(-1.0 < label[index] && label[index] < 1.0))
-				std::cout << "label["<<index<<"] = "<<label[index]<<std::endl;*/
-			if(label[i] < outputmin)
-				outputmin = label[i];
-			else if(label[i] > outputmax)
-				outputmax = label[i];
+			label[i] = normalize(label[i], outputMins[1], outputMaxs[1]);
 		}
-		std::cout << "input min= " <<inputmin<< " input max= " <<inputmax<< " output min= " <<outputmin<< " output max= " <<outputmax<<std::endl;
 	}
 	sleep(1);
 	
@@ -255,5 +226,5 @@ void LearningCommander::learnFromFiles(std::vector<std::string> filenames, int t
 			}
 		}
 	}
-	learnFromList(l, false);
+	learnFromList(l, true);
 }

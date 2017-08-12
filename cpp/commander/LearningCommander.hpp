@@ -28,14 +28,13 @@ class LearningCommander : public StreamObserver{
 		Sphero *sphero;
 		Target *target;
 		
-		/** Mean of inputs */
-		double inputMeans[INPUTSIZE];
-		/** standard deviation of inputs */
-		double inputSd[INPUTSIZE];
-		/** Mean of outputs */
-		double outputMeans[OUTPUTSIZE];
-		/** standard deviation of outputs */
-		double outputSd[OUTPUTSIZE];
+		float inputMins[INPUTSIZE];
+		float inputMaxs[INPUTSIZE];
+		float outputMins[OUTPUTSIZE];
+		float outputMaxs[OUTPUTSIZE];
+		
+		double normalize(double value, double min, double max);
+		double denormalize(double value, double min, double max);
 		
 	public :
 		LearningCommander(Sphero *sph, DataAdapter *dadapter);
