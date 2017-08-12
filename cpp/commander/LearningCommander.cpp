@@ -92,8 +92,8 @@ void LearningCommander::learnFromList(std::vector<InputOutput> l, bool tonormali
 			inputMins[4] = min((float)(tflist[i].currentAccelx) , inputMins[4]);
 			inputMins[5] = min((float)(tflist[i].currentAccely) , inputMins[5]);
 			//output min
-			outputMins[0] = min((float)(speedlist[0]) , outputMins[0]);
-			outputMins[1] = min((float)(headlist[0]), outputMins[1]);
+			outputMins[0] = min((float)(speedlist[i]) , outputMins[0]);
+			outputMins[1] = min((float)(headlist[i]), outputMins[1]);
 			//input max
 			inputMaxs[0] = max((float)(tflist[i].currentSpeedx) , inputMaxs[0]);
 			inputMaxs[1] = max((float)(tflist[i].currentSpeedy) , inputMaxs[1]);
@@ -102,8 +102,8 @@ void LearningCommander::learnFromList(std::vector<InputOutput> l, bool tonormali
 			inputMaxs[4] = max((float)(tflist[i].currentAccelx) , inputMaxs[4]);
 			inputMaxs[5] = max((float)(tflist[i].currentAccely) , inputMaxs[5]);
 			//output max
-			outputMaxs[0] = max((float)(speedlist[0]) , outputMaxs[0]);
-			outputMaxs[1] = max((float)(headlist[0]), outputMaxs[1]);
+			outputMaxs[0] = max((float)(speedlist[i]) , outputMaxs[0]);
+			outputMaxs[1] = max((float)(headlist[i]), outputMaxs[1]);
 		}
 	}
 	
@@ -125,9 +125,8 @@ void LearningCommander::learnFromList(std::vector<InputOutput> l, bool tonormali
 		index++ ; data[index] = (float)(tflist[i].currentAccelx);
 		index++ ; data[index] = (float)(tflist[i].currentAccely);
 	}
-	index = -1;
 	for(int i=0; i<layersize ; i++){
-		index++ ; label[index] = (float)(headlist[i]);
+		label[i] = (float)(headlist[i]);
 	}
 	//perform normalization
 	if(tonormalize){
@@ -140,7 +139,6 @@ void LearningCommander::learnFromList(std::vector<InputOutput> l, bool tonormali
 			}
 		}
 		//normalize labels (outputs)
-		index = -1;
 		for(int i=0 ; i<layersize ; i++){
 			label[i] = normalize(label[i], outputMins[1], outputMaxs[1]);
 		}
@@ -185,6 +183,9 @@ void LearningCommander::learnFromList(std::vector<InputOutput> l, bool tonormali
 	index = -1;
     for(int i = 0; i< result.size(); ++i){
     	index++;
+    	std::cout << " Input=";
+    	for(int j=index*INPUTSIZE ; j<index*INPUTSIZE+INPUTSIZE ; j++)
+    		std::cout <<" "<<data[j];
     	std::cout << "  Got "<<result[i]<<"   expected "<<label[index]<<std::endl;
     }
 }

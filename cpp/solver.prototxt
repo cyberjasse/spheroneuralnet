@@ -1,8 +1,8 @@
 net: "model.prototxt"
-base_lr: 0.02
+base_lr: 0.3
 lr_policy: "step"
-gamma: 0.5
-stepsize: 10000
+gamma: 0.2
+stepsize: 1000
 display: 1000
 max_iter: 100000
 snapshot: 100000
