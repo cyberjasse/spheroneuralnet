@@ -74,5 +74,6 @@ else
 	echo "[${THIS}] No file entered in parameter. Only package are compiled."	
 fi
 #Defile a variable. Else the executable will not find the sphero api
-echo "[${THIS}] define variable LD_LIBRARY_PATH=sphero-linux-api/"
+echo "[${THIS}] LD_LIBRARY_PATH with paths"
 export LD_LIBRARY_PATH=sphero-linux-api/
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:commander/caffe-master/build/lib

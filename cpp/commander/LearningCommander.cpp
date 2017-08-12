@@ -6,6 +6,7 @@
 #include <iostream>
 #include <fstream>
 #include <math.h>
+#include <unistd.h>
 
 LearningCommander::LearningCommander(Sphero *sph, DataAdapter *dadapter){
 	sphero = sph;
@@ -113,7 +114,7 @@ void LearningCommander::learnFromList(std::vector<InputOutput> l, bool normalize
 	// memory allocation
 	const int BATCHSIZE = 100;
 	const int N = tflistSize/BATCHSIZE;
-	double *data = new double[BATCHSIZE*(INPUTSIZE+OSIZE)*N];//FIXME really *(inputsize+outputsize) ?
+	double *data = new double[BATCHSIZE*(INPUTSIZE)*N];//FIXME really *(inputsize+outputsize) ?
 	double *label = new double[BATCHSIZE*OSIZE*N];
 	// fill
 	int layersize = N*BATCHSIZE;
@@ -128,27 +129,50 @@ void LearningCommander::learnFromList(std::vector<InputOutput> l, bool normalize
 	}
 	index = -1;
 	for(int i=0; i<layersize ; i++){
-		index++ ; data[index] = (double)(headlist[i]);
+		index++ ; label[index] = (double)(headlist[i]);
 	}
 	//perform normalization
 	if(normalize){
+		double inputmin = 1000000.0;
+		double outputmin = 1000000.0;
+		double inputmax = -1000000.0;
+		double outputmax = -1000000.0;
 		//normalize inputs
 		index = -1;
 		for(int i=0 ; i<layersize ; i++){
-			for(int j=0 ; i<INPUTSIZE ; i++){
+			for(int j=0 ; j<INPUTSIZE ; j++){
 				index ++;
-				data[index] = (data[index]-inputMeans[j]) / inputSd[j];
+				data[index] = (data[index]-inputMeans[j]) / (inputSd[j]);
+				/*if(!(0.0 < inputSd[j] && inputSd[j] < 500.0)){
+					std::cout << "inputSd["<<j<<"] = "<<inputSd[j]<<std::endl;
+					sleep(1);
+				}
+				if(!(-1.0 < data[index] && data[index] < 1.0))
+					std::cout << "data["<<index<<"] = "<<data[index]<<std::endl;*/
+				if(data[index] < inputmin)
+					inputmin = data[index];
+				else if(data[index] > inputmax)
+					inputmax = data[index];
 			}
 		}
 		//normalize labels (outputs)
 		index = -1;
 		for(int i=0 ; i<layersize ; i++){
-			for(int j=0 ; i<OSIZE ; i++){
-				index ++;
-				label[index] = (label[index]-outputMeans[j]) / outputSd[j];
+			label[i] = (label[i]-outputMeans[1]) / (outputSd[1]);
+			/*if(!(0.0 < outputSd[1] && outputSd[1] < 500.0)){
+				std::cout << "outputSd[1] = "<<outputSd[1]<<std::endl;
+				sleep(1);
 			}
+			if(!(-1.0 < label[index] && label[index] < 1.0))
+				std::cout << "label["<<index<<"] = "<<label[index]<<std::endl;*/
+			if(label[i] < outputmin)
+				outputmin = label[i];
+			else if(label[i] > outputmax)
+				outputmax = label[i];
 		}
+		std::cout << "input min= " <<inputmin<< " input max= " <<inputmax<< " output min= " <<outputmin<< " output max= " <<outputmax<<std::endl;
 	}
+	sleep(1);
 	
 	// perform training.  //inspired by https://medium.com/@shiyan/caffe-c-helloworld-example-with-memorydata-input-20c692a82a22
 	
@@ -158,29 +182,43 @@ void LearningCommander::learnFromList(std::vector<InputOutput> l, bool normalize
     // create the solver with loaded parameters
     boost::shared_ptr<caffe::Solver<double> > solver(caffe::SolverRegistry<double>::CreateSolver(solver_param));
     caffe::MemoryDataLayer<double> *dataLayer_trainnet = (caffe::MemoryDataLayer<double> *) (solver->net()->layer_by_name("inputdata").get());
-    	caffe::MemoryDataLayer<double> *dataLayer_testnet_ = (caffe::MemoryDataLayer<double> *) (solver->test_nets()[0]->layer_by_name("test_inputdata").get());
-	// provide data and label
-	dataLayer_testnet_->Reset(data, label, layersize);
-	dataLayer_trainnet->Reset(data, label, layersize);
+    dataLayer_trainnet->Reset(data, label, layersize);
+    caffe::MemoryDataLayer<double> *dataLayer_testnet = (caffe::MemoryDataLayer<double> *) (solver->test_nets()[0]->layer_by_name("test_inputdata").get());
+	dataLayer_testnet->Reset(data, label, layersize);
+	
 	// train the solver
+	std::cout << " #########\n # begin #\n #########\n   solve\n";
 	solver->Solve();
+	std::cout << " #########\n #  end  #\n #########\n   solve\n";
 	
 	// test
 	
 	std::shared_ptr<caffe::Net<double> > testnet;
+std::cout << "r1\n";
 	testnet.reset(new caffe::Net<double>("./model.prototxt", caffe::TEST));
-	testnet->ShareTrainedLayersWith(solver->net().get());
-	caffe::MemoryDataLayer<double> *dataLayer_testnet = (caffe::MemoryDataLayer<double> *) (testnet->layer_by_name("test_inputdata").get());
-	dataLayer_testnet_->Reset(data, label, layersize);
+std::cout << "r2\n";
+	testnet->CopyTrainedLayersFrom("SPHERO_iter_10000.caffemodel");  //  <-- LOAD
+std::cout << "r3\n";
+	dataLayer_testnet = (caffe::MemoryDataLayer<double>*)(testnet->layer_by_name("test_inputdata").get());
+	dataLayer_trainnet = (caffe::MemoryDataLayer<double>*)(testnet->layer_by_name("inputdata").get());
+	dataLayer_testnet->Reset(data, label, layersize);
+	std::cout << " #########\n # begin #\n #########\n   forward\n";
 	testnet->Forward();
+	std::cout << " #########\n #  end  #\n #########\n   forward\n";
     boost::shared_ptr<caffe::Blob<double> > output_layer = testnet->blob_by_name("output");
     const double* begin = output_layer->cpu_data();
     const double* end = begin + layersize;
-    std::vector<float> result(begin, end);
+    std::vector<double> result(begin, end);
+    int lindex = -1;
     index = -1;
     for(int i=0 ; i<result.size() ; i++){
-    	index++;
-    	std::cout << " Got " << result[i] << "   expected " << label[index] << std::endl;
+    	lindex++;
+    	std::cout << " Input: ";
+    	for(int j=0 ; j<INPUTSIZE ; j++){
+    		index++;
+    		std::cout << data[index] << " , ";
+    	}
+    	std::cout << "    Got " << result[i] << "   expected " << label[lindex] << std::endl;
     }
     free(data);
     free(label);
