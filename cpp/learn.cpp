@@ -29,7 +29,7 @@ int main(int argc, char* argv[]){
 	LearningCommander *commander = new LearningCommander(sph, adapter);
 	//start training
 	commander->learnFromFiles(filenames, 0,1000000);
-	//if target file, drive
+	/*if target file, drive
 	if(argc>3){
 		std::cerr << "training finished. Driving...\n";
 		std::string targetname = argv[3];
@@ -46,5 +46,5 @@ int main(int argc, char* argv[]){
 		const short frequency  = 5;
 		sph->addStreamObserver(commander);
 		sph->startStream(frequency);
-	}
+	}*/
 }
