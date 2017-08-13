@@ -82,8 +82,7 @@ Passons ensuite au commander utilisant le réseau de neurones.
 La Sphero ne sera pratiquemment jamais exactement sur la position cible.
 Actuellement, pour résoudre ce problème, l'objet Target cherche parmis les points de sa trajectoire, la plus proche de la position actuelle.
 Il renvoie ensuite l'état juste après celui dont la position est le plus proche de la position actuelle de la Sphero.
-Mais cette technique présente plusieurs inconvénients.
-
+Mais cette technique présente plusieurs inconvénients:
 Elle ne permet pas les trajectoires croisées comme les trajectoires en 8.
 De plus, la Sphero pourrait dévier assez fort de sa trajectoire cible.
 Dans ce cas, la position de la Sphero risque d'être plus proche d'un autre point de la trajectoire que celui qu'il est sensé atteindre.
@@ -97,4 +96,4 @@ Dans ce cas, la position de la Sphero risque d'être plus proche d'un autre poin
  \caption{Éditeur de trajectoire}
  \label{fig:targettrajectory}
 \end{figure}
-Un interface graphique a été implémentée en Qt afin de tracer les trajectoires à la souris. (Figure \ref{fig:targettrajectory})
+Une interface graphique a été implémentée en Qt afin de créer des trajectoires à la souris. (Figure \ref{fig:targettrajectory})

@@ -25,7 +25,7 @@ Un odomètre n'est pas approprié pour la mesure de position dans notre applicat
 En effet, la distance parcourue n'est mesurée qu'à partir du roulement du moteur permettant le déplacement.
 La distance parcourue par dérapage ne sera pas comptabilisée.
 Cela a été vérifié lors de l'expérience menée dans la section \ref{sec:choixdesign}.
-Une camera sera utilisée pour tracer la position réelle de la Sphero.
+Une camera est plus appropriée pour tracer la position réelle de la Sphero.
 
 Pour l'accélération, les commandes à appliquer à l'instant $t$ ne dépendent pas de l'accélération à l'instant $t$ juste avant l'application des commandes.
 Mais par contre, cette donnée peut être utile pour anticiper la vitesse de la Sphero au moment où elle reçoit les commandes car, dû à la latence d'envoi de paquet, la vitesse à l'instant $t$ n'est plus la même que celle communiquée.
@@ -43,6 +43,7 @@ Pour une meilleure précision, on ajoute un vecteur vitesse à atteindre sur le 
 On aligne l'axe des abscisses avec l'axe de l'orientation du moteur afin de reduire le domaine d'entrée et donc le nombre d'exemples à créer pour l'apprentissage.
 Le vecteur d'entrée contiendra donc le vecteur de la vitesse actuelle, le vecteur de la vitesse à atteindre et la position relative à atteindre dans $T$ secondes où $T$ sera la période à laquelle on échantillonera les données des capteurs.
 Nous avons donc un vecteur d'entrée à 6 dimensions (vitesse actuelle en x et y, position relative cible en x et y, vitesse cible en x et y).
+Nous pourrions réduire d'avantage le domaine d'entrée si nous considérons que la direction et la vitesse à prendre pour atteindre une position est en symétrie orthogonale d'axe x.
 
 Deux possibilités s'offrent à nous pour le vecteur de sortie:\\
 \begin{tabular}{|l|l|l|}

@@ -66,23 +66,47 @@ Deux modèles différents ont été construit car il a été observé que le RBF
 \begin{figure}
  \centering
  \incweka{../figures/targetxyvirtual.png}
- \wecaption{Nuage des positions à atteindre}
+ \wecaption{Nuage des positions et de la direction à commander pour les atteindre. Pour la Sphero virtuelle}
  \label{we:targetvirtual}
+\end{figure}
+\begin{figure}
+ \centering
+ \incweka{../figures/targetxSpeedvirtual.png}
+ \wecaption{Nuage des positions et de la vitesse à commander pour les atteindre. Pour la Sphero virtuelle}
+ \label{we:targetvirtualSpeed}
 \end{figure}
 
 Observons les données fournies par la commande aléatoire sur la véritable Sphero.
-Dans la figure ? chaque point représentent la position que doit atteindre la Sphero $\frac{1}{f}$ secondes plus tard.
+Dans la figure \ref{we:targetxy} et \ref{we:targetxySpeed}, chaque point représentent la position que doit atteindre la Sphero $\frac{1}{f}$ secondes plus tard.
 Pour chaque point, la Sphero est en (0,0) et est dirigée vers la droite, parallèle à l'axe x.
 La couleur du point représente la valeur de l'orientation à commander.
 Plus le ton est orangé, plus la valeur est grande.
 On pourrait s'attendre à ce que plus le point est vers le haut, plus la valeur de head est grande, comme on peut l'observer sur les données de commande aléatoire sur la Sphero virtuelle. (Figure \ref{we:targetvirtual})
-Mais ce n'est pas le cas, on observe un nuage de points aléatoires.
-Pour chaque attribut qu'on peut prendre 2 à 2, on n'observe pas de pattern. TODO%TODO
-Il nous faudrait pouvoir voir plus que 3 dimensions pour, peut-être, observer un pattern.
-Mais en tout cas, il y en a un.
-C'est ce que nous allons voir dans l'expérimentation sur les données réelles.
+On pourrait s'attendre aussi à ce que plus le point à atteindre est éloigné de la position actuelle, plus la vitesse commandée doit être élevée, comme on peut également le voir sur les données venant de la Sphero virtuelle. (Figure \ref{we:targetvirtualSpeed})
 
-\subsubsection{Expérimentation sur données réelles}
+\begin{figure}
+ \centering
+ \incweka{../figures/targetxy.png}
+ \wecaption{Nuage des positions et de la direction à commander pour les atteindre. Pour la Sphero réelle}
+ \label{we:targetxy}
+\end{figure}
+Concernant les données de la Sphero réelle, si on prend les attributs deux à deux, on n'observe pas de pattern quant à la direction à prendre selon les données acquises.
+Une de ces observation est illustrée dans la Figure \ref{we:targetxy}.
+Dans cette figure, tous les points ont été légèrement déplacés aléatoirement afin de pouvoir tous les distinguer.
+Nous devrions voir en plus de 3 dimensions pour observer un éventuel pattern.
+Mais en tout cas, selon Wela, il y en a un.
+C'est ce que nous allons voir dans \hyperref[sec:realdataex]{l'expérimentation sur les données réelles}.
+
+\begin{figure}
+ \centering
+ \incweka{../figures/targetxySpeed.png}
+ \wecaption{Nuage des positions et de la vitesse à commander pour les atteindre. Pour la Sphero réelle}
+ \label{we:targetxySpeed}
+\end{figure}
+Tandis que pour la vitesse à commander, sur la Figure \ref{we:targetxySpeed} on observe effectivement une tendance à commander une vitesse plus élevée pour atteindre des positions plus éloignées.
+Plus la couleur du point est orangée, plus la vitesse est élevée.
+
+\subsubsection{Expérimentation sur données réelles}\label{sec:realdataex}
 Puisque cette expérience s'est déroulée en même temps que la phase de conception et de test du générateur de commande aléatoire,
 il a fallut préparer un espace accessible sur une assez longue période.
 La vitesse a été bridée et aucune caméra n'a été utilisée.
@@ -92,30 +116,68 @@ Pour toutes les obsevations effectuées, le RBF implémenté retournait toujours
 
 \ssstitle{Avec données relatives à la position et l'orientation}
 \begin{minipage}[c]{\mpwekawidth}
- \includegraphics[width=\h]{../figures/speed121314N1500H20.png}
+ \includegraphics[width=\textwidth]{../figures/speed121314N1500H20.png}
+ \begin{center}
+  \textbf{Vitesse}
+ \end{center}
 \end{minipage}
 \begin{minipage}[c]{\mpwekawidth}
  \includegraphics[width=\textwidth]{../figures/121314N1500H20.png}
+ \begin{center}
+  \textbf{Orientation}
+ \end{center}
 \end{minipage}
 \\
-Ici, les données d'entrées sont relatifs à la position de la Sphero et à son orientation et sont normalisées.
-Le réseau de neurones configuré sur Weka a une couche de 20 neurones cachés avec un learning rate (pas de gradient) de 0,3 et un nombre d'époques de 1500.
+
+Ici, les données d'entrées sont relatifs à la position de la Sphero et à son orientation.
+Les données sont normalisées avant des les utiliser dans le réseau de neurones.
+Si les valeurs de sortie ne sont pas normalisées, alors si elles ont un domaine différent, elles n'auront pas le même poids lors du calcul d'erreur.
+Si les valeurs d'entrée ne sont pas normalisées, alors nous devons paramètrer nous-mêmes l'initialisation de certains neurones.
+Comme les neurones du RBF, si ils sont initialisés avec un écart-type de 1 et une moyenne de 0 mais que les valeurs d'entrées peuvent atteindre plusieurs centaines,
+alors malgré la précision en 64bits du calcul de la fonction d'activation, elles retourneront souvent 0.
+Idem pour la fonction sigmoïde, elle retourna souvent 0 ou 1.
+
+En construisant le modèle en règlant les paramètres, un optimum local a été atteind sur Weka. Il s'agit d'une seule couche de 20 neurones cachés avec un learning rate (i.e. pas de gradient) de 0,3 et un nombre d'époques de 1500.
 (C'est à dire que les données d'entrainement sont présentés 1500 fois aux réseaux de neurones).
-Le coefficient de corrélation est de 0.5404 pour la vitesse et de 0,69 pour l'orientation.
+Le coefficient de corrélation du modèle construit par Weka est de 0.5404 pour la vitesse et de 0,69 pour l'orientation.
+
+\ssstitle{Sans normalisation des données}
+\begin{minipage}[c]{\mpwekawidth}
+ \includegraphics[width=\textwidth]{../figures/121314SpeedOutputNotNormalized.png}
+ \begin{center}
+  \textbf{Vitesse}
+ \end{center}
+\end{minipage}
+\begin{minipage}[c]{\mpwekawidth}
+ \includegraphics[width=\textwidth]{../figures/HeadNotNormalized.png}
+ \begin{center}
+  \textbf{Orientation}
+ \end{center}
+\end{minipage}
+\\
+
+Si nous n'avions pas normalisé les données, le coefficient de corrélation du modèle construit par Weka est de 0,0119 pour la vitesse et 0,0264 pour l'orientation.
+Nous pouvons d'ailleur ci-dessus observer un comportement étrange sur les prédictions données par le modèle.
+La configuration du réseau de neurones est la même que la précédente.
 
 \ssstitle{Ajout de la vitesse commandée en attribut}
-\begin{minipage}[c]{\mpwekawidth}
- TODO %\includegraphics[width=\h]{../figures/virtualHeadResult.png}
-\end{minipage}
-\begin{minipage}[c]{\mpwekawidth}
- \includegraphics[width=\textwidth]{../figures/121314SpeedN1500H20.png}
-\end{minipage}
+\incweka{../figures/121314SpeedN1500H20.png}
 \\
-C'est ce que nous obtenons si on ajoute la vitesse commandée en attribut.
-La configuration du réseau de neurones est la même que la précédente.
-Le coefficient de corrélation est de ? pour la vitesse et de 0,72 pour l'orientation.
 
-\ssstitle{Avec données relatives à la position et l'orientation et en mirroir sur l'axe x}
-\ssstitle{Avec données relatives à la position et l'orientation, ordered speed en attribut et output non normalisé}
-\ssstitle{Avec données relatives à la position et l'orientation, ordered speed en attribut et input non normalisé}
-\ssstitle{Avec données relatives à la position et l'orientation, ordered speed en attribut, input et output non normalisés}
+Revenons aux données normalisées et ajoutons la vitesse commandée en attribut.
+Toujours avec la même configuration du réseau de neurones.
+Puisque nous pouvons utiliser un réseau différent pas sortie, il est possible de d'abord prédire la vitesse à commander et d'ensuite ajouter cette donnée pour la prédiction de l'orientation à prendre si celle-ci améliore la précision.
+Dans ce cas, le coefficient de corrélation atteind 0,72 pour l'orientation.
+Un test est nécessaire afin de confirmer si cette augmentation de 0,03 est significatif.
+Par ailleur, si on ajoute l'orientation commandée comme attribut pour le modèle prédisant la vitesse à commander, la corrélation est de 0,4991.
+
+\ssstitle{En considérant la symétrie orthogonale}
+Dans la section \ref{sec:choixdesign} nous avons évoquer une possibilité d'une symétrie orthogonale d'axe x sur l'orientation et la vitesse à prendre.
+C'est d'ailleur ce qui est observé sur les données de la Sphero virtuelle, Figure \ref{we:targetvirtual} et \ref{we:targetvirtualSpeed}.
+Nous allons le vérifier pour les données réelles.
+Pour chaque instance, si l'ordonnée de la position à atteindre est négatif, on multiplie par -1 toutes les ordonnées des entrées.
+C'est à dire que si targety est <0, alors targety = -targety, currentSpeedy = -currentSpeedy et currentAccely = -currentAccely.
+Toujours avec la même configuration de réseau, le coefficient de corrélation devient 0,5123 pour la vitesse et 0,6339 pour l'orientation.
+
+\ssstitle{Sélection des attributs}
+TODO
