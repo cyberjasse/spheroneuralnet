@@ -152,6 +152,17 @@ En effet, malgré tous les problèmes rencontrés nuisant à la qualité des don
 un réseau de neurone devrait être capable d'approximer une fonction même avec des imprécisions, ou, du moins, de converger vers une autres solution que la moyenne de toutes les sorties.
 Les autres attributs qui peuvent être ajoutées sont la vitesse à atteindre, l'inclinaison gauche-droite, l'inclinaison arrière-avant et les commandes précédentes.
 
+Le comportement étrange de Weka, section \ref{sec:realdataex}, nous a peut-être mis sur une mauvaise piste.
+Pensant que le problème vient du réseau de neurones implémenté alors qu'il peut provenir des données.
+Il faudrait donc à l'avenir éviter d'utiliser ce logiciel pour des tâches de régression.
+
+Dans l'état actuel de ce projet, nous avons un système de commande commandant aléatoirement mais en effectuant des trajectoires naturelles.
+Nous pouvons désormais éditer facilement l'architecture du réseau de neurones pour le système de commandes,
+éditer des trajectoires,
+ou encore integrer de nouvelles transformations de données ou de nouveaux modèles de Sphero virtuelles.
+
+Enfin, le développement d'un réseau de neurones nous a permis de comprendre en détails son fonctionnement et une propriété qui les rend très modulaires.
+
 \subsection*{Remerciements}
 \noindent Je remercie Monsieur Pierre \textsc{Hauweele} de m'avoir proposé un projet qui est exactement dans le domaine que je voulais, de son aide et de la direction de mon projet.\\
 
