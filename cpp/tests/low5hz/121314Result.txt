@@ -133,4 +133,93 @@ Root mean squared error                 44.1206
 Relative absolute error                114.755  %
 Root relative squared error            115.1811 %
 Total Number of Instances              804 
-Total Number of Instances              804 
+Total Number of Instances              804
+
+Speed
+MultilayerPerceptron -L 0.3 -M 0.2 -N 1500 -V 0 -S 0 -E 20 -H 20
+=== Cross-validation ===
+=== Summary ===
+
+Correlation coefficient                  0.5404
+Mean absolute error                      8.0052
+Root mean squared error                 10.0352
+Relative absolute error                 83.803  %
+Root relative squared error             87.5106 %
+Total Number of Instances             3411 
+
+speed mirror
+=== Cross-validation ===
+=== Summary ===
+
+Correlation coefficient                  0.5123
+Mean absolute error                      8.5973
+Root mean squared error                 10.8801
+Relative absolute error                 90.6091 %
+Root relative squared error             92.7983 %
+Total Number of Instances             2562    
+
+speed with ordered head as attribute
+=== Cross-validation ===
+=== Summary ===
+
+Correlation coefficient                  0.4991
+Mean absolute error                      8.3033
+Root mean squared error                 10.3671
+Relative absolute error                 86.9237 %
+Root relative squared error             90.4044 %
+Total Number of Instances             3411
+
+head, without ordered speed, MIRROR
+=== Cross-validation ===
+=== Summary ===
+
+Correlation coefficient                  0.6339
+Mean absolute error                     23.4557
+Root mean squared error                 31.4543
+Relative absolute error                 79.8287 %
+Root relative squared error             79.4049 %
+Total Number of Instances             2562 
+
+head, without ordered speed, in mirror, not normalized
+=== Cross-validation ===
+=== Summary ===
+
+Correlation coefficient                 -0.047 
+Mean absolute error                     99.5113
+Root mean squared error                128.9002
+Relative absolute error                338.6756 %
+Root relative squared error            325.4023 %
+Total Number of Instances             2562 
+
+head, without ordered speed, not in mirror, not normalized
+=== Cross-validation ===
+=== Summary ===
+
+Correlation coefficient                  0.0264
+Mean absolute error                    175.4634
+Root mean squared error                240.682 
+Relative absolute error                577.393  %
+Root relative squared error            595.532  %
+Total Number of Instances             3411 
+
+speed, not in mirror, not normalized
+=== Cross-validation ===
+=== Summary ===
+
+Correlation coefficient                  0.0119
+Mean absolute error                     68.8273
+Root mean squared error                 96.7176
+Relative absolute error                720.525  %
+Root relative squared error            843.4096 %
+Total Number of Instances             3411   
+
+speed, not in mirror, 1BK
+=== Cross-validation ===
+=== Summary ===
+
+Correlation coefficient                  0.9977
+Mean absolute error                      0.0545
+Root mean squared error                  0.7722
+Relative absolute error                  0.5708 %
+Root relative squared error              6.7339 %
+Total Number of Instances             3411   
