@@ -279,7 +279,7 @@ void Sphero::disconnect()
 	if(_connected)
 	{
 		_connected = false;
-		pthread_cancel(monitor);
+		//pthread_cancel(monitor);
 		_bt_adapter->disconnect();
 
 		_disconnect_handler.reportAction();

@@ -24,7 +24,7 @@ void LearningCommander::notify(struct StreamFrame *frame){
 			// prepare input
 			struct StreamFrame targetstate = target->getTarget(frame);
 			struct TransformedFrame transformed = adapter->normalizeFrame(*frame, targetstate);
-			float speed, head;
+			double speed, head;
 			compute(transformed, &speed, &head, true, false);
 			uint8_t ns = adapter->denormalizeSpeed(round(speed));
 			int16_t nh = adapter->denormalizeHead( round(head ));
@@ -50,16 +50,16 @@ double LearningCommander::denormalize(double value, double min, double max){
 
 void LearningCommander::learnFromList(std::vector<InputOutput> l, bool tonormalize){
 	const int ratioTest = 3; //take 1 sample on 3 for the test
-	float errormean; //Mean of quadratic errors
-	float testmean; //Mean of test errors
+	double errormean; //Mean of quadratic errors
+	double testmean; //Mean of test errors
 	int listsize = l.size();
-	float speed, head;
-	float expected[OUTPUTSIZE];
+	double speed, head;
+	double expected[OUTPUTSIZE];
 	// fill list of transformed frame and fill list of outputs
 	int tflistSize = listsize-1;
 	struct TransformedFrame tflist[tflistSize];
-	float speedlist[tflistSize];
-	float headlist[tflistSize];
+	double speedlist[tflistSize];
+	double headlist[tflistSize];
 	for(int i=0 ; i<tflistSize ; i++){
 		tflist[i] = adapter->normalizeFrame( l[i].frame, l[i+1].frame);
 		speedlist[i] = adapter->normalizeSpeed(l[i].speedCommand);
@@ -70,40 +70,40 @@ void LearningCommander::learnFromList(std::vector<InputOutput> l, bool tonormali
 	
 	if(tonormalize){
 		//initial values
-		inputMins[0] = (float)(tflist[0].currentSpeedx);
-		inputMins[1] = (float)(tflist[0].currentSpeedy);
-		inputMins[2] = (float)(tflist[0].targetx);
-		inputMins[3] = (float)(tflist[0].targety);
-		inputMins[4] = (float)(tflist[0].currentAccelx);
-		inputMins[5] = (float)(tflist[0].currentAccely);
+		inputMins[0] = (double)(tflist[0].currentSpeedx);
+		inputMins[1] = (double)(tflist[0].currentSpeedy);
+		inputMins[2] = (double)(tflist[0].targetx);
+		inputMins[3] = (double)(tflist[0].targety);
+		inputMins[4] = (double)(tflist[0].currentAccelx);
+		inputMins[5] = (double)(tflist[0].currentAccely);
 		for(int i=0; i<INPUTSIZE; i++)
 			inputMaxs[i] = inputMins[i];
-		outputMins[0] = (float)(speedlist[0]);
-		outputMins[1] = (float)(headlist[0]);
+		outputMins[0] = (double)(speedlist[0]);
+		outputMins[1] = (double)(headlist[0]);
 		for(int i=0; i<OUTPUTSIZE; i++)
 			outputMaxs[i] = outputMins[i];
 		//search mins and maxs
 		for(int i=0; i<tflistSize; i++){
 			//input min
-			inputMins[0] = min((float)(tflist[i].currentSpeedx) , inputMins[0]);
-			inputMins[1] = min((float)(tflist[i].currentSpeedy) , inputMins[1]);
-			inputMins[2] = min((float)(tflist[i].targetx) , inputMins[2]);
-			inputMins[3] = min((float)(tflist[i].targety) , inputMins[3]);
-			inputMins[4] = min((float)(tflist[i].currentAccelx) , inputMins[4]);
-			inputMins[5] = min((float)(tflist[i].currentAccely) , inputMins[5]);
+			inputMins[0] = min((double)(tflist[i].currentSpeedx) , inputMins[0]);
+			inputMins[1] = min((double)(tflist[i].currentSpeedy) , inputMins[1]);
+			inputMins[2] = min((double)(tflist[i].targetx) , inputMins[2]);
+			inputMins[3] = min((double)(tflist[i].targety) , inputMins[3]);
+			inputMins[4] = min((double)(tflist[i].currentAccelx) , inputMins[4]);
+			inputMins[5] = min((double)(tflist[i].currentAccely) , inputMins[5]);
 			//output min
-			outputMins[0] = min((float)(speedlist[i]) , outputMins[0]);
-			outputMins[1] = min((float)(headlist[i]), outputMins[1]);
+			outputMins[0] = min((double)(speedlist[i]) , outputMins[0]);
+			outputMins[1] = min((double)(headlist[i]), outputMins[1]);
 			//input max
-			inputMaxs[0] = max((float)(tflist[i].currentSpeedx) , inputMaxs[0]);
-			inputMaxs[1] = max((float)(tflist[i].currentSpeedy) , inputMaxs[1]);
-			inputMaxs[2] = max((float)(tflist[i].targetx) , inputMaxs[2]);
-			inputMaxs[3] = max((float)(tflist[i].targety) , inputMaxs[3]);
-			inputMaxs[4] = max((float)(tflist[i].currentAccelx) , inputMaxs[4]);
-			inputMaxs[5] = max((float)(tflist[i].currentAccely) , inputMaxs[5]);
+			inputMaxs[0] = max((double)(tflist[i].currentSpeedx) , inputMaxs[0]);
+			inputMaxs[1] = max((double)(tflist[i].currentSpeedy) , inputMaxs[1]);
+			inputMaxs[2] = max((double)(tflist[i].targetx) , inputMaxs[2]);
+			inputMaxs[3] = max((double)(tflist[i].targety) , inputMaxs[3]);
+			inputMaxs[4] = max((double)(tflist[i].currentAccelx) , inputMaxs[4]);
+			inputMaxs[5] = max((double)(tflist[i].currentAccely) , inputMaxs[5]);
 			//output max
-			outputMaxs[0] = max((float)(speedlist[i]) , outputMaxs[0]);
-			outputMaxs[1] = max((float)(headlist[i]), outputMaxs[1]);
+			outputMaxs[0] = max((double)(speedlist[i]) , outputMaxs[0]);
+			outputMaxs[1] = max((double)(headlist[i]), outputMaxs[1]);
 		}
 	}
 	
@@ -111,22 +111,50 @@ void LearningCommander::learnFromList(std::vector<InputOutput> l, bool tonormali
 	
 	// memory allocation
 	const int BATCHSIZE = 100;
+	const int TESTSIZE = 1000;
 	const int N = tflistSize/BATCHSIZE;
-	float *data = new float[BATCHSIZE*(INPUTSIZE)*N];//FIXME really *(inputsize+outputsize) ?
-	float *label = new float[BATCHSIZE*OSIZE*N];
+	double *data = new double[BATCHSIZE*(INPUTSIZE)*N];
+	double *label = new double[BATCHSIZE*OSIZE*N];
+	double *testdata = new double[TESTSIZE*INPUTSIZE];
+	double *testlabel = new double[TESTSIZE*OSIZE];
+for(int tested=0 ; tested < tflistSize ; tested+=TESTSIZE){
+	std::cout << " ###\nFOLD "<<tested<<"\n ###\n";
+	testend = tested+TESTSIZE;
+	if(testend > tflistSize)
+		testend = tflistSize;
 	// fill
 	int layersize = N*BATCHSIZE;
 	int index = -1;
-	for(int i=0; i<layersize ; i++){
-		index++ ; data[index] = (float)(tflist[i].currentSpeedx);
-		index++ ; data[index] = (float)(tflist[i].currentSpeedy);
-		index++ ; data[index] = (float)(tflist[i].targetx);
-		index++ ; data[index] = (float)(tflist[i].targety);
-		index++ ; data[index] = (float)(tflist[i].currentAccelx);
-		index++ ; data[index] = (float)(tflist[i].currentAccely);
+	for(int i=0; i<layersize ; i++){//fill data
+		if(tested > i || i > testend){
+			index++ ; data[index] = (double)(tflist[i].currentSpeedx);
+			index++ ; data[index] = (double)(tflist[i].currentSpeedy);
+			index++ ; data[index] = (double)(tflist[i].targetx);
+			index++ ; data[index] = (double)(tflist[i].targety);
+			index++ ; data[index] = (double)(tflist[i].currentAccelx);
+			index++ ; data[index] = (double)(tflist[i].currentAccely);
+		}
 	}
-	for(int i=0; i<layersize ; i++){
-		label[i] = (float)(headlist[i]);
+	index = -1;
+	for(int i=tested ; i<testend ; i++){//fill test data
+		index++ ; testdata[index] = (double)(tflist[i].currentSpeedx);
+		index++ ; testdata[index] = (double)(tflist[i].currentSpeedy);
+		index++ ; testdata[index] = (double)(tflist[i].targetx);
+		index++ ; testdata[index] = (double)(tflist[i].targety);
+		index++ ; testdata[index] = (double)(tflist[i].currentAccelx);
+		index++ ; testdata[index] = (double)(tflist[i].currentAccely);
+	}
+	index = -1
+	for(int i=0; i<layersize ; i++){//fill label
+		if(tested > i || i > testend){
+			index++ ; label[index] = (double)(headlist[i]);
+		}
+	}
+	index = -1
+	for(int i=tested; i<testend ; i++){//fill test label
+		if(tested > i || i > testend){
+			index++ ; testlabel[index] = (double)(headlist[i]);
+		}
 	}
 	//perform normalization
 	if(tonormalize){
@@ -150,35 +178,34 @@ void LearningCommander::learnFromList(std::vector<InputOutput> l, bool tonormali
     caffe::SolverParameter solver_param;
     caffe::ReadSolverParamsFromTextFileOrDie("./solver.prototxt", &solver_param);
 
-    boost::shared_ptr<caffe::Solver<float> > solver(caffe::SolverRegistry<float>::CreateSolver(solver_param));
-    caffe::MemoryDataLayer<float> *dataLayer_trainnet = (caffe::MemoryDataLayer<float> *) (solver->net()->layer_by_name("inputdata").get());
-    caffe::MemoryDataLayer<float> *dataLayer_testnet_ = (caffe::MemoryDataLayer<float> *) (solver->test_nets()[0]->layer_by_name("test_inputdata").get());
+    boost::shared_ptr<caffe::Solver<double> > solver(caffe::SolverRegistry<double>::CreateSolver(solver_param));
+    caffe::MemoryDataLayer<double> *dataLayer_trainnet = (caffe::MemoryDataLayer<double> *) (solver->net()->layer_by_name("inputdata").get());
+    caffe::MemoryDataLayer<double> *dataLayer_testnet_ = (caffe::MemoryDataLayer<double> *) (solver->test_nets()[0]->layer_by_name("test_inputdata").get());
 
     dataLayer_testnet_->Reset(data, label, layersize);
 
-    dataLayer_trainnet->Reset(data, label, layersize);
+    dataLayer_trainnet->Reset(testdata, testlabel, TESTSIZE);
 
     solver->Solve();
 
-    boost::shared_ptr<caffe::Net<float> > testnet;
+    boost::shared_ptr<caffe::Net<double> > testnet;
 
-    testnet.reset(new caffe::Net<float>("./model.prototxt", caffe::TEST));
-    //testnet->CopyTrainedLayersFrom("XOR_iter_5000000.caffemodel");
+    testnet.reset(new caffe::Net<double>("./model.prototxt", caffe::TEST));
 
     testnet->ShareTrainedLayersWith(solver->net().get());
 
-    caffe::MemoryDataLayer<float> *dataLayer_testnet = (caffe::MemoryDataLayer<float> *) (testnet->layer_by_name("test_inputdata").get());
+    caffe::MemoryDataLayer<double> *dataLayer_testnet = (caffe::MemoryDataLayer<double> *) (testnet->layer_by_name("test_inputdata").get());
 
     dataLayer_testnet->Reset(data, label, layersize);
 
     testnet->Forward();
 
-    boost::shared_ptr<caffe::Blob<float> > output_layer = testnet->blob_by_name("output");
+    boost::shared_ptr<caffe::Blob<double> > output_layer = testnet->blob_by_name("output");
 
-    const float* begin = output_layer->cpu_data();
-    const float* end = begin + layersize;
+    const double* begin = output_layer->cpu_data();
+    const double* end = begin + layersize;
     
-    std::vector<float> result(begin, end);
+    std::vector<double> result(begin, end);
 
 	index = -1;
     for(int i = 0; i< result.size(); ++i){
