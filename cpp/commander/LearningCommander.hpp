@@ -28,10 +28,10 @@ class LearningCommander : public StreamObserver{
 		Sphero *sphero;
 		Target *target;
 		
-		double inputMins[INPUTSIZE];
-		double inputMaxs[INPUTSIZE];
-		double outputMins[OUTPUTSIZE];
-		double outputMaxs[OUTPUTSIZE];
+		float inputMins[INPUTSIZE];
+		float inputMaxs[INPUTSIZE];
+		float outputMins[OUTPUTSIZE];
+		float outputMaxs[OUTPUTSIZE];
 		
 		double normalize(double value, double min, double max);
 		double denormalize(double value, double min, double max);
