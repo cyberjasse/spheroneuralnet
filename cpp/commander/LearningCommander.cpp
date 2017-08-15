@@ -117,6 +117,7 @@ void LearningCommander::learnFromList(std::vector<InputOutput> l, bool tonormali
 	double *label = new double[BATCHSIZE*OSIZE*N];
 	double *testdata = new double[TESTSIZE*INPUTSIZE];
 	double *testlabel = new double[TESTSIZE*OSIZE];
+	std::vector<double> predicted;
 for(int tested=0 ; tested < tflistSize ; tested+=TESTSIZE){
 	std::cout << " ###\nFOLD "<<tested<<"\n ###\n";
 	testend = tested+TESTSIZE;
@@ -210,10 +211,8 @@ for(int tested=0 ; tested < tflistSize ; tested+=TESTSIZE){
 	index = -1;
     for(int i = 0; i< result.size(); ++i){
     	index++;
-    	std::cout << " Input=";
-    	for(int j=index*INPUTSIZE ; j<index*INPUTSIZE+INPUTSIZE ; j++)
-    		std::cout <<" "<<data[j];
     	std::cout << "  Got "<<result[i]<<"   expected "<<label[index]<<std::endl;
+    	predicted.push_back(result[i]);
     }
 }
 

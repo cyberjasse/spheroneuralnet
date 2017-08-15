@@ -23,7 +23,7 @@ abstract class Layer {
 	# double gradientStep
 	+ Neuron[] neurons
 	+ void compute(double[] input, double[] output)
-	+ void errorContribution(double[] nexLayerContributions, double[] thisContribution)
+	+ void backpropagation(double[] nexLayerContributions, double[] thisContribution)
 }
 class Net {
 	# Layer[] layers

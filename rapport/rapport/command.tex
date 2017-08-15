@@ -1,5 +1,5 @@
 \subsection{Implémentation d'un système de commande}\label{sec:impcommander}
-Passons maintenant à la descriptions des différentes classes et interfaces du système de commande.
+Passons maintenant à la description des différentes classes et interfaces du système de commande.
 
 \newcommand{\classname}[1]{\textbf{\texttt{#1}}}
 \subsubsection{Structure}
@@ -69,14 +69,14 @@ Leur comportement est de retourner la moyenne des outputs, quelque soit l'input.
 Ensuite, afin d'effectuer des trajectoires aléatoires mais naturelles et utiles pour l'apprentissage, il faut pouvoir simuler un humain qui effectuerait des mouvements aléatoires sur une télécommande.
 En effet, si la différence d'orientation entre l'état actuelle et l'orientation commandée est purement aléatoire, alors elle alterne rapidement entre positif et négatif.
 Ce qui provoque des tremblements, des mouvements balanciers et des trajectoires trop souvent en ligne droite.
-Les données de streaming issues d'un tel comportement ne permettaient pas non plus au réseau implémenté au au \mlp de Weka de converger vers une autre solution que la moyenne de tous les outputs.
-Pour pouvoir simuler cette commande naturelle, la générateur va d'abord choisir une orientation aléatoire.
-Ensuite un nombre d'étape aléatoire.
-Soit $N$ le nombre d'étape, soit $d$ la différence d'angle (celle inférieur à 180\textdegree) entre l'orientation actuelle de la Sphero et la ciblée.
+Les données de streaming issues d'un tel comportement ne permettaient pas non plus au réseau implémenté et au \mlp de Weka de converger vers une autre solution que la moyenne de tous les outputs.
+Pour pouvoir simuler cette commande naturelle, le générateur va d'abord choisir une orientation aléatoire.
+Ensuite un nombre d'étapes aléatoires.
+Soit $N$ le nombre d'étapes, soit $d$ la différence d'angle (celle inférieur à 180\textdegree) entre l'orientation actuelle de la Sphero et la ciblée.
 Le générateur va commander une rotation de $\frac{d}{N}$ pour les $N$ prochaines commandes sauf au moment où la Sphero quitte sa zone délimitée.
 Le nombre $N$ est généré de sorte à éviter le premier problème cité.
-Ensuite, lorsque la Sphero atteind l'orientation cible, elle a une chance sur trois de changer d'orientation cible.
-Afin d'éffectuer quand-même des mouvements droits.
+Ensuite, lorsque la Sphero atteind l'orientation cible, elle a une chance sur trois de changer d'orientation cible,
+afin d'éffectuer quand-même des mouvements droits.
 La génération de commande sur la vitesse se fait de la même manière.
 
 Et pour finir, il y a une ambiguïté sur le format de l'angle obtenu par streaming.
@@ -84,7 +84,7 @@ En effet, dans la documentation, il est écrit que pour commander une nouvelle o
 0\textdegree sigifie droit devant, 90\textdegree à droite, 180\textdegree en arrière et 270\textdegree à gauche.\cite{SDKofficiels}
 L'angle obtenu par streaming (et uniquement par streaming) est entre -179\textdegree et 180\textdegree.
 Mais il n'y pas d'information concernant le sens.
-Il a été conclu que le sens des angles échantillonés est l'inverse de l'angle à envoyer en commande en observant qu'en commandant l'orientation à 90\textdegree, la Sphero fini par échantilloner -90\textdegree.
+Il a été conclu que le sens des angles échantillonnés est l'inverse de l'angle à envoyer en commande en observant qu'en commandant l'orientation à 90\textdegree, la Sphero fini par échantillonner -90\textdegree.
 
 \subsubsection{Récupération de la trajectoire}
 Passons ensuite au commander utilisant le réseau de neurones.

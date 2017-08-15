@@ -108,7 +108,7 @@ En résumé, l'implémentation d'un réseau \rbf se fera à partir d'une implém
 Deux fonctions sont nécessaires pour l'implémentation d'un neurone:
 \begin{enumerate}
  \item Une fonction qui permet de générer la sortie à partir de ses entrées (compute).
- \item Une fonction permettant l'apprentissage par rétropropagation (errorContribution).
+ \item Une fonction permettant l'apprentissage par rétropropagation (backpropagation).
 \end{enumerate}
 La fonction qui génère la sortie n'a besoin que des sorties des neurones de la couche précédente.
 Et si on observe le développement des formules de rétropropagation dans les annexes \ref{sec:eqmlp} et \ref{sec:eqrbf},
@@ -132,25 +132,24 @@ Et donc $\partiel{Q}{f_i}$ peut être calculé à partir d'une implémentation d
  \caption{Diagramme de classe du réseaux de neurones. \footnotesize Généré par \href{http://plantuml.com/class-diagram}{plantUML}}
  \label{fig:diagclasse}
 \end{figure}
-Dans le diagramme de classe, Figure \ref{fig:diagclasse}, dans la déclaration de la fonction \texttt{errorContribution()}, \texttt{errorContribution} est le facteur $\partiel{Q}{f_i}$.
+Dans le diagramme de classe, Figure \ref{fig:diagclasse}, dans la déclaration de la fonction \texttt{backpropagation()}, \texttt{errorContribution} est le facteur $\partiel{Q}{f_i}$.
 Le tableau retourné est stocké dans \texttt{thisContribution}.
 Pour chaque entrée $x_j$ du neurone $i$, la $j$\textsuperscript{ième} valeur du tableau retourné est $\partiel{Q}{f_i}\partiel{f_i}{x_j}$.
 Ces valeurs sont utilisées pour effectuer la rétropropagation de la couche précédente.
 
 \subsubsection{Limitation actuelle}
-Dans la version actuelle de l'implémentation, les biais ne sont pas supportés, le MLP n'est pas encore fonctionnel et des fuites mémoires ont été observés.
+Dans la version actuelle de l'implémentation, les biais ne sont pas supportés, le MLP n'est pas encore fonctionnel et des fuites mémoires ont été détectés.
 Les fuites mémoires sont dû à l'allocation de mémoire pour transmettre des valeurs d'une couche à l'autre dans \texttt{Net.cpp}.
-L'opérateur \texttt{New} effectue une allocation dynamique et nécessite d'être libérée exlplicitement pas le programmeur.
+L'opérateur \texttt{New} effectue une allocation dynamique et nécessite d'être libérée exlplicitement par le programmeur.
 
 \input{command}
 
 \input{experimentation}
 
 \section{Conclusion}
-Malgré que le projet n'est pas arrivé à son terme, nous avons découvert que pour pouvoir piloter une Sphero avec un réseau de neurone, nous avons besoin de nouveaux attributs ou d'une autre achitecture de réseau de neurones.
-En effet, malgré tous les problèmes rencontrés nuisant à la qualité des données récoletées (section \ref{sec:choixdesign} et \ref{sec:choixdesign}) ,
-un réseau de neurone devrait être capable d'approximer une fonction même avec des imprécisions.
-Ou du moins de converger vers une autres solution que la moyenne de toutes les sorties.
+Malgré que le projet ne soit pas arrivé à son terme, nous avons découvert que pour pouvoir piloter une Sphero avec un réseau de neurone, nous avons besoin de nouveaux attributs ou d'une autre achitecture de réseau de neurones.
+En effet, malgré tous les problèmes rencontrés nuisant à la qualité des données récoltées (section \ref{sec:choixdesign} et \ref{sec:choixdesign}) ,
+un réseau de neurone devrait être capable d'approximer une fonction même avec des imprécisions, ou, du moins, de converger vers une autres solution que la moyenne de toutes les sorties.
 Les autres attributs qui peuvent être ajoutées sont la vitesse à atteindre, l'inclinaison gauche-droite, l'inclinaison arrière-avant et les commandes précédentes.
 
 \subsection*{Remerciements}

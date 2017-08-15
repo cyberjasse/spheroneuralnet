@@ -39,9 +39,9 @@ Nouvelle vitesse et Nouvelle orientation sont limitées selon un paramètre.
 \end{center}
 
 Deux réseaux de neurones ont été testés: le \rbf implémenté et le \mlp de Weka.
-Le fonction d'activation des neurones cachés de Weka est la sigmoïde.
+La fonction d'activation des neurones cachés de Weka est la sigmoïde: 
 \[ f(x) = \frac{1}{1+e^{-x}} \]
-Tandis que la fonction d'activation des neurones de sortie est une fonction linéaire.\cite{mlpweka}
+et la fonction d'activation des neurones de sortie est une fonction linéaire.\cite{mlpweka}
 
 \begin{figure}
  \begin{minipage}[c]{\mpwekawidth}
@@ -55,7 +55,7 @@ Tandis que la fonction d'activation des neurones de sortie est une fonction lin�
 \end{figure}
 Tous les deux étaient capables d'approximer ce modèle.
 Pour que les résultats observés ne soient pas biaisées par le surajustement, la technique de 10fold cross-validation a été utilisée.
-C'est à dire que la base de données est séparée en 10 ensembles de tailles égales.
+C'est-à-dire que la base de données est séparée en 10 ensembles de tailles égales.
 Pour chaque ensemble, on construit le modèle sur les 90 autres pourcents de données et on utilise ces 10\% comme ensemble de test.
 À la fin, on obtient un nuage de points (sortie espérée, sortie aproximée par le modèle) où nous pouvons, par exemple,
 calculer le coefficient de corrélation pour avoir un indice sur la qualité du réseau de neurones pour ces données.
@@ -137,7 +137,7 @@ Pour toutes les obsevations effectuées, le RBF implémenté retournait toujours
 \end{minipage}
 \\
 
-Ici, les données d'entrées sont relatifs à la position de la Sphero et à son orientation.
+Ici, les données d'entrées sont relatives à la position de la Sphero et à son orientation.
 Les données sont normalisées avant des les utiliser dans le réseau de neurones.
 Si les valeurs de sortie ne sont pas normalisées, alors si elles ont un domaine différent, elles n'auront pas le même poids lors du calcul d'erreur.
 Si les valeurs d'entrée ne sont pas normalisées, alors nous devons paramètrer nous-mêmes l'initialisation de certains neurones.
@@ -145,8 +145,8 @@ Comme les neurones du RBF, si ils sont initialisés avec un écart-type de 1 et 
 alors malgré la précision en 64bits du calcul de la fonction d'activation, elles retourneront souvent 0.
 Idem pour la fonction sigmoïde, elle retourna souvent 0 ou 1.
 
-En construisant le modèle en règlant les paramètres, un optimum local a été atteind sur Weka. Il s'agit d'une seule couche de 20 neurones cachés avec un learning rate (i.e. pas de gradient) de 0,3 et un nombre d'époques de 1500.
-(C'est à dire que les données d'entrainement sont présentés 1500 fois aux réseaux de neurones).
+En construisant le modèle en règlant les paramètres, un optimum local a été atteint sur Weka. Il s'agit d'une seule couche de 20 neurones cachés avec un learning rate (i.e. pas de gradient) de 0,3 et un nombre d'époques de 1500.
+(C'est-à-dire que les données d'entrainement sont présentés 1500 fois aux réseaux de neurones).
 Le coefficient de corrélation du modèle construit par Weka est de 0.5404 pour la vitesse et de 0,69 pour l'orientation.
 
 \ssstitle{Sans normalisation des données}
@@ -175,7 +175,7 @@ La configuration du réseau de neurones est la même que la précédente.
 Revenons aux données normalisées et ajoutons la vitesse commandée en attribut.
 Toujours avec la même configuration du réseau de neurones.
 Puisque nous pouvons utiliser un réseau différent pas sortie, il est possible de d'abord prédire la vitesse à commander et d'ensuite ajouter cette donnée pour la prédiction de l'orientation à prendre si celle-ci améliore la précision.
-Dans ce cas, le coefficient de corrélation atteind 0,72 pour l'orientation.
+Dans ce cas, le coefficient de corrélation atteint 0,72 pour l'orientation.
 Un test est nécessaire afin de confirmer si cette augmentation de 0,03 est significatif.
 Par ailleur, si on ajoute l'orientation commandée comme attribut pour le modèle prédisant la vitesse à commander, la corrélation est de 0,4991.
 
@@ -184,7 +184,7 @@ Dans la section \ref{sec:choixdesign} nous avons évoquer une possibilité d'une
 C'est d'ailleur ce qui est observé sur les données de la Sphero virtuelle, Figure \ref{we:targetvirtual} et \ref{we:targetvirtualSpeed}.
 Nous allons le vérifier pour les données réelles.
 Pour chaque instance, si l'ordonnée de la position à atteindre est négatif, on multiplie par -1 toutes les ordonnées des entrées.
-C'est à dire que si targety est <0, alors targety = -targety, currentSpeedy = -currentSpeedy et currentAccely = -currentAccely.
+C'est-à-dire que si targety est <0, alors targety = -targety, currentSpeedy = -currentSpeedy et currentAccely = -currentAccely.
 Toujours avec la même configuration de réseau, le coefficient de corrélation devient 0,5123 pour la vitesse et 0,6339 pour l'orientation.
 
 \ssstitle{Résultats étranges avec le one nearest neighbor}
@@ -206,7 +206,7 @@ Des résultats étranges ont été observés lorsque un modèle de régression e
 Pour prédire une valeur à partir des entrées, le modèle effectue un calcul de distance entre ces entrées et toutes les entrées des instances de l'ensemble d'apprentissage.
 Ensuite il retient l'instance la plus proche et retourne sa sortie.
 Ce modèle utilise des données normalisées.
-La corrélation atteind 0,9977 pour la vitesse et 0,9985 pour l'orientation !
+La corrélation atteint 0,9977 pour la vitesse et 0,9985 pour l'orientation !
 Rappelons que par le principe du 10cross validation, aucune instance de test n'est reprise dans les instances d'entrainement.
 
 Le one nearest neighbor a été implémenté dans le commander et testé sur les mêmes données utilisées dans Weka.

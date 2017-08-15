@@ -15,7 +15,7 @@ La Sphero peut nous fournir\cite{SDKofficiels}:
 \end{itemize}
 
 Parmis ces données, nous n'avons pas besoin de l'état des LEDs, version et nombre de charges car ils n'influencent pas la conduite de la Shero.
-Dans ce projet, nous ne prenons pas en compte les éventuels collisions.
+Dans ce projet, nous ne prenons pas en compte les éventuelles collisions.
 
 Le niveau de charge pourrait influencer la conduite.
 Nous ne savons pas si la puissance maximale des moteurs diminuent lorsque la charge est trop faible.
@@ -27,8 +27,7 @@ La distance parcourue par dérapage ne sera pas comptabilisée.
 Cela a été vérifié lors de l'expérience menée dans la section \ref{sec:choixdesign}.
 Une camera est plus appropriée pour tracer la position réelle de la Sphero.
 
-Pour l'accélération, les commandes à appliquer à l'instant $t$ ne dépendent pas de l'accélération à l'instant $t$ juste avant l'application des commandes.
-Mais par contre, cette donnée peut être utile pour anticiper la vitesse de la Sphero au moment où elle reçoit les commandes car, dû à la latence d'envoi de paquet, la vitesse à l'instant $t$ n'est plus la même que celle communiquée.
+Pour l'accélération, cette donnée peut être utile pour anticiper la vitesse de la Sphero au moment où elle reçoit les commandes car, dû à la latence d'envoi de paquet, la vitesse à l'instant $t$ n'est plus la même que celle communiquée.
 Si cette donnée impacte peu dans les résultats obtenus, alors nous pourrions décider de nous passer de ce paramètre.
 Ajouter cette dimension dans le vecteur d'entrée demandera un plus grand nombre d'exemples pour la phases d'apprentissage car il faut balayer toutes les configurations possibles de vecteur d'entrée.
 
@@ -45,11 +44,12 @@ Ajouter cette dimension dans le vecteur d'entrée demandera un plus grand nombre
 \subsubsection{Choix du design}\label{sec:choixdesign}
  %TODO montrer les design repris chez gauthier
 On aligne l'axe des abscisses avec l'axe de l'orientation du moteur afin de reduire le domaine d'entrée et donc le nombre d'exemples à créer pour l'apprentissage.
-Le vecteur d'entrée contiendra donc le vecteur de la vitesse actuelle, le vecteur de la vitesse à atteindre et la position relative à atteindre dans $T$ secondes où $T$ sera la période à laquelle on échantillonera les données des capteurs.
+Le vecteur d'entrée contiendra donc la vitesse actuelle, l'accélération actuelle et la position relative à atteindre dans $T$ secondes où $T$ sera la période à laquelle on échantillonera les données des capteurs.
 Nous avons donc un vecteur d'entrée à 6 dimensions (vitesse actuelle en x et y, position relative cible en x et y, acccélération actuelle en x et y).
 Nous pourrions réduire d'avantage le domaine d'entrée si nous considérons que la direction et la vitesse à prendre pour atteindre une position est en symétrie orthogonale d'axe x.
 
-Deux possibilités s'offrent à nous pour le vecteur de sortie:\\
+Il y a deux façons différentes de commander la Sphero.\cite{SDKofficiels}
+Donc deux possibilités s'offrent à nous pour le vecteur de sortie:\\
 \begin{tabular}{|l|l|l|}
  \hline
  \textbf{Vecteur} & \textbf{Avantages} & \textbf{Inconvénients}\\
@@ -80,8 +80,8 @@ Grâce à cette commande, nous pouvons demander à la Sphero d'envoyer uniquemen
 Trois paramètres de cette commande peuvent influencer les performances d'échantillonage:
 \begin{enumerate}
  \item Un diviseur (entier) de la fréquence maximale d'échantillonage.
- \item Le nombre d'échantillonage à garder en mémoire avant envoi.
- \item Le nombre de capteur à échantilloner.
+ \item Le nombre d'échantillonages à garder en mémoire avant envoi.
+ \item Le nombre de capteurs à échantilloner.
 \end{enumerate}
 Un échantillonage consiste à obtenir seulement les données qui nous intéressent à un instant précis.
 La fréquence maximale d'échantillonage, un échantillon à la fois, est de 400Hz.\cite{SDKofficiels}
@@ -103,7 +103,7 @@ Les paquets invalides, donc de checksum incorrect ou de taille trop courte, sont
 Ce qui explique les pics sur $2T$.
 En plus du streaming, pour chaque paquet reçu, un paquet est envoyé à la Sphero pour changer les leds.
 Cela nous permet d'obtenir des résultats qui se rapprocheront de ce que nous obtiendrons si nous envoyons une nouvelle commande à chaque période $T$.
-Les fréquences de streaming choisis sont des diviseurs de 400 car le démarage d'un streaming demande en paramètre un diviseur de 400.\ref{SDKofficiels}
+Les fréquences de streaming choisis sont des diviseurs de 400 car le démarage d'un streaming demande en paramètre un diviseur de 400.\cite{SDKofficiels}
 La Sphero divise ensuite 400 par ce paramètre pour obtenir la fréquence demandée.
 La configuration de l'ordinateur utilisé est la suivante:
 \begin{itemize}
@@ -134,12 +134,12 @@ Pour les critères de choix d'une valeur pour $T$, deux critères sont pris en c
 \end{figure}
 Une autre façon d'observer la stabilité d'un streaming est d'enregistrer la date de réception de chaque paquet, de leur soustraire la date esperée de réception et puis de reporter toutes ces valeurs dans un graphique.
 Toutes les parties du graphique représentant une droite horizontale représentent un moment pendant laquelle la période de réception de paquets valides est stable.
-Si on observe bond vertical vers le haut de $T$ secondes, alors il un paquet a été rejeté à ce moment là.
-Ce graphiques sont reportés dans la Figure \ref{befores}.
+Si on observe un bond vertical vers le haut de $T$ secondes, alors un paquet a été rejeté à ce moment là.
+Ces graphiques sont reportés dans la Figure \ref{befores}.
 
 On observe que la fréquence de rejet de paquet est anormalement régulière.
-On observe presque 10 paquets valides entre paquet rejeté.
-tous ces paquets ont été rejeté car leur taille était insuffisante.
+On observe presque toujours 10 paquets valides entre paquet rejeté.
+Tous ces paquets ont été rejeté car leur taille était insuffisante.
 Pour empêcher que ce manque de précision nuit à la convergence du réseau de neurones, nous pourrions, dans l'ensemble d'apprentissage, retirer les instances dont le temps mis pour atteindre l'état suivant est de environ $2T$.
-En rejetant donc toutes ces données, nous pouvons donc ne plus prendre en compte du pic sur $2T$ dans les histogrammes de la Figure \ref{histogrammes}.
+En rejetant donc toutes ces données, nous pouvons donc ne plus prendre en compte le pic sur $2T$ dans les histogrammes de la Figure \ref{histogrammes}.
 On observe dès lors que le plus stable celui à 80Hz car le pic en $T$ est plus haut que celui des autres et avec une largeur presque pareille.
