@@ -41,7 +41,7 @@ Nouvelle vitesse et Nouvelle orientation sont limitées selon un paramètre.
 Deux réseaux de neurones ont été testés: le \rbf implémenté et le \mlp de Weka.
 Le fonction d'activation des neurones cachés de Weka est la sigmoïde.
 \[ f(x) = \frac{1}{1+e^{-x}} \]
-Tandis que la fonction d'activation des neurones de sortie est une fonction linéaire.
+Tandis que la fonction d'activation des neurones de sortie est une fonction linéaire.\cite{mlpweka}
 
 \begin{figure}
  \begin{minipage}[c]{\mpwekawidth}
@@ -96,6 +96,14 @@ Dans cette figure, tous les points ont été légèrement déplacés aléatoirem
 Nous devrions voir en plus de 3 dimensions pour observer un éventuel pattern.
 Mais en tout cas, selon Wela, il y en a un.
 C'est ce que nous allons voir dans \hyperref[sec:realdataex]{l'expérimentation sur les données réelles}.
+Notons qu'il est possible d'obtenir des données indiquant qu'il faut tourner, par exemple, à droite pour une position qui se trouve plutôt vers la gauche.
+En effet, après un virage serré, à cause de la force centrifuge exercée sur le centre de gravité, la Sphero se met à se balancer de gauche à droite par rapport à sa direction.
+Juste avant la fin de ce virage, nous avons commandé à la Sphero de tourner vers la droite.
+Mais à la fin de son virage, l'inertie de son centre de gravité la fait basculer vers la gauche.
+Si la position est échantillonée pendant ce basculement, alors on a une position qui peut être vers la gauche par rapport à la position échantillonée juste avant alors qu'on avait commander à la Sphero de tourner vers la droite.
+Ce problème est analogue aux dérapages.
+Mais comme il ne s'agit pas d'un dérapage, la position réellement atteinte est effectivement échantillonée par l'odomètre.
+Afin de détecter ces cas, il nous faudrait observer la vitesse ou l'accélération en plus de la position à atteindre.
 
 \begin{figure}
  \centering
@@ -179,5 +187,42 @@ Pour chaque instance, si l'ordonnée de la position à atteindre est négatif, o
 C'est à dire que si targety est <0, alors targety = -targety, currentSpeedy = -currentSpeedy et currentAccely = -currentAccely.
 Toujours avec la même configuration de réseau, le coefficient de corrélation devient 0,5123 pour la vitesse et 0,6339 pour l'orientation.
 
-\ssstitle{Sélection des attributs}
-TODO
+\ssstitle{Résultats étranges avec le one nearest neighbor}
+\begin{minipage}[c]{\mpwekawidth}
+ \includegraphics[width=\textwidth]{../figures/1BkSpeed.png}
+ \begin{center}
+  \textbf{Vitesse}
+ \end{center}
+\end{minipage}
+\begin{minipage}[c]{\mpwekawidth}
+ \includegraphics[width=\textwidth]{../figures/IB1.png}
+ \begin{center}
+  \textbf{Orientation}
+ \end{center}
+\end{minipage}
+\\
+
+Des résultats étranges ont été observés lorsque un modèle de régression est construit par le \emph{one nearest neighbor} sur ces données via Weka.
+Pour prédire une valeur à partir des entrées, le modèle effectue un calcul de distance entre ces entrées et toutes les entrées des instances de l'ensemble d'apprentissage.
+Ensuite il retient l'instance la plus proche et retourne sa sortie.
+Ce modèle utilise des données normalisées.
+La corrélation atteind 0,9977 pour la vitesse et 0,9985 pour l'orientation !
+Rappelons que par le principe du 10cross validation, aucune instance de test n'est reprise dans les instances d'entrainement.
+
+Le one nearest neighbor a été implémenté dans le commander et testé sur les mêmes données utilisées dans Weka.
+Pour la validation, le $N$cross validation a été appliqué où $N$ est le nombre d'instance.
+Les modèles générés devraient donc être théoriquement plus performant que ceux construits durant un 10cross validation.
+Mais on observe une corrélation de ? pour la vitesse et ? pour l'orientation.
+Au vu de ces résultats, nous pouvons avoir des doutes quant aux résultats des modèles de réseaux de neurones produits pas Weka.
+
+\subsubsection{Déploiement}
+Nous avons donc trouvé un réseau de neurones convergeant vers une solution de corrélation de plus de 0,50 entre la vitesse à commander prédite et celle qui est attendue et de presque 0,70 pour l'orientation à commander.
+Au lieu d'implémenter le même réseau pour le commander, utiliser une API de réseau de neurones nous permetra de modifier plus rapidement la configuration du réseau et de tester de nouveaux types de réseau.
+L'API choisie est Caffe elle permet de mofidier aisément l'architecture via un fichier texte au format prototxt.\cite{caffe}
+Les paramètres du modèle comme le nombre d'époques ou le pas de gradient peuvent aussi être modifiée via un tel fichier.
+De plus, étant en c++, le réseau peut rapidement être intégré dans l'impémentation actuelle du commander.
+L'enregistrement et le chargement d'un modèle est entièrement pris en charge par Caffe et ne dépend pas de l'architecture.
+Et enfin, l'implémentation de Caffe est multithreadé.
+
+Avec ce nouveau réseau de neurones, les performances du commander sur les données de la Sphero virtuelle sont bonnes. %TODO montrer
+Malheureusement, avec les données de la Sphero réelle, ce modèle converge vers la moyenne de toutes les sorties à prédire. %TODO et sur la vitesse ?

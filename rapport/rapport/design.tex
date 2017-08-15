@@ -34,15 +34,19 @@ Ajouter cette dimension dans le vecteur d'entrée demandera un plus grand nombre
 
 \newcommand{\inchist}[1]{
  \begin{minipage}{0.48\textwidth}
-  \includegraphics[width=10cm]{../figures/hist#1.jpeg}
+  \includegraphics[height=8cm]{../figures/perf#1.png}
+ \end{minipage}
+}
+\newcommand{\incbefore}[1]{
+ \begin{minipage}{0.48\textwidth}
+  \includegraphics[width=8cm]{../figures/perf#1Before.png}
  \end{minipage}
 }
 \subsubsection{Choix du design}\label{sec:choixdesign}
  %TODO montrer les design repris chez gauthier
-Pour une meilleure précision, on ajoute un vecteur vitesse à atteindre sur le point de destination.
 On aligne l'axe des abscisses avec l'axe de l'orientation du moteur afin de reduire le domaine d'entrée et donc le nombre d'exemples à créer pour l'apprentissage.
 Le vecteur d'entrée contiendra donc le vecteur de la vitesse actuelle, le vecteur de la vitesse à atteindre et la position relative à atteindre dans $T$ secondes où $T$ sera la période à laquelle on échantillonera les données des capteurs.
-Nous avons donc un vecteur d'entrée à 6 dimensions (vitesse actuelle en x et y, position relative cible en x et y, vitesse cible en x et y).
+Nous avons donc un vecteur d'entrée à 6 dimensions (vitesse actuelle en x et y, position relative cible en x et y, acccélération actuelle en x et y).
 Nous pourrions réduire d'avantage le domaine d'entrée si nous considérons que la direction et la vitesse à prendre pour atteindre une position est en symétrie orthogonale d'axe x.
 
 Deux possibilités s'offrent à nous pour le vecteur de sortie:\\
@@ -80,23 +84,27 @@ Trois paramètres de cette commande peuvent influencer les performances d'échan
  \item Le nombre de capteur à échantilloner.
 \end{enumerate}
 Un échantillonage consiste à obtenir seulement les données qui nous intéressent à un instant précis.
-La fréquence maximale d'échantillonage, un échantillon à la fois, est de 400Hz\cite{SDKofficiels}.
-La vitesse maximale de la Sphero est de 4,5 miles par heure\cite{product}. Ce qui fait environ 2 mètres par seconde.
+La fréquence maximale d'échantillonage, un échantillon à la fois, est de 400Hz.\cite{SDKofficiels}
+La vitesse maximale de la Sphero est de 4,5 miles par heure.\cite{product} Ce qui fait environ 2 mètres par seconde.
 \begin{figure}
  \centering
+ \inchist{5}
+ \inchist{10}
  \inchist{20}
  \inchist{40}
- \inchist{60}
  \inchist{80}
  \inchist{100}
- \inchist{200}
- \caption{Histogrammes de temps de réception de packet streamé. Générés via script R}
+ \caption{Histogrammes de temps de réception de packet streamé. Générés par script R}
  \label{histogrammes}
 \end{figure}
 
-À la Figure \ref{histogrammes} sont repris les histogrammes de temps de réceptions de paquets pour différentes fréquences d'échantillonage.
+À la Figure \ref{histogrammes} sont repris les histogrammes de temps de réceptions de 500 paquets pour différentes fréquences d'échantillonage.
+Les paquets invalides, donc de checksum incorrect ou de taille trop courte, sont rejetés.
+Ce qui explique les pics sur $2T$.
 En plus du streaming, pour chaque paquet reçu, un paquet est envoyé à la Sphero pour changer les leds.
 Cela nous permet d'obtenir des résultats qui se rapprocheront de ce que nous obtiendrons si nous envoyons une nouvelle commande à chaque période $T$.
+Les fréquences de streaming choisis sont des diviseurs de 400 car le démarage d'un streaming demande en paramètre un diviseur de 400.\ref{SDKofficiels}
+La Sphero divise ensuite 400 par ce paramètre pour obtenir la fréquence demandée.
 La configuration de l'ordinateur utilisé est la suivante:
 \begin{itemize}
  \item AMD Athlon(tm) X2 Dual-Core QL-64
@@ -107,9 +115,6 @@ La configuration de l'ordinateur utilisé est la suivante:
  \item OS: Linux 4.4.0-57-generic, Ubuntu 16.04.4
 \end{itemize}
 
-On observe tout d'abord que les temps de réception ont l'air de suivre une cadence de 1ms.
-Cela peut s'expliquer par le fait que la Sphero 2.0 a une granularité de 1ms pour l'éxecution de macro\cite{product}.
-%Plus $T$ est petit, plus notre système de commande est réactif et, toutes choses égales par ailleur, nous pouvons effectuer des mouvements plus précis.
 Pour les critères de choix d'une valeur pour $T$, deux critères sont pris en compte:
 \begin{enumerate}
  \item La stabilité du streaming. Moins la densité de probabilité de temps de réception de paquet est concentrée sur le voisinage de $T$, moins la solution sera précise.
@@ -117,9 +122,24 @@ Pour les critères de choix d'une valeur pour $T$, deux critères sont pris en c
  Nous pouvons compenser ce manque de précision par un vecteur d'entrée plus complexe mais la solution converge alors moins vite et un ensemble d'apprentissage plus conséquent doit être fourni.
 \end{enumerate}
 
-On observe que la stabilité du streaming varie selon la fréquence.
-Prenons le streaming à 60Hz. On observe que en moyenne les paquets arrivent toutes les 15 millisecondes.
-La distance maximale que peut parcourir la Sphero en 15ms est de 3 cm.
-Le manque de précision dû au temps de réaction est dans ce cas négligeable pour des trajectoires à grande vitesse de l'ordre de quelque mètres.
-De plus, ce streaming étant le plus stable, c'est cette fréquence qui sera utilisée.
-Nous considèrerons donc que $T$ = 15ms malgré que la fréquence est règlée à 60Hz.
+\begin{figure}
+ \centering
+ \incbefore{5}
+ \incbefore{10}
+ \incbefore{20}
+ \incbefore{40}
+ \incbefore{80}
+ \caption{Dates de réception de paquet - dates esperées. Générés par script R}
+ \label{befores}
+\end{figure}
+Une autre façon d'observer la stabilité d'un streaming est d'enregistrer la date de réception de chaque paquet, de leur soustraire la date esperée de réception et puis de reporter toutes ces valeurs dans un graphique.
+Toutes les parties du graphique représentant une droite horizontale représentent un moment pendant laquelle la période de réception de paquets valides est stable.
+Si on observe bond vertical vers le haut de $T$ secondes, alors il un paquet a été rejeté à ce moment là.
+Ce graphiques sont reportés dans la Figure \ref{befores}.
+
+On observe que la fréquence de rejet de paquet est anormalement régulière.
+On observe presque 10 paquets valides entre paquet rejeté.
+tous ces paquets ont été rejeté car leur taille était insuffisante.
+Pour empêcher que ce manque de précision nuit à la convergence du réseau de neurones, nous pourrions, dans l'ensemble d'apprentissage, retirer les instances dont le temps mis pour atteindre l'état suivant est de environ $2T$.
+En rejetant donc toutes ces données, nous pouvons donc ne plus prendre en compte du pic sur $2T$ dans les histogrammes de la Figure \ref{histogrammes}.
+On observe dès lors que le plus stable celui à 80Hz car le pic en $T$ est plus haut que celui des autres et avec une largeur presque pareille.

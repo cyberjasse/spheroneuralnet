@@ -1,4 +1,4 @@
-\subsection{Implémentation d'un système de commande}
+\subsection{Implémentation d'un système de commande}\label{sec:impcommander}
 Passons maintenant à la descriptions des différentes classes et interfaces du système de commande.
 
 \newcommand{\classname}[1]{\textbf{\texttt{#1}}}
@@ -58,7 +58,9 @@ En effet, supposons que la Sphero soit capable de changer son orientation de max
 Alors toutes les commandes dont le changement d'orientation est entre 30 et 180 degrés, à partir d'un même état initial, aboutiront au même état-cible.
 C'est à dire que plusieurs commandes de valeur significativement différentes sont optimales pour atteindre cet état-cible.
 Ce qui est mauvais pour la convergence du réseau de neurones.
-Pour rappel, si plusieurs outputs sont optimales pour le même input, alors la solution du réseau de neurones ne convergera pas vers un de ces outputs mais vers un outputs de valeur entre ces deux outputs optimals.
+Si plusieurs outputs sont optimales pour le même input, alors la solution du réseau de neurones ne convergera pas vers un de ces outputs mais vers un outputs de valeur entre ces deux outputs optimals.
+Cela n'empêchera pas de produire un modèle performant au niveau de la commande puisque à partir du moment où l'orientation commandée est trop élevée pour que la Sphero puisse l'atteindre en $\frac{1}{f}$ secondes, sa valeur n'influence pas la conduite.
+Par contre c'est pour le calcul d'erreur que cela pose problème.
 Et non seulement cela empêche une bonne convergence mais cela élargi aussi le domaine d'entrée.
 Expérimentalement, sans limiter la différence d'orientation, ni le réseau de neurones implémenté, ni le \mlp de Weka, ni celui du package nnet de R ne sont capables de fournir une solution correcte.
 Leur comportement est de retourner la moyenne des outputs, quelque soit l'input.\\
@@ -70,12 +72,19 @@ Ce qui provoque des tremblements, des mouvements balanciers et des trajectoires 
 Les données de streaming issues d'un tel comportement ne permettaient pas non plus au réseau implémenté au au \mlp de Weka de converger vers une autre solution que la moyenne de tous les outputs.
 Pour pouvoir simuler cette commande naturelle, la générateur va d'abord choisir une orientation aléatoire.
 Ensuite un nombre d'étape aléatoire.
-Soit $N$ le nombre d'étape, soit $d$ la différence d'angle (celle inférieur à 180) entre l'orientation actuelle de la Sphero et la ciblée.
+Soit $N$ le nombre d'étape, soit $d$ la différence d'angle (celle inférieur à 180\textdegree) entre l'orientation actuelle de la Sphero et la ciblée.
 Le générateur va commander une rotation de $\frac{d}{N}$ pour les $N$ prochaines commandes sauf au moment où la Sphero quitte sa zone délimitée.
 Le nombre $N$ est généré de sorte à éviter le premier problème cité.
 Ensuite, lorsque la Sphero atteind l'orientation cible, elle a une chance sur trois de changer d'orientation cible.
 Afin d'éffectuer quand-même des mouvements droits.
 La génération de commande sur la vitesse se fait de la même manière.
+
+Et pour finir, il y a une ambiguïté sur le format de l'angle obtenu par streaming.
+En effet, dans la documentation, il est écrit que pour commander une nouvelle orientation, celle-ci doit être un angle entre 0\textdegree et 359\textdegree et dont le sens est le suivant:
+0\textdegree sigifie droit devant, 90\textdegree à droite, 180\textdegree en arrière et 270\textdegree à gauche.\cite{SDKofficiels}
+L'angle obtenu par streaming (et uniquement par streaming) est entre -179\textdegree et 180\textdegree.
+Mais il n'y pas d'information concernant le sens.
+Il a été conclu que le sens des angles échantillonés est l'inverse de l'angle à envoyer en commande en observant qu'en commandant l'orientation à 90\textdegree, la Sphero fini par échantilloner -90\textdegree.
 
 \subsubsection{Récupération de la trajectoire}
 Passons ensuite au commander utilisant le réseau de neurones.

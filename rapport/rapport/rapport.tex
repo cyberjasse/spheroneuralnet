@@ -13,6 +13,7 @@
 \usepackage{amssymb}
 \usepackage{amsthm}
 \usepackage{booktabs}% http://ctan.org/pkg/booktabs
+\usepackage{textcomp}% symbole degré
 \newcommand{\tabitem}{~~\llap{\textbullet}~~}
 \begin{document}
 \input{../titlepage}
@@ -77,29 +78,41 @@ Nous utiliserons dans un premier temps la méthode en deux phases pour obtenir u
 
 \subsection{Les API}
 Certaines API permettant l'envoi de commande et réception de message provenant de la Sphero sont disponibles.
-Les APIs officiels sont disponibles en: \textbf{Objective-C}, \textbf{Swift}, \textbf{Android}\cite{SDKofficiels}.\\
+Les APIs officiels sont disponibles en: \textbf{Objective-C}, \textbf{Swift}, \textbf{Android}.\cite{SDKofficiels}\\
 Il existe également des APIs créés par la communauté disponibles en\cite{gosphero}: \textbf{C\#}, \textbf{JavaScript}, \textbf{Ruby}, \textbf{Python}\cite{pythonAPI}, \textbf{Arduino}, \textbf{C++}\cite{cppAPI}.\\
 L'API choisie est l'API \textbf{C++} pour le langage de programmation connu et performant exécutable sur PC.
+Malgré les apparences, cet API n'est pas modulaire concernant le streaming.
+En effet, le streaming est démarré dès la connection de la Sphero et la lecture des messages de streaming récupérés ne fonctionne que pour le streaming configuré pour l'application que l'auteur voulait en faire.
+C'est à dire que des accès à la mémoire se font sans considération des données demandées pour le streaming et ne permet donc que de récupérer la position et la vitesse.
+De plus l'écoute des messages de streaming sont non bloquants car ils sont effectués dans un thread à part.
+Il n'est donc pas possible, sans modifier l'API, d'utiliser les données reçues dès leur réception.
+L'API a donc été modifiée pour récupérer les données qui nous intéressent dans le cadre de ce projet mais aussi pour effectuer le design pattern observer  et le faire hériter d'une interface d'objet capable de streamer.
+(Voir la section \ref{sec:impcommander} sur l'implémentation du système de commande.)
 
 Le langage \textbf{Qt} sera utilisé pour créer les interfaces graphiques.
-Cela nous permet de créer facilement des interfaces munies de boutons, menus et fenêtre afin de tracer la trajectoire.
-De plus, l'implémentation du réseau de neurones pourra être directement utilisée dans un script \textbf{Qt}.
+Cela nous permet de créer facilement des interfaces munies de boutons, menus et fenêtres afin de tracer la trajectoire.
+De plus, l'implémentation du réseau de neurones pourra être directement utilisée dans un script \textbf{Qt} puisqu'il s'agit d'une extension du c++.
+
+L'API \textbf{Caffe} sera utilisé plus tard afin de modifier facilement l'architecture du réseau de neurones dans le module de commande sans recompilation.\cite{caffe}
 
 \subsection{Implémentation d'un réseau de neurones}
+Un \rbf a été implémenté. Bien que fonctionnel, ce n'est pas ce réseau qui est utilisé dans la version actuelle du système de commande de ce projet.
+Il a néanmoins été utilisé durant la phase d'expérimentation.
+\subsubsection{Propriété utilisée}
 Afin d'expliquer la structure de l'implémentation du réseau de neurone, nous allons tout d'abord expliquer pourquoi l'implémentation d'un neurone est indépendant de sa position et du modèle du réseau de neurones.
-Et grâce à cette propriété, nous pouvons donc connecter n'importe quelle couche de neurones avec une autre.
+Et grâce à cette propriété, nous pouvons donc connecter n'importe quelle couche de neurones avec une autre sans modifier l'implémentation.
 Nous pourrions donc facilement passer à une méthode d'apprentissage par modèle différentiable (Section \ref{sec:appmodele}) si cela s'avère nécessaire.
 De plus, l'implémentation d'un nouveau modèle non récursif comme le \mlp nécésitera juste l'implémentation des nouveaux neurones.
 En résumé, l'implémentation d'un réseau \rbf se fera à partir d'une implémentation de réseau de neurones non récursif modulaire.\\
 
-L'implémentation d'un neurone se fait indépendamment de sa position dans le réseau et des autres neurones.
-En effet, deux fonctions sont nécessaires pour l'implémentation d'un neurone:
+Deux fonctions sont nécessaires pour l'implémentation d'un neurone:
 \begin{enumerate}
  \item Une fonction qui permet de générer la sortie à partir de ses entrées (compute).
  \item Une fonction permettant l'apprentissage par rétropropagation (errorContribution).
 \end{enumerate}
 La fonction qui génère la sortie n'a besoin que des sorties des neurones de la couche précédente.
-La fonction qui permet l'apprentissage n'a besoin que de la sortie générée précédemment (cela peut être gardé en mémoire) et la \emph{contribution à l'erreur} des neurones de la couche suivante.
+Et si on observe le développement des formules de rétropropagation dans les annexes \ref{sec:eqmlp} et \ref{sec:eqrbf},
+la fonction qui permet l'apprentissage n'a besoin que de la sortie générée précédemment (cela peut être gardé en mémoire) et la \emph{contribution à l'erreur} des neurones de la couche suivante.
 Le terme de contribution à l'erreur fait réference au terme $\delta$ dans la formule de modification des poids d'un \mlp (Section \ref{sec:appmlp}).
 En effet, pour tous les différents neurones que nous avons vu dans ce rapport, soit $p$ un paramètre à modifier pour l'apprentissage du neurone $i$.
 Soit $f_i$ la fonction appliquée aux entrées du neurone $i$ afin de générer la sortie.
@@ -112,6 +125,7 @@ si le neurone $i$ est un neurone de sortie, alors $\partiel{Q}{f_i}$ est connu, 
 Sinon $$\partiel{Q}{f_i} = \sum_{k \in \text{couche suivate}}\partiel{Q}{f_k}\partiel{f_k}{f_i}$$
 Et donc $\partiel{Q}{f_i}$ peut être calculé à partir d'une implémentation dans les neurones de la couche suivante.
 
+\subsubsection{Diagramme de classe}
 \begin{figure}
  \centering
  \includegraphics[width=\textwidth]{../../uml/neurondiag.png}
@@ -123,16 +137,30 @@ Le tableau retourné est stocké dans \texttt{thisContribution}.
 Pour chaque entrée $x_j$ du neurone $i$, la $j$\textsuperscript{ième} valeur du tableau retourné est $\partiel{Q}{f_i}\partiel{f_i}{x_j}$.
 Ces valeurs sont utilisées pour effectuer la rétropropagation de la couche précédente.
 
+\subsubsection{Limitation actuelle}
+Dans la version actuelle de l'implémentation, les biais ne sont pas supportés, le MLP n'est pas encore fonctionnel et des fuites mémoires ont été observés.
+Les fuites mémoires sont dû à l'allocation de mémoire pour transmettre des valeurs d'une couche à l'autre dans \texttt{Net.cpp}.
+L'opérateur \texttt{New} effectue une allocation dynamique et nécessite d'être libérée exlplicitement pas le programmeur.
+
 \input{command}
 
 \input{experimentation}
+
+\section{Conclusion}
+Malgré que le projet n'est pas arrivé à son terme, nous avons découvert que pour pouvoir piloter une Sphero avec un réseau de neurone, nous avons besoin de nouveaux attributs ou d'une autre achitecture de réseau de neurones.
+En effet, malgré tous les problèmes rencontrés nuisant à la qualité des données récoletées (section \ref{sec:choixdesign} et \ref{sec:choixdesign}) ,
+un réseau de neurone devrait être capable d'approximer une fonction même avec des imprécisions.
+Ou du moins de converger vers une autres solution que la moyenne de toutes les sorties.
+Les autres attributs qui peuvent être ajoutées sont la vitesse à atteindre, l'inclinaison gauche-droite, l'inclinaison arrière-avant et les commandes précédentes.
 
 \subsection*{Remerciements}
 \noindent Je remercie Monsieur Pierre \textsc{Hauweele} de m'avoir proposé un projet qui est exactement dans le domaine que je voulais, de son aide et de la direction de mon projet.\\
 
 \noindent Je remercie Monsieur Hadrien Mélot pour la direction de mon projet et de l'aide qu'il m'a apporté.\\
 
-\noindent Je remercie Monsieur Tom Mens d'être rapporteur de mon projet et de son aide.\\
+\noindent Je remercie Monsieur Tom Mens pour son feed-back et ses conseils sur la rédaction de ce rapport.\\
+
+\noindent Je remercie Monsieur Gauvain Devillez pour m'avoir débloqué plusieurs fois dans la compilation et ses conseils.sec:realdataex
 
 \bibliographystyle{unsrt-fr}%unsrt-fr pour reference fr par num. plainnat-fr ou frplain Pour reference fr par auteur et annee
 \bibliography{../bibli}
