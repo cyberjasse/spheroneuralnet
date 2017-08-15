@@ -27,6 +27,14 @@ else
 	find -type f | grep -i ".h$\|.hpp$\|.tpp" | xargs -i cp {} ../../sphero/{}
 	cd ../..
 fi
+#compile caffe
+if [ -d ${COMMANDERFOLDER}/caffe-master/build/ ]
+then
+	echo "[${THIS}] caffe already built."
+else
+	echo "[${THIS}] Compile caffe."
+	make -C ${COMMANDERFOLDER}/caffe-master/
+fi
 #test if the build folder exist
 if [ -d ${BUILDFOLDER} ]
 then
@@ -58,16 +66,16 @@ else
 	mkdir ${BUILDFOLDER}${NEURONNETFOLDER}
 fi
 #compile the neuronnet files
-#echo "[${THIS}] Compile files in neuronnet folder"
-#NEURONNETPATH='neuronnet/src/'
-#cd ${NEURONNETPATH}
-#g++ -c *.cpp
-#cd ../..
-#mv ${NEURONNETPATH}*.o ${BUILDFOLDER}${NEURONNETFOLDER}
+echo "[${THIS}] Compile files in neuronnet folder"
+NEURONNETPATH='neuronnet/src/'
+cd ${NEURONNETPATH}
+g++ -c *.cpp
+cd ../..
+mv ${NEURONNETPATH}*.o ${BUILDFOLDER}${NEURONNETFOLDER}
 #now compile my files
 if [ -n "$1" ]
 then
-	echo "[${THIS}]    Compile ${FILE}.cpp ..."
+	echo "[${THIS}]    Compile ${FILE}.cpp .   If there is a problem, perhaps you have to change the path /usr/lib/x86_64-gnu/ in this compile.sh, line 80"
 	g++ -std=c++11 -c ${CAFFEINCLUDES} ${FILE}.cpp -o ${BUILDFOLDER}${FILE}.o && \
 	g++ -Lsphero-linux-api/ -Lcommander/caffe-master/build/lib -L/usr/lib/x86_64-gnu/ -o ${FILE} ${BUILDFOLDER}${FILE}.o ${BUILDFOLDER}${COMMANDERFOLDER}*.o ${BUILDFOLDER}${NEURONNETFOLDER}*.o -lsphero -lcaffe -lglog -lboost_system
 else
