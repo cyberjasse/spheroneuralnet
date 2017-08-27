@@ -1,0 +1,135 @@
+\beamer@endinputifotherversion {3.36pt}
+\headcommand {\slideentry {0}{0}{1}{1/1}{}{0}}
+\headcommand {\beamer@framepages {1}{1}}
+\headcommand {\sectionentry {1}{Sphero}{3}{Sphero}{0}}
+\headcommand {\beamer@sectionpages {1}{2}}
+\headcommand {\beamer@subsectionpages {1}{2}}
+\headcommand {\beamer@subsectionentry {0}{1}{1}{3}{Qu'est ce?}}\headcommand {\beamer@subsectionpages {3}{2}}
+\headcommand {\slideentry {1}{1}{1}{3/3}{Qu'est ce?}{0}}
+\headcommand {\beamer@framepages {3}{3}}
+\headcommand {\sectionentry {2}{Design}{5}{Design}{0}}
+\headcommand {\beamer@sectionpages {3}{4}}
+\headcommand {\beamer@subsectionpages {3}{4}}
+\headcommand {\beamer@subsectionentry {0}{2}{1}{5}{Vecteur d'entr\IeC {\'e}e}}\headcommand {\beamer@subsectionpages {5}{4}}
+\headcommand {\slideentry {2}{1}{1}{5/5}{Vecteur d'entr\IeC {\'e}e}{0}}
+\headcommand {\beamer@framepages {5}{5}}
+\headcommand {\slideentry {2}{1}{2}{6/6}{Vecteur d'entr\IeC {\'e}e}{0}}
+\headcommand {\beamer@framepages {6}{6}}
+\headcommand {\slideentry {2}{1}{3}{7/7}{Vecteur d'entr\IeC {\'e}e}{0}}
+\headcommand {\beamer@framepages {7}{7}}
+\headcommand {\slideentry {2}{1}{4}{8/8}{Vecteur d'entr\IeC {\'e}e}{0}}
+\headcommand {\beamer@framepages {8}{8}}
+\headcommand {\beamer@subsectionentry {0}{2}{2}{9}{Vecteur de sortie}}\headcommand {\beamer@subsectionpages {5}{8}}
+\headcommand {\slideentry {2}{2}{1}{9/9}{Vecteur de sortie}{0}}
+\headcommand {\beamer@framepages {9}{9}}
+\headcommand {\slideentry {2}{2}{2}{10/10}{Vecteur de sortie}{0}}
+\headcommand {\beamer@framepages {10}{10}}
+\headcommand {\slideentry {2}{2}{3}{11/11}{Vecteur de sortie}{0}}
+\headcommand {\beamer@framepages {11}{11}}
+\headcommand {\beamer@subsectionentry {0}{2}{3}{12}{Fr\IeC {\'e}quence de streaming}}\headcommand {\beamer@subsectionpages {9}{11}}
+\headcommand {\slideentry {2}{3}{1}{12/12}{Fr\IeC {\'e}quence de streaming}{0}}
+\headcommand {\beamer@framepages {12}{12}}
+\headcommand {\slideentry {2}{3}{2}{13/13}{Fr\IeC {\'e}quence de streaming}{0}}
+\headcommand {\beamer@framepages {13}{13}}
+\headcommand {\slideentry {2}{3}{3}{14/14}{Fr\IeC {\'e}quence de streaming}{0}}
+\headcommand {\beamer@framepages {14}{14}}
+\headcommand {\sectionentry {3}{Les NN}{15}{Les NN}{0}}
+\headcommand {\beamer@sectionpages {5}{14}}
+\headcommand {\beamer@subsectionpages {12}{14}}
+\headcommand {\beamer@subsectionentry {0}{3}{1}{15}{Feedforward ou r\IeC {\'e}current}}\headcommand {\beamer@subsectionpages {15}{14}}
+\headcommand {\slideentry {3}{1}{1}{15/15}{Feedforward ou r\IeC {\'e}current}{0}}
+\headcommand {\beamer@framepages {15}{15}}
+\headcommand {\slideentry {3}{1}{2}{16/16}{Feedforward ou r\IeC {\'e}current}{0}}
+\headcommand {\beamer@framepages {16}{16}}
+\headcommand {\slideentry {3}{1}{3}{17/17}{Feedforward ou r\IeC {\'e}current}{0}}
+\headcommand {\beamer@framepages {17}{17}}
+\headcommand {\slideentry {3}{1}{4}{18/18}{Feedforward ou r\IeC {\'e}current}{0}}
+\headcommand {\beamer@framepages {18}{18}}
+\headcommand {\slideentry {3}{1}{5}{19/19}{Feedforward ou r\IeC {\'e}current}{0}}
+\headcommand {\beamer@framepages {19}{19}}
+\headcommand {\slideentry {3}{1}{6}{20/20}{Feedforward ou r\IeC {\'e}current}{0}}
+\headcommand {\beamer@framepages {20}{20}}
+\headcommand {\slideentry {3}{1}{7}{21/21}{Feedforward ou r\IeC {\'e}current}{0}}
+\headcommand {\beamer@framepages {21}{21}}
+\headcommand {\slideentry {3}{1}{8}{22/22}{Feedforward ou r\IeC {\'e}current}{0}}
+\headcommand {\beamer@framepages {22}{22}}
+\headcommand {\sectionentry {4}{Architecture}{23}{Architecture}{0}}
+\headcommand {\beamer@sectionpages {15}{22}}
+\headcommand {\beamer@subsectionpages {15}{22}}
+\headcommand {\beamer@subsectionentry {0}{4}{1}{23}{Probl\IeC {\`e}me du ma\IeC {\^\i }tre distant}}\headcommand {\beamer@subsectionpages {23}{22}}
+\headcommand {\slideentry {4}{1}{1}{23/23}{Probl\IeC {\`e}me du ma\IeC {\^\i }tre distant}{0}}
+\headcommand {\beamer@framepages {23}{23}}
+\headcommand {\slideentry {4}{1}{2}{24/24}{Probl\IeC {\`e}me du ma\IeC {\^\i }tre distant}{0}}
+\headcommand {\beamer@framepages {24}{24}}
+\headcommand {\slideentry {4}{1}{3}{25/25}{Probl\IeC {\`e}me du ma\IeC {\^\i }tre distant}{0}}
+\headcommand {\beamer@framepages {25}{25}}
+\headcommand {\slideentry {4}{1}{4}{26/26}{Probl\IeC {\`e}me du ma\IeC {\^\i }tre distant}{0}}
+\headcommand {\beamer@framepages {26}{26}}
+\headcommand {\slideentry {4}{1}{5}{27/27}{Probl\IeC {\`e}me du ma\IeC {\^\i }tre distant}{0}}
+\headcommand {\beamer@framepages {27}{27}}
+\headcommand {\slideentry {4}{1}{6}{28/28}{Probl\IeC {\`e}me du ma\IeC {\^\i }tre distant}{0}}
+\headcommand {\beamer@framepages {28}{28}}
+\headcommand {\slideentry {4}{1}{7}{29/29}{Probl\IeC {\`e}me du ma\IeC {\^\i }tre distant}{0}}
+\headcommand {\beamer@framepages {29}{29}}
+\headcommand {\slideentry {4}{1}{8}{30/30}{Probl\IeC {\`e}me du ma\IeC {\^\i }tre distant}{0}}
+\headcommand {\beamer@framepages {30}{30}}
+\headcommand {\sectionentry {5}{Impl\IeC {\'e}mentation}{31}{Impl\IeC {\'e}mentation}{0}}
+\headcommand {\beamer@sectionpages {23}{30}}
+\headcommand {\beamer@subsectionpages {23}{30}}
+\headcommand {\beamer@subsectionentry {0}{5}{1}{31}{Impl\IeC {\'e}mentation}}\headcommand {\beamer@subsectionpages {31}{30}}
+\headcommand {\slideentry {5}{1}{1}{31/31}{Impl\IeC {\'e}mentation}{0}}
+\headcommand {\beamer@framepages {31}{31}}
+\headcommand {\slideentry {5}{1}{2}{32/32}{Impl\IeC {\'e}mentation}{0}}
+\headcommand {\beamer@framepages {32}{32}}
+\headcommand {\slideentry {5}{1}{3}{33/33}{Impl\IeC {\'e}mentation}{0}}
+\headcommand {\beamer@framepages {33}{33}}
+\headcommand {\slideentry {5}{1}{4}{34/34}{Impl\IeC {\'e}mentation}{0}}
+\headcommand {\beamer@framepages {34}{34}}
+\headcommand {\slideentry {5}{1}{5}{35/35}{Impl\IeC {\'e}mentation}{0}}
+\headcommand {\beamer@framepages {35}{35}}
+\headcommand {\sectionentry {6}{Commandes al\IeC {\'e}atoires}{36}{Commandes al\IeC {\'e}atoires}{0}}
+\headcommand {\beamer@sectionpages {31}{35}}
+\headcommand {\beamer@subsectionpages {31}{35}}
+\headcommand {\beamer@subsectionentry {0}{6}{1}{36}{Syst\IeC {\`e}me de commande al\IeC {\'e}atoire}}\headcommand {\beamer@subsectionpages {36}{35}}
+\headcommand {\slideentry {6}{1}{1}{36/36}{Syst\IeC {\`e}me de commande al\IeC {\'e}atoire}{0}}
+\headcommand {\beamer@framepages {36}{36}}
+\headcommand {\slideentry {6}{1}{2}{37/37}{Syst\IeC {\`e}me de commande al\IeC {\'e}atoire}{0}}
+\headcommand {\beamer@framepages {37}{37}}
+\headcommand {\sectionentry {7}{Donn\IeC {\'e}es}{38}{Donn\IeC {\'e}es}{0}}
+\headcommand {\beamer@sectionpages {36}{37}}
+\headcommand {\beamer@subsectionpages {36}{37}}
+\headcommand {\beamer@subsectionentry {0}{7}{1}{38}{La Sphero virtuelle}}\headcommand {\beamer@subsectionpages {38}{37}}
+\headcommand {\slideentry {7}{1}{1}{38/38}{La Sphero virtuelle}{0}}
+\headcommand {\beamer@framepages {38}{38}}
+\headcommand {\slideentry {7}{1}{2}{39/39}{La Sphero virtuelle}{0}}
+\headcommand {\beamer@framepages {39}{39}}
+\headcommand {\beamer@subsectionentry {0}{7}{2}{40}{La Sphero r\IeC {\'e}elle}}\headcommand {\beamer@subsectionpages {38}{39}}
+\headcommand {\slideentry {7}{2}{1}{40/40}{La Sphero r\IeC {\'e}elle}{0}}
+\headcommand {\beamer@framepages {40}{40}}
+\headcommand {\slideentry {7}{2}{2}{41/41}{La Sphero r\IeC {\'e}elle}{0}}
+\headcommand {\beamer@framepages {41}{41}}
+\headcommand {\sectionentry {8}{R\IeC {\'e}sultats des mod\IeC {\`e}les}{42}{R\IeC {\'e}sultats des mod\IeC {\`e}les}{0}}
+\headcommand {\beamer@sectionpages {38}{41}}
+\headcommand {\beamer@subsectionpages {40}{41}}
+\headcommand {\beamer@subsectionentry {0}{8}{1}{42}{Pour les 3 r\IeC {\'e}seaux utilis\IeC {\'e}s}}\headcommand {\beamer@subsectionpages {42}{41}}
+\headcommand {\slideentry {8}{1}{1}{42/42}{Pour les 3 r\IeC {\'e}seaux utilis\IeC {\'e}s}{0}}
+\headcommand {\beamer@framepages {42}{42}}
+\headcommand {\slideentry {8}{1}{2}{43/43}{Pour les 3 r\IeC {\'e}seaux utilis\IeC {\'e}s}{0}}
+\headcommand {\beamer@framepages {43}{43}}
+\headcommand {\slideentry {8}{1}{3}{44/44}{Pour les 3 r\IeC {\'e}seaux utilis\IeC {\'e}s}{0}}
+\headcommand {\beamer@framepages {44}{44}}
+\headcommand {\slideentry {8}{1}{4}{45/45}{Pour les 3 r\IeC {\'e}seaux utilis\IeC {\'e}s}{0}}
+\headcommand {\beamer@framepages {45}{45}}
+\headcommand {\slideentry {8}{1}{5}{46/46}{Pour les 3 r\IeC {\'e}seaux utilis\IeC {\'e}s}{0}}
+\headcommand {\beamer@framepages {46}{46}}
+\headcommand {\sectionentry {9}{Conclusion}{47}{Conclusion}{0}}
+\headcommand {\beamer@sectionpages {42}{46}}
+\headcommand {\beamer@subsectionpages {42}{46}}
+\headcommand {\beamer@subsectionentry {0}{9}{1}{47}{Conclusion}}\headcommand {\beamer@subsectionpages {47}{46}}
+\headcommand {\slideentry {9}{1}{1}{47/47}{Conclusion}{0}}
+\headcommand {\beamer@framepages {47}{47}}
+\headcommand {\beamer@partpages {1}{47}}
+\headcommand {\beamer@subsectionpages {47}{47}}
+\headcommand {\beamer@sectionpages {47}{47}}
+\headcommand {\beamer@documentpages {47}}
+\headcommand {\def \inserttotalframenumber {45}}
