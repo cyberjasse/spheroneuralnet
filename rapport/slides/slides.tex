@@ -3,6 +3,12 @@
 \usepackage[utf8]{inputenc}
 \usepackage[frenchb]{babel}
 \usepackage{graphicx}
+\newcommand{\tabitem}{~~\llap{\textbullet}~~}
+\newcommand{\incinslide}[1]{
+\begin{figure}
+ \centering
+ \includegraphics[height=6.5cm]{../figures/#1}
+\end{figure}}
 
 % title page informations
 \title[Projet de Master 1]{Un réseau de neurones pour la\\\includegraphics[height=1cm]{../sphero.jpg}}

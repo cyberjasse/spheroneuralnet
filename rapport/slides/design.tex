@@ -4,25 +4,70 @@
 \begin{frame}
  \frametitle{Design du vecteur d'entrée}
  \framesubtitle{Version naïve}
- 
+ Pour permettre au réseau de neurones d'approximer les commandes à envoyer, nous devons lui fournir des informations sur l'état actuelle et l'état à atteindre.\\
+ \vspace{1cm}
+ Un état peut être caractérisé par:
+ \begin{itemize}
+  \item La position (2 réels)
+  \item La vitesse (2 réels)
+  \item L'accélération (2 réels)
+  \item L'orientation (1 angle en dregré)
+ \end{itemize}
+ Nous avons pour le moment une entrée de dimension 14.
 \end{frame}
 
 \begin{frame}
  \frametitle{Design du vecteur d'entrée}
  \framesubtitle{Relative à la position}
- 
+ %les expériences se feront sur un sol plat et partout de même matière
+ Nous pouvons remplacer les données \{position actuelle, position à atteindre\} par \{position à atteindre - position actuelle\}.\\
+ La position actuelle est donc à retirer.\\
+ \vspace{0.5cm}
+ \begin{center}
+ \begin{tabular}{ll}
+  $\rightarrow$ & Entrée de dimension 14,\\
+   & Domaine de la position à atteindre réduit.
+ \end{tabular}
+ \end{center}
 \end{frame}
 
 \begin{frame}
  \frametitle{Design du vecteur d'entrée}
  \framesubtitle{Puis relative à l'orientation}
- 
+ À chaque instant, pivotons le repère pour que l'axe x soit confondue avec l'axe de l'orientation.\\
+ L'orientation actuelle est donc à retirer.\\
+ \vspace{0.5cm}
+ \begin{center}
+ \begin{tabular}{ll}
+  $\rightarrow$ & Entrée de dimension 13,\\
+   & Domaine de toutes les entrées réduit.
+ \end{tabular}
+ \end{center}
 \end{frame}
 
 \begin{frame}
  \frametitle{Design du vecteur d'entrée}
  \framesubtitle{Possibilité d'une symétrie orthogonale}
- 
+ Si on considère que le pattern des données ont une symétrie d'axe x, on inverse toutes les ordonnées des entrées dont la position à atteindre est dans les x négatifs.\\
+ \vspace{0.5cm}
+ \begin{center}
+ \begin{tabular}{ll}
+  $\rightarrow$ & Domaine de toutes les entrées réduites de moitié.
+ \end{tabular}
+ \end{center}
+\end{frame}
+
+\begin{frame}
+ \frametitle{Choix des entrées}
+ Données en entrée lors de l'expérimentation:
+ \begin{itemize}
+  \item La position à atteindre
+  \item La vitesse actuelle
+  \item L'accélération actuelle
+ \end{itemize}
+ \begin{center}
+  $\rightarrow$ Entrée de dimension 6.
+ \end{center}
 \end{frame}
 
 \subsection{Vecteur de sortie}
@@ -30,35 +75,67 @@
 \begin{frame}
  \frametitle{Design du vecteur de sortie}
  \framesubtitle{Commande \{moteur A, moteur B\}}
- 
+ Deux manières de commander la Sphero:
+ \begin{enumerate}
+  \item En commandant la puissance du moteur A et du moteur B.
+  \item En commandant la vitesse et l'orientation.
+ \end{enumerate}
+ \vspace{0.3cm}
+ \begin{center}
+ \large Commande \{moteur A, moteur B\} \normalsize\\
+ \begin{tabular}{|l|l|l|}
+ \hline
+ \textbf{Avantages} & \textbf{Inconvénients}\\
+ \hline
+ \tabitem Plus précis & \tabitem Stabilisateur désactivé\\
+ \tabitem Permet plus de dérapage & \tabitem Risque de commande\\
+ \tabitem Grande vitesse dans les & \og inutiles \fg\\
+ virages & \tabitem Risque une déstabilisation\\
+ & totale\\
+ \hline
+\end{tabular}
+\end{center}
 \end{frame}
 
 \begin{frame}
  \frametitle{Design du vecteur de sortie}
  \framesubtitle{Commande \{vitesse, orientation\}}
- 
-\end{frame}
-
-\begin{frame}
- \frametitle{Choix du vecteur de sortie}
- 
+ \begin{center}
+ \large Commande \{vitesse, orientation\} \normalsize\\
+ \begin{tabular}{|l|l|l|}
+ \hline
+ \textbf{Avantages} & \textbf{Inconvénients}\\
+ \hline
+ \tabitem Stabilisateur activé & \tabitem Moins précis\\
+ \tabitem Toutes les commandes ont & \tabitem Évite les dérapages\\
+ un effet &\\
+ \hline
+\end{tabular}\\
+\vspace{0.5cm}
+Choisissons la commande par vitesse et orientation.
+\end{center}
 \end{frame}
 
 \subsection{Fréquence de streaming}
-
-\begin{frame}
- \frametitle{Choix de la fréquence de streaming}
- 
-\end{frame}
+\newcommand{\inchist}[1]{
+ \begin{center}
+  \includegraphics[height=6.5cm]{../figures/perf#1.png}
+ \end{center}
+}
+\newcommand{\incbefore}[1]{
+ \begin{center}
+  \includegraphics[height=6.5cm]{../figures/perf#1Before.png}
+ \end{center}
+}
 
 \begin{frame}
  \frametitle{Choix de la fréquence de streaming}
  \framesubtitle{Stabilité de la période}
- 
+ \inchist{5}
 \end{frame}
 
 \begin{frame}
  \frametitle{Choix de la fréquence de streaming}
  \framesubtitle{Pertes de paquet}
- 
+ \incbefore{5}
 \end{frame}
